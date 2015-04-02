@@ -3,11 +3,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
-    <title>DisplaySettings Tests</title>
+    <title>Identify Tests</title>
     <link rel="stylesheet" href="//js.arcgis.com/3.13/esri/css/esri.css">
     <style>
         @import url('tests.css');
-        @import url('../resources/DisplaySettings.css');
+        @import url('../resources/Identify.css');
 
         /* override default styles here */
     </style>
@@ -24,20 +24,18 @@
         var map;
 
         require([
+
+            'esri/arcgis/utils',
           
-          'esri/arcgis/utils',
-          
-            testsUrl + '../DisplaySettings.js',
+            testsUrl + '../Identify.js',
             'dojo/domReady!'
         ], function(
-          
+
           arcgisUtils,
           
           Module
         ) {
 
-
-          
             // init map
             var mapOptions = {
                 basemap: 'topo',
@@ -55,8 +53,7 @@
             }).then(function(response) {
               map = response.map;
             });
-            
-          
+                      
 
             // init widget
             widgetUnderTest = new Module({

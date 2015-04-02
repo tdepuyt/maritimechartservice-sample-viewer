@@ -1,13 +1,13 @@
 {
-  "name": "MaritimeDisplayProperties",
-  "label": "Maritime Display Properties",
+  "name": "MaritimeSearch",
+  "label": "Maritime Search",
   "2D": true,
   "3D": false,
   "platform": "HTML",
   "version": "0.0.1",
   "wabVersion": "1.1",
   "author": "TODO: your name here",
-  "description": "Display Properties for Maritime Chart Service",
+  "description": "Custom Maritime Chart Service Search",
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
   "properties": {
