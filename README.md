@@ -5,9 +5,11 @@ JavaScript example illustrating how to use the Maritime Chart Service functional
 ![App](maritimechartservice-sample-viewer.png)
 
 ## Features
-* Illustrates how to build web apps consuming the S-57 display functionalities of ArcGIS for Maritime: Server in a JavaScript web app.
-* Combines the ENCs with the Esri Ocean Basemap.
-* Allows user to easily access and modify server-side rendering options by exposing them to the JavaScript client.
+* Illustrates how to build web apps consuming S-57 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
+* Combines the S-57 web service with the Esri Ocean Basemap.
+* Allows users to change S-52 based display settings through the JavaScrip client
+* Provides the ability to search based on object name (OBJNAM) and S-57 dataset names.
+* Enables users to identify on individual features and view their attribute information.
 
 ## Instructions
 
@@ -18,7 +20,7 @@ JavaScript example illustrating how to use the Maritime Chart Service functional
 
 ## Requirements
 
-* Access to an instance of ArcGIS for Maritime: Server and S-57 data 
+* Access to a REST endpoint from a published map service with ArcGIS for Maritime: Server - Maritime Chart Service capabilities enabled and S-57 data 
 * A little background with Javascript and REST
 * Experience with the [ArcGIS Javascript API](http://www.esri.com/) would help.
 
