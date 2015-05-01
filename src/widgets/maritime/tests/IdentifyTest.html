@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
     <title>Identify Tests</title>
-    <link rel="stylesheet" href="//js.arcgis.com/3.13/esri/css/esri.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
     <style>
         @import url('tests.css');
         @import url('../resources/Identify.css');
@@ -17,7 +17,7 @@
     <div id="widgetContainer">
         <div id="widgetNode"></div>
     </div>
-    <script src="//js.arcgis.com/3.13/"></script>
+    <script src="//js.arcgis.com/3.11/"></script>
     <script type="text/javascript">
         var testsUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
         var widgetUnderTest;
@@ -44,6 +44,8 @@
                 sliderStyle: 'small'
             };
             
+            aisServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/AISServer";
+            s57ServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer";
             // this web map id is a placeholder
             // with only the topo basemap
             // replace it with the id of your web map
@@ -52,13 +54,14 @@
               mapOptions: mapOptions
             }).then(function(response) {
               map = response.map;
+               // init widget
+                widgetUnderTest = new Module({
+                       map: map,
+                       s57ServiceUrl: s57ServiceUrl,
+                       aisServiceUrl: aisServiceUrl
+                }, 'widgetNode');
+                widgetUnderTest.startup();
             });
-                      
-
-            // init widget
-            widgetUnderTest = new Module({
-            }, 'widgetNode');
-            widgetUnderTest.startup();
         });
     </script>
 </body>

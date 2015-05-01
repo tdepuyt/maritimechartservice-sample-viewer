@@ -1,7 +1,7 @@
 define(['dojo/_base/declare', 'jimu/BaseWidget', '../maritime/DisplaySettings'],
     function(declare, BaseWidget, DisplaySettings) {
         //To create a widget, you need to derive from BaseWidget.
-        return declare([BaseWidget, DisplaySettings], {
+        return declare([BaseWidget], {
 
             // Custom widget code goes here
 
@@ -14,18 +14,25 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', '../maritime/DisplaySettings'],
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('MaritimeDisplayProperties::postCreate');
-
+                this.s57Layer = this.map.getLayer(this.config.s57LayerID);
+                this.aisLayer = this.map.getLayer(this.config.aisLayerID);
+               
                 this.displaySettings = new DisplaySettings({
-                    //config: this.config.floodModeler,
-                    nls: this.nls,
-                    map: this.map
+                    map: this.map,
+                    s57Layer: this.s57Layer,
+                    aisLayer: this.aisLayer
                 }, this.displaySettingsNode);
-            }
+                
+            },
 
-            // startup: function() {
-            //   this.inherited(arguments);
-            //   console.log('MCSDisplayProperties::startup');
-            // },
+            startup: function() {
+
+               this.inherited(arguments);
+
+               console.log('MCSDisplayProperties::startup');
+
+               this.displaySettings.startup();
+            }
 
             // onOpen: function(){
             //   console.log('MCSDisplayProperties::onOpen');
