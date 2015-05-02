@@ -1,5 +1,7 @@
 # maritimechartservice-sample-viewer
 
+Announcement: 
+
 JavaScript example illustrating how to use the Maritime Chart Service functionality provided by ArcGIS for Maritime: Server.
 
 ![App](maritimechartservice-sample-viewer.png)
