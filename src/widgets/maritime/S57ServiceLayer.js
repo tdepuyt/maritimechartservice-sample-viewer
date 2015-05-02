@@ -57,8 +57,6 @@ define([
 					//changing values
 					bbox: extent.xmin + "," + extent.ymin + "," + extent.xmax + "," + extent.ymax,
 					bboxSR: JSON.stringify(extent.spatialReference.toJson()),
-					imageSR: JSON.stringify(extent.spatialReference.toJson()),
-					// imageSR: dojo.toJson(extent.spatialReference.toJson()),
 					size: width + "," + height,
 					f: "image",
 					display_params: JSON.stringify(this.displayParameters)
