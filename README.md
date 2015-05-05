@@ -2,7 +2,7 @@
 
 # Announcement: 
 # The Maritime Chart Service Sample Viewer will be available on this page on Tuesday 05/12/2015
-
+#
 
 JavaScript example illustrating how to use the Maritime Chart Service functionality provided by ArcGIS for Maritime: Server.
 
