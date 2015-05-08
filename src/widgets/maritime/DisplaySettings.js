@@ -59,17 +59,20 @@ define([
       var imageParameters = new ImageParameters();
       imageParameters.format = "jpeg";
       s57CustomLayer = new S57ServiceLayer(this.s57Layer.url, {
-        "opacity": 0.2,
+        "opacity": 1,
         "imageParameters": imageParameters
       });
+      
       aisCustomLayer = new AISServiceLayer(this.aisLayer.url, {
-        "opacity": 0.2,
+        "opacity": 1,
         "imageParameters": imageParameters
       });
-      //TODO: Set display parameters in form to match that of the service in case that differs. [Before event handling!]
+
       aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+
       this.map.removeLayer(this.s57Layer);
       this.map.addLayer(s57CustomLayer);
+      //s57CustomLayer.on('load', this.setupDisplaySettings());
       this.map.removeLayer(this.aisLayer);
       this.map.addLayer(aisCustomLayer);
       this._initEventHandlers();
@@ -82,11 +85,20 @@ define([
       console.log('maritime.DisplaySettings::setupConnections', arguments);
 
     },
+    setupDisplaySettings: function(){
+      //TODO: Set display parameters in form to match that of the service in case that differs. [Before event handling!]
+      var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+      this.colorschemeSelect.value = this.findParameter(parametersArray, 'ColorScheme').value.toString();
+      this.depthunitsSelect.value = this.findParameter(parametersArray, 'ColorScheme').value.toString();
+      
+
+
+    },
     _initEventHandlers: function() {
       var _this = this;
       this.own(on(this.colorschemeSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "ColorScheme")].value = _this.colorschemeSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "ColorScheme")].value = parseInt(_this.colorschemeSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
         aisCustomLayer.refresh();
@@ -94,57 +106,57 @@ define([
       }));
       this.own(on(this.depthunitsSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "DisplayDepthUnits")].value = _this.depthunitsSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "DisplayDepthUnits")].value = parseInt(_this.depthunitsSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.depthshadesSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "TwoDepthShades")].value = _this.depthshadesSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "TwoDepthShades")].value = parseInt(_this.depthshadesSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.shallowpatternsSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "ShallowDepthPattern")].value = _this.shallowpatternsSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "ShallowDepthPattern")].value = parseInt(_this.shallowpatternsSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.pointsymbolizationSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.StaticParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "PointSymbolizationType")].value = _this.pointsymbolizationSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "PointSymbolizationType")].value = parseInt(_this.pointsymbolizationSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.areasymbolizationSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.StaticParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "AreaSymbolizationType")].value = _this.areasymbolizationSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "AreaSymbolizationType")].value = parseInt(_this.areasymbolizationSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.framesonSelect, 'change', function() {
-        s57CustomLayer.framesOn = _this.framesonSelect.value;
+        s57CustomLayer.framesOn = (_this.framesonSelect.value ===2);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.scaminSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "HonorScamin")].value = _this.scaminSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "HonorScamin")].value = parseInt(_this.scaminSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.nobjnmSelect, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[_this.findParameter(parametersArray, "DisplayNOBJNM")].value = _this.nobjnmSelect.value;
+        parametersArray[_this.findParameter(parametersArray, "DisplayNOBJNM")].value = parseInt(_this.nobjnmSelect.value, 10);
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
     },
     _onApplyClick: function( /*e*/ ) {
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-      parametersArray[this.findParameter(parametersArray, "ShallowContour")].value = this.input_shallow.value;
-      parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = this.input_safety.value;
-      parametersArray[this.findParameter(parametersArray, "DeepContour")].value = this.input_deep.value;
+      parametersArray[this.findParameter(parametersArray, "ShallowContour")].value = parseInt(this.input_shallow.value, 10);
+      parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = parseInt(this.input_safety.value, 10);
+      parametersArray[this.findParameter(parametersArray, "DeepContour")].value = parseInt(this.input_deep.value, 10);
       s57CustomLayer.refresh();
       aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
     },
