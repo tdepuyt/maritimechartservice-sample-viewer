@@ -5,6 +5,7 @@ define([
   'dojo/text!./templates/DisplaySettings.html',
 
   'dojo/_base/declare',
+   'dojo/_base/lang',
 
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
@@ -19,7 +20,7 @@ define([
   on,
   template,
 
-  declare,
+  declare, lang,
 
   _WidgetBase,
   _TemplatedMixin,
@@ -60,23 +61,28 @@ define([
       imageParameters.format = "jpeg";
       s57CustomLayer = new S57ServiceLayer(this.s57Layer.url, {
         "opacity": 1,
-        "imageParameters": imageParameters
+        "imageParameters": imageParameters,
+        "id": "Maritime Chart Service"
       });
       
       aisCustomLayer = new AISServiceLayer(this.aisLayer.url, {
         "opacity": 1,
-        "imageParameters": imageParameters
+        "imageParameters": imageParameters,
+        "id": "Recorded SF Harbor AIS Service"
       });
 
       aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
-
+      /*s57LayerAddEvent = on(this.map, "layer-add-result", lang.hitch(this, function(layerAdded, errorMsg) {
+        if (layerAdded.layer.id === "Maritime Chart Service") {
+          this.setupDisplaySettings();
+          s57LayerAddEvent.remove();
+        }
+      }));*/
       this.map.removeLayer(this.s57Layer);
       this.map.addLayer(s57CustomLayer);
-      //s57CustomLayer.on('load', this.setupDisplaySettings());
       this.map.removeLayer(this.aisLayer);
       this.map.addLayer(aisCustomLayer);
       this._initEventHandlers();
-
     },
     setupConnections: function() {
       // summary:
@@ -86,13 +92,21 @@ define([
 
     },
     setupDisplaySettings: function(){
-      //TODO: Set display parameters in form to match that of the service in case that differs. [Before event handling!]
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
       this.colorschemeSelect.value = this.findParameter(parametersArray, 'ColorScheme').value.toString();
-      this.depthunitsSelect.value = this.findParameter(parametersArray, 'ColorScheme').value.toString();
-      
-
-
+      this.depthunitsSelect.value = this.findParameter(parametersArray, 'DisplayDepthUnits').value.toString();
+      this.depthshadesSelect.value = this.findParameter(parametersArray, 'TwoDepthShades').value.toString();
+      this.shallowpatternsSelect.value = this.findParameter(parametersArray, 'ShallowDepthPattern').value.toString();
+      this.scaminSelect.value = this.findParameter(parametersArray, 'HonorScamin').value.toString();
+      this.nobjnmSelect.value = this.findParameter(parametersArray, 'DisplayNOBJNM').value.toString();
+      this.input_shallow.value = this.findParameter(parametersArray, 'ShallowContour').value.toString();
+      this.input_safety.value = this.findParameter(parametersArray, 'SafetyContour').value.toString();
+      this.input_deep.value = this.findParameter(parametersArray, 'DeepContour').value.toString();
+      parametersArray = s57CustomLayer.displayParameters.ECDISParameters.StaticParameters.Parameter;
+      this.pointsymbolizationSelect.value = this.findParameter(parametersArray, 'PointSymbolizationType').value.toString();
+      this.areasymbolizationSelect.value = this.findParameter(parametersArray, 'AreaSymbolizationType').value.toString();
+      this.framesonSelect.value = s57CustomLayer.framesOn ? '2' : '1';
+      this._initEventHandlers();
     },
     _initEventHandlers: function() {
       var _this = this;
@@ -135,7 +149,7 @@ define([
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.framesonSelect, 'change', function() {
-        s57CustomLayer.framesOn = (_this.framesonSelect.value ===2);
+        s57CustomLayer.framesOn = (_this.framesonSelect.value === '2');
         s57CustomLayer.refresh();
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
