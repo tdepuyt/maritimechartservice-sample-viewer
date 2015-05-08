@@ -1,17 +1,18 @@
 define([
 		'dojo/_base/declare',
 		'dojo/_base/lang',
+		'dojo/Evented',
 		'dojo/io-query',
 		'esri/layers/ArcGISDynamicMapServiceLayer',
 		'esri/request'
 	],
 	function(
-		declare, lang, ioQuery,
+		declare, lang, Evented, ioQuery,
 		ArcGISDynamicMapServiceLayer,
 		esriRequest
 	) {
 
-		return declare([ArcGISDynamicMapServiceLayer], {
+		return declare([Evented, ArcGISDynamicMapServiceLayer], {
 			constructor: function(args, arg2, arg3) {
 				this.internalLoaded = false;
 				this.serviceError = lang.hitch(this, this.serviceError);
@@ -29,7 +30,7 @@ define([
 				this.displayParameters = parameters.DisplayParameters;
 				this.serverDefaultVisibility = parameters.ServerParameters.defaultVisibility;
 				this.framesOn = parameters.ServerParameters.framesOn;
-				this.internalLoaded = true;
+				this.emit('parametersLoaded', {});
 			},
 
 			serviceError: function(err) {
