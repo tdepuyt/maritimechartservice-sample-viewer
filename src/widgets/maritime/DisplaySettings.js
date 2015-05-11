@@ -68,6 +68,10 @@ define([
       on(s57CustomLayer, 'parametersLoaded', lang.hitch(this, function() {
         this.setupDisplaySettings();
       }));
+
+      on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
+        this.map.removeLayer(this.s57Layer);
+      }));
       
       aisCustomLayer = new AISServiceLayer(this.aisLayer.url, {
         "opacity": 1,
@@ -75,11 +79,15 @@ define([
         "id": "Recorded SF Harbor AIS Service"
       });
 
+       on.once(aisCustomLayer, 'update-end', lang.hitch(this, function() {
+        this.map.removeLayer(this.aisLayer);
+      }));
+
       aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       this.map.addLayer(s57CustomLayer);
       this.map.addLayer(aisCustomLayer);
-      this.map.removeLayer(this.aisLayer);
-      this.map.removeLayer(this.s57Layer);
+      //this.map.removeLayer(this.aisLayer);
+      //this.map.removeLayer(this.s57Layer);
     },
     setupConnections: function() {
       // summary:
