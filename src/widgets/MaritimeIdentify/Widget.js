@@ -14,11 +14,13 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', '../maritime/Identify'],
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('Identify::postCreate');
+
                 this.Identify = new Identify({
                     map: this.map,
                     nls: this.nls,
                     aisServiceUrl: this.config.aisServiceUrl,
-                    s57ServiceUrl: this.config.s57ServiceUrl
+                    s57ServiceUrl: this.config.s57ServiceUrl,
+                    identifySymbol: this.config.identifySymbol
                 }, this.IdentifyNode);
             },
 
@@ -37,8 +39,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', '../maritime/Identify'],
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onOpen', arguments);
                 if (this.Identify) {
-                    this.Identify.showPoint();
-                    this.Identify.resumeClickListener();
+                     this.Identify.resumeClickListener();
                 }
             },
 
@@ -46,7 +47,6 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', '../maritime/Identify'],
                 // summary:
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onClose', arguments);
-                this.Identify.hidePoint();
                 this.Identify.pauseClickListener();
             }
 

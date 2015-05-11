@@ -1,5 +1,29 @@
 {
   "widgetName": "MaritimeIdentify",
   "aisServiceUrl": "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/AISServer",
-  "s57ServiceUrl": "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer"
+  "s57ServiceUrl": "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer",
+  "identifySymbol": {
+    "color": [
+      255,
+      0,
+      0,
+      0
+    ],
+    "size": 10,
+    "angle": 0,
+    "xoffset": 0,
+    "yoffset": 0,
+    "type": "esriSMS",
+    "style": "esriSMSCircle",
+    "outline": {
+      "color": [
+        255,
+        0,
+        0
+      ],
+      "width": 2,
+      "type": "esriSLS",
+      "style": "esriSLSSolid"
+    }
+  }
 }

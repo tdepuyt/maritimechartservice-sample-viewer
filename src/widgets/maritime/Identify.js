@@ -3,6 +3,9 @@ define([
   'dojo/_base/declare',
   'dojo/_base/lang',
   'dojo/on',
+  'dojo/dom',
+  'dojo/dom-construct',
+  'dojo/query',
   'dojo/Deferred',
   'dojo/_base/array',
   'dijit/_WidgetBase',
@@ -22,12 +25,13 @@ define([
   'esri/InfoTemplate',
   'esri/geometry/Polygon',
   'esri/geometry/Polyline',
-  'esri/geometry/Point'
+  'esri/geometry/Point',
+  'esri/domUtils'
 
 ], function(
   template,
   declare,
-  lang, on, Deferred, array,
+  lang, on, dom, domConstruct, query, Deferred, array,
   _WidgetBase,
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
@@ -35,7 +39,8 @@ define([
   SimpleMarkerSymbol, SimpleFillSymbol, Draw, //jsonUtils,
   IdentifyParameters,
   IdentifyTask, InfoTemplate,
-  Polygon, Polyline, Point
+  Polygon, Polyline, Point,
+  domUtils
 
 ) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -75,21 +80,18 @@ define([
       this.setupConnections();
 
       this.inherited(arguments);
-      if (this.simpleMarkerSymbol) {
-        this.pointSymbol = new SimpleMarkerSymbol(this.simpleMarkerSymbol);
+      if (this.identifySymbol) {
+        this.pointSymbol = new SimpleMarkerSymbol(this.identifySymbol);
       } else {
         this.pointSymbol = new SimpleMarkerSymbol(
           SimpleMarkerSymbol.STYLE_CIRCLE,
-          30,
+          10,
           new SimpleLineSymbol(
             SimpleLineSymbol.STYLE_SOLID,
-            new Color([255, 0, 0]), 4
-          ),
-          new Color([255, 0, 0])
+            new Color([255, 0, 0]), 2),
+          new Color([255, 0, 0, 0])
         );
       }
-      /*this.polygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 4), new Color([255, 0, 0, 0]));
-      this.lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 4);*/
 
       if (this.map) {
         this.setMap(this.map);
@@ -100,7 +102,28 @@ define([
 
       this.createQueryTask(s57ServiceUrl);
       this.createAISQueryTask(aisServiceUrl);
+
+
+      
+      var popupWindowContent = query(".contentPane", this.map.infoWindow.domNode);
+
+      on(popupWindowContent, "click", function(e) {
+        if (e.target.id === 'moreInfoLink') {
+          moreInfoDiv = dom.byId('moreInfoDiv');
+          moreInfoLinkText = dom.byId('moreInfoLink');
+          if (moreInfoLinkText.innerHTML == "More Info") {
+            moreInfoLinkText.innerHTML = "Less Info";
+            domUtils.show(moreInfoDiv);
+          } else {
+            moreInfoLinkText.innerHTML = "More Info";
+            domUtils.hide(moreInfoDiv);
+          }
+        }
+      });
+
     },
+
+
 
     setupConnections: function() {
       // summary:
@@ -141,18 +164,6 @@ define([
 
     resumeClickListener: function() {
       this.clickListener.resume();
-    },
-
-    hidePoint: function() {
-      if (this.pointGraphic) {
-        this.map.graphics.remove(this.pointGraphic);
-      }
-    },
-
-    showPoint: function() {
-      if (this.pointGraphic) {
-        this.map.graphics.add(this.pointGraphic);
-      }
     },
 
     destroy: function() {
@@ -198,24 +209,22 @@ define([
         deferred.resolve(response);
       }).then(lang.hitch(this, function(response) {
         _this = this;
-
         var features =
           array.map(response, function(result) {
-            //console.log("TEST - response");
             var feature = result.feature;
             feature.attributes.layerName = result.layerName;
             if (result.layerName === 'S57 Cells') {
-              if (null !== feature.attributes.TXTDSC) {
+              if (null != feature.attributes.TXTDSC) {
                 feature.attributes.TXTDSC = "<a href='" + s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.txtdsc_token + "' target='_blank'>" + feature.attributes.TXTDSC + "</a>";
               }
-              if (null !== feature.attributes.NTXTDS) {
+              if (null != feature.attributes.NTXTDS) {
                 feature.attributes.NTXTDS = "<a href='" + s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.ntxtds_token + "' target='_blank'>" + feature.attributes.NTXTDS + "</a>";
               }
-              if (null !== feature.attributes.PICREP) {
+              if (null != feature.attributes.PICREP) {
                 feature.attributes.PICREP = "<a href='" + s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.picrep_token + "' target='_blank'>" + feature.attributes.PICREP + "</a>";
               }
 
-              if (null !== feature.attributes.cellName) {
+              if (null != feature.attributes.cellName) {
                 feature.attributes.cellName = feature.attributes.cellName.replace(".000", "");
               }
 
@@ -273,13 +282,14 @@ define([
             return feature;
           });
         this.map.infoWindow.setFeatures(features);
-        isIdentify = true;
         this.showInfoWindow(lastIdentifyPoint);
       }));
     },
 
     generateInfoContent: function(feature) {
-      var content = "<table><tr><td><b>${cellName}</b></td><td style='padding-left: 3em;'><a id='moreInfoLink' href='#' data-dojo-attach-event='onclick:moreInfoClick'>More Info</a></td><td style='padding-left: 1em;'></td></tr></table>";
+
+
+      var content = "<table><tr><td><b>${cellName}</b></td><td style='padding-left: 8em;'><a id='moreInfoLink' href='javascript: void(0);'>More Info</a></td></tr></table>";
       content += "<hr noshade='noshade'>";
       content += "<table><tr><td>Feature:</td><td style='padding-left: 1em;'>${objectType:formatFeatureName}</td></tr><tr><td>Description:</td><td style='padding-left: 1em;'>${objectTypeDescription}</td></tr><tr><td>Geometry:</td><td style='padding-left:1em;'>${geometryType}</td></tr><tr><td>Usage:</td><td style='padding-left:1em;'>${usage}</td></tr><tr><td>Compilation Scale:</td><td style='padding-left:1em;'>${compilationScale}</td></tr></table>";
       content += "<div id='moreInfoDiv' style='display: none;'>";
@@ -294,6 +304,7 @@ define([
 
       content += "</table></div></div>";
       return content;
+
     },
 
     executeAISQueryTask: function(mp) {
@@ -379,54 +390,19 @@ define([
       return value;
     },
 
-    zoomToFeature: function() {
-      var feature = this.map.infoWindow.getSelectedFeature();
-      var centerPoint;
-
-      switch (feature.geometry.type) {
-        case "polygon":
-          var polygon = new Polygon(feature.geometry);
-
-          centerPoint = polygon.getExtent().getCenter();
-          break;
-        case "polyline":
-          var polyline = new Polyline(feature.geometry);
-
-          centerPoint = polyline.getExtent().getCenter();
-          break;
-        case "point":
-          centerPoint = new Point(feature.geometry);
-          break;
-      }
-
-      this.setMapScaleAtCenterPoint(feature.attributes.compilationScale, centerPoint);
-    },
-
-    setMapScaleAtCenterPoint: function(scale, centerPoint) {
-      if (scale && centerPoint) {
-        this.map.setScale(scale);
-        this.map.centerAt(centerPoint);
-      }
-    },
-
-
     clearGraphics: function() {
 
       this.map.graphics.clear();
     },
-
-
-
     moreInfoClick: function() {
       if (typeof moreInfoLink !== 'undefined') {
         if (moreInfoLink.innerHTML == "More Info") {
           moreInfoLink.innerHTML = "Less Info";
-          esri.show(moreInfoDiv);
-          isShowingMoreInfo = true;
+          domUtils.show(moreInfoDiv);
+
         } else {
           moreInfoLink.innerHTML = "More Info";
-          esri.hide(moreInfoDiv);
-          isShowingMoreInfo = false;
+          domUtils.hide(moreInfoDiv);
         }
       }
     },
