@@ -101,26 +101,38 @@ define([
       s57ServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer";
 
       this.createQueryTask(s57ServiceUrl);
-      this.createAISQueryTask(aisServiceUrl);
+      //this.createAISQueryTask(aisServiceUrl);
+
+      var moreInfoLink = domConstruct.create("a", {
+        "class": "action",
+        "id": "moreInfoLink",
+        "innerHTML": "More Info", //text that appears in the popup for the link 
+        "href": "javascript: void(0);"
+      }, query(".actionList", this.map.infoWindow.domNode)[0]);
 
 
-      
-      var popupWindowContent = query(".contentPane", this.map.infoWindow.domNode);
-
-      on(popupWindowContent, "click", function(e) {
-        if (e.target.id === 'moreInfoLink') {
-          moreInfoDiv = dom.byId('moreInfoDiv');
-          moreInfoLinkText = dom.byId('moreInfoLink');
-          if (moreInfoLinkText.innerHTML == "More Info") {
-            moreInfoLinkText.innerHTML = "Less Info";
-            domUtils.show(moreInfoDiv);
-          } else {
-            moreInfoLinkText.innerHTML = "More Info";
-            domUtils.hide(moreInfoDiv);
-          }
+      //when the link is clicked register a function that will run 
+      on(moreInfoLink, "click", function(e) {
+        moreInfoDiv = dom.byId('moreInfoDiv');
+        if (moreInfoLink.innerHTML == "More Info") {
+          moreInfoLink.innerHTML = "Less Info";
+          domUtils.show(moreInfoDiv);
+        } else {
+          moreInfoLink.innerHTML = "More Info";
+          domUtils.hide(moreInfoDiv);
         }
       });
 
+      on(this.map.infoWindow, "selection-change", function() {
+        moreInfoDiv = dom.byId('moreInfoDiv');
+
+        if (moreInfoLink.innerHTML == "More Info") {
+          domUtils.hide(moreInfoDiv);
+        } else {
+          domUtils.show(moreInfoDiv);
+        }
+
+      });
     },
 
 
@@ -155,7 +167,8 @@ define([
       this.pointGraphic = new Graphic(mp, this.pointSymbol);
 
       this.map.graphics.add(this.pointGraphic);
-      this.executeAISQueryTask(mp);
+      //this.executeAISQueryTask(mp);
+      this.executeQueryTask(mp);
     },
 
     pauseClickListener: function() {
@@ -289,7 +302,7 @@ define([
     generateInfoContent: function(feature) {
 
 
-      var content = "<table><tr><td><b>${cellName}</b></td><td style='padding-left: 8em;'><a id='moreInfoLink' href='javascript: void(0);'>More Info</a></td></tr></table>";
+      var content = "<table><tr><td><b>${cellName}</b></td></tr></table>";
       content += "<hr noshade='noshade'>";
       content += "<table><tr><td>Feature:</td><td style='padding-left: 1em;'>${objectType:formatFeatureName}</td></tr><tr><td>Description:</td><td style='padding-left: 1em;'>${objectTypeDescription}</td></tr><tr><td>Geometry:</td><td style='padding-left:1em;'>${geometryType}</td></tr><tr><td>Usage:</td><td style='padding-left:1em;'>${usage}</td></tr><tr><td>Compilation Scale:</td><td style='padding-left:1em;'>${compilationScale}</td></tr></table>";
       content += "<div id='moreInfoDiv' style='display: none;'>";

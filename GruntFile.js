@@ -18,7 +18,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: 'src',
           src: [
-            'widgets/**'
+            'widgets/**', 'libs/**'
           ],
           dest: stemappDir
         }],
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         files: [{
           cwd: 'src',
           src: [
-            'widgets/**', 'config.json', '*.pdf'
+            'widgets/**', 'libs/**'
           ],
           dest: appDir
         }],

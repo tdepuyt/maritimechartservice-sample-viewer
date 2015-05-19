@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/maritime/Search'],
+define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Search'],
 function(declare, BaseWidget, MaritimeSearch) {
   //To create a widget, you need to derive from BaseWidget.
   return declare([BaseWidget], {

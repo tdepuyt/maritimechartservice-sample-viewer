@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/maritime/Identify'],
+define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
     function(declare, BaseWidget, Identify) {
         //To create a widget, you need to derive from BaseWidget.
         var clazz = declare([BaseWidget], {
