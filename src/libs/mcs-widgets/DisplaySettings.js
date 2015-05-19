@@ -1,4 +1,4 @@
-var testsUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
+//var testsUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
 
 define([
   'dojo/on',
@@ -12,10 +12,10 @@ define([
   'dijit/_WidgetsInTemplateMixin',
   'esri/layers/ImageParameters',
   './S57ServiceLayer',
-  './AISServiceLayer',
+  './AISServiceLayer'//,
   //testsUrl + '../S57ServiceLayer.js',
   //testsUrl + '../AISServiceLayer.js',
-  'dijit/form/Button'
+  //'dijit/form/Button'
 ], function(
   on,
   template,

@@ -1,7 +1,5 @@
 {
   "widgetName": "MaritimeIdentify",
-  "aisServiceUrl": "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/AISServer",
-  "s57ServiceUrl": "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer",
   "identifySymbol": {
     "color": [
       255,

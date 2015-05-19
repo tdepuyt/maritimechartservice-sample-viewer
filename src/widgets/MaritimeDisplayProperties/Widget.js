@@ -14,15 +14,23 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('MaritimeDisplayProperties::postCreate');
-                this.s57Layer = this.map.getLayer(this.config.s57LayerID);
-                this.aisLayer = this.map.getLayer(this.config.aisLayerID);
-               
-                this.displaySettings = new DisplaySettings({
-                    map: this.map,
-                    s57Layer: this.s57Layer,
-                    aisLayer: this.aisLayer
-                }, this.displaySettingsNode);
-                
+
+                for (var j = 0; j < this.map.layerIds.length; j++) {
+                    var layer = this.map.getLayer(this.map.layerIds[j]);
+                    if (layer.url.indexOf("/exts/Maritime Chart Service/AISServer") > 0)
+                    else if (layer.url.indexOf("/exts/Maritime Chart Service/MapServer") > 0)
+                }
+
+                    this.displaySettingsNode.innerHTML = "This map has no Maritime Chart Service Layer";
+
+                } else {
+                    this.displaySettings = new DisplaySettings({
+                        map: this.map,
+                        s57Layer: this.s57Layer,
+                        aisLayer: this.aisLayer
+                    }, this.displaySettingsNode);
+                }
+
             },
 
             startup: function() {
@@ -30,8 +38,8 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                this.inherited(arguments);
 
                console.log('MCSDisplayProperties::startup');
-
-               this.displaySettings.startup();
+               if (this.displaySettings != null)
+                this.displaySettings.startup();
             }
 
             // onOpen: function(){

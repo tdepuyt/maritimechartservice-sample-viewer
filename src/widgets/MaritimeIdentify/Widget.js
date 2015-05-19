@@ -6,6 +6,8 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
             // Custom widget code goes here
 
             baseClass: 'identify',
+            aisServiceUrl: null,
+            s57ServiceUrl: null,
             // this property is set by the framework when widget is loaded.
             // name: 'Identify',
             // add additional properties here
@@ -15,14 +17,26 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
                 this.inherited(arguments);
                 console.log('Identify::postCreate');
 
-                this.Identify = new Identify({
+                for (var j = 0; j < this.map.layerIds.length; j++) {
+                    var layerUrl = this.map.getLayer(this.map.layerIds[j]).url;
+                    if (layerUrl.indexOf("/exts/Maritime Chart Service/AISServer") > 0)
+                        this.aisServiceUrl = layerUrl;
+                    else if (layerUrl.indexOf("/exts/Maritime Chart Service/MapServer") > 0)
+                        this.s57ServiceUrl = layerUrl;
+                }
+
+                if (this.s57ServiceUrl == null) {
+                    console.log("This map has no Maritime Chart Service Layer");
+                } else {
+                    this.Identify = new Identify({
                     map: this.map,
                     nls: this.nls,
-                    aisServiceUrl: this.config.aisServiceUrl,
-                    s57ServiceUrl: this.config.s57ServiceUrl,
+                    aisServiceUrl: this.aisServiceUrl,
+                    s57ServiceUrl: this.s57ServiceUrl,
                     identifySymbol: this.config.identifySymbol
                 }, this.IdentifyNode);
-            },
+            }
+        },
 
             startup: function() {
                 // summary:
@@ -30,7 +44,9 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
                 // tags:
                 //      private
                 this.inherited(arguments);
-                this.Identify.startup();
+                if (this.Identify) {
+                    this.Identify.startup();
+                }
             },
 
 

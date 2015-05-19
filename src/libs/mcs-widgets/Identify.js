@@ -97,11 +97,8 @@ define([
         this.setMap(this.map);
       }
 
-      aisServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/AISServer";
-      s57ServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer";
-
-      this.createQueryTask(s57ServiceUrl);
-      //this.createAISQueryTask(aisServiceUrl);
+      this.createQueryTask(this.s57ServiceUrl);
+      //this.createAISQueryTask(this.aisServiceUrl);
 
       var moreInfoLink = domConstruct.create("a", {
         "class": "action",
@@ -228,13 +225,13 @@ define([
             feature.attributes.layerName = result.layerName;
             if (result.layerName === 'S57 Cells') {
               if (null != feature.attributes.TXTDSC) {
-                feature.attributes.TXTDSC = "<a href='" + s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.txtdsc_token + "' target='_blank'>" + feature.attributes.TXTDSC + "</a>";
+                feature.attributes.TXTDSC = "<a href='" + _this.s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.txtdsc_token + "' target='_blank'>" + feature.attributes.TXTDSC + "</a>";
               }
               if (null != feature.attributes.NTXTDS) {
-                feature.attributes.NTXTDS = "<a href='" + s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.ntxtds_token + "' target='_blank'>" + feature.attributes.NTXTDS + "</a>";
+                feature.attributes.NTXTDS = "<a href='" + _this.s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.ntxtds_token + "' target='_blank'>" + feature.attributes.NTXTDS + "</a>";
               }
               if (null != feature.attributes.PICREP) {
-                feature.attributes.PICREP = "<a href='" + s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.picrep_token + "' target='_blank'>" + feature.attributes.PICREP + "</a>";
+                feature.attributes.PICREP = "<a href='" + _this.s57ServiceUrl + "/notes?f=json&file=" + feature.attributes.picrep_token + "' target='_blank'>" + feature.attributes.PICREP + "</a>";
               }
 
               if (null != feature.attributes.cellName) {
@@ -387,6 +384,7 @@ define([
       return content;
     },
 
+    //TODO: This needs testing and possible clean up. 
     setSafetyContour: function() {
       var dynlayer2 = map1.getLayer("s57ServiceLayer");
       var feature = map1.infoWindow.getSelectedFeature();
@@ -401,23 +399,6 @@ define([
     // --------------------------------------------------------
     formatFeatureName: function(value, key, data) {
       return value;
-    },
-
-    clearGraphics: function() {
-
-      this.map.graphics.clear();
-    },
-    moreInfoClick: function() {
-      if (typeof moreInfoLink !== 'undefined') {
-        if (moreInfoLink.innerHTML == "More Info") {
-          moreInfoLink.innerHTML = "Less Info";
-          domUtils.show(moreInfoDiv);
-
-        } else {
-          moreInfoLink.innerHTML = "More Info";
-          domUtils.hide(moreInfoDiv);
-        }
-      }
     },
 
     showInfoWindow: function(lastIdentifyPoint) {
