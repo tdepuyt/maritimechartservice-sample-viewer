@@ -18,9 +18,12 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layer = this.map.getLayer(this.map.layerIds[j]);
                     if (layer.url.indexOf("/exts/Maritime Chart Service/AISServer") > 0)
+                        this.aisLayer = layer;
                     else if (layer.url.indexOf("/exts/Maritime Chart Service/MapServer") > 0)
+                        this.s57Layer = layer;
                 }
 
+                if (this.s57Layer == null) {
                     this.displaySettingsNode.innerHTML = "This map has no Maritime Chart Service Layer";
 
                 } else {
