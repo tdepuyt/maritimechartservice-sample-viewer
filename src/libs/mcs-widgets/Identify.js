@@ -207,9 +207,9 @@ define([
 
     executeQueryTask: function(mp) {
 
-      lastIdentifyPoint = mp;
+      identifyPoint = mp;
 
-      this.identifyParams.geometry = lastIdentifyPoint;
+      this.identifyParams.geometry = identifyPoint;
       this.identifyParams.mapExtent = this.map.extent;
       this.identifyParams.width = this.map.width;
       this.identifyParams.height = this.map.height;
@@ -292,7 +292,7 @@ define([
             return feature;
           });
         this.map.infoWindow.setFeatures(features);
-        this.showInfoWindow(lastIdentifyPoint);
+        this.showInfoWindow(identifyPoint);
       }));
     },
 
@@ -319,20 +319,13 @@ define([
 
     executeAISQueryTask: function(mp) {
 
-      //TODO: Check if ais layer is in map
-      /*var dynlayer3 = map1.getLayer("s57AISServiceLayer");
-      if (typeof dynlayer3 == "undefined" || dynlayer3 == null || !dynlayer3.visible) {
-        return (this.executeQueryTask(evt));
-      }*/
+      identifyPoint = mp;
 
-      lastIdentifyPoint = mp;
-
-      this.identifyAISParams.geometry = lastIdentifyPoint;
+      this.identifyAISParams.geometry = identifyPoint;
       this.identifyAISParams.mapExtent = this.map.extent;
       this.identifyAISParams.width = this.map.width;
       this.identifyAISParams.height = this.map.height;
 
-      //var deferred = this.identifyAISTask.execute(identifyAISParams);
       this.identifyAISTask.execute(this.identifyAISParams, function(response) {
         var deferred = new Deferred();
         deferred.resolve(response);
@@ -353,7 +346,7 @@ define([
           });
           this.map.infoWindow.setFeatures(features);
 
-          this.showInfoWindow(lastIdentifyPoint);
+          this.showInfoWindow(identifyPoint);
         }
       }));
     },
@@ -396,16 +389,11 @@ define([
       }
     },
 
-    // --------------------------------------------------------
-    formatFeatureName: function(value, key, data) {
-      return value;
-    },
-
-    showInfoWindow: function(lastIdentifyPoint) {
-      var isInExtent = this.map.extent.contains(lastIdentifyPoint);
+    showInfoWindow: function(identifyPoint) {
+      var isInExtent = this.map.extent.contains(identifyPoint);
       if (isInExtent === true) {
-        if (lastIdentifyPoint !== null) {
-          this.map.infoWindow.show(lastIdentifyPoint);
+        if (identifyPoint !== null) {
+          this.map.infoWindow.show(identifyPoint);
           on(this.map.infoWindow, 'hide', lang.hitch(this, function() {
             this.map.graphics.clear();
           }));

@@ -19,9 +19,9 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
 
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layerUrl = this.map.getLayer(this.map.layerIds[j]).url;
-                    if (layerUrl.indexOf("/exts/Maritime Chart Service/AISServer") > 0)
+                    if ((layerUrl.indexOf("/exts/Maritime Chart Service/AISServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/AISServer") > 0))
                         this.aisServiceUrl = layerUrl;
-                    else if (layerUrl.indexOf("/exts/Maritime Chart Service/MapServer") > 0)
+                    else if ((layerUrl.indexOf("/exts/Maritime Chart Service/MapServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/MapServer") > 0))
                         this.s57ServiceUrl = layerUrl;
                 }
 
