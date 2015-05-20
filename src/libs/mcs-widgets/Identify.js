@@ -98,7 +98,8 @@ define([
       }
 
       this.createQueryTask(this.s57ServiceUrl);
-      //this.createAISQueryTask(this.aisServiceUrl);
+      if(this.aisServiceUrl != null)
+       this.createAISQueryTask(this.aisServiceUrl);
 
       var moreInfoLink = domConstruct.create("a", {
         "class": "action",
@@ -164,8 +165,8 @@ define([
       this.pointGraphic = new Graphic(mp, this.pointSymbol);
 
       this.map.graphics.add(this.pointGraphic);
-      //this.executeAISQueryTask(mp);
-      this.executeQueryTask(mp);
+      this.executeAISQueryTask(mp);
+      //this.executeQueryTask(mp);
     },
 
     pauseClickListener: function() {
@@ -319,41 +320,44 @@ define([
 
     executeAISQueryTask: function(mp) {
 
-      identifyPoint = mp;
+      if (this.aisServiceUrl == null)
+      else {
+        identifyPoint = mp;
 
-      this.identifyAISParams.geometry = identifyPoint;
-      this.identifyAISParams.mapExtent = this.map.extent;
-      this.identifyAISParams.width = this.map.width;
-      this.identifyAISParams.height = this.map.height;
+        this.identifyAISParams.geometry = identifyPoint;
+        this.identifyAISParams.mapExtent = this.map.extent;
+        this.identifyAISParams.width = this.map.width;
+        this.identifyAISParams.height = this.map.height;
 
-      this.identifyAISTask.execute(this.identifyAISParams, function(response) {
-        var deferred = new Deferred();
-        deferred.resolve(response);
-      }).then(lang.hitch(this, function(response) {
-        if (response.length <= 0) {
-          this.executeQueryTask(mp);
-        } else {
-          _this = this;
-          var features = array.map(response, function(result) {
-            var feature = result.feature;
-            feature.attributes.layerName = result.layerName;
-            if (result.layerName === 'S57 Cells') {
-              feature.attributes.moreInfo = "";
-              var template = new InfoTemplate("Identify Results", _this.generateAISInfoContent(feature));
-              feature.setInfoTemplate(template);
-            }
-            return feature;
-          });
-          this.map.infoWindow.setFeatures(features);
+        this.identifyAISTask.execute(this.identifyAISParams, function(response) {
+          var deferred = new Deferred();
+          deferred.resolve(response);
+        }).then(lang.hitch(this, function(response) {
+          if (response.length <= 0) {
+            this.executeQueryTask(mp);
+          } else {
+            _this = this;
+            var features = array.map(response, function(result) {
+              var feature = result.feature;
+              feature.attributes.layerName = result.layerName;
+              if (result.layerName === 'S57 Cells') {
+                feature.attributes.moreInfo = "";
+                var template = new InfoTemplate("Identify Results", _this.generateAISInfoContent(feature));
+                feature.setInfoTemplate(template);
+              }
+              return feature;
+            });
+            this.map.infoWindow.setFeatures(features);
 
-          this.showInfoWindow(identifyPoint);
-        }
-      }));
+            this.showInfoWindow(identifyPoint);
+          }
+        }));
+      }
     },
 
     generateAISInfoContent: function(feature) {
-      var content = "<table><tr><td><b>${cellName}</b></td><td style='padding-left: 3em;'><a id='moreInfoLink' href='#' onclick='moreInfoClick();'>More Info</a></td>";
-      content += "<td style='padding-left: 1em;color: grey'>Zoom To</td></tr></table>";
+      var content = "<table><tr><td><b>${cellName}</b></td>";
+      content += "</tr></table>";
 
       content += "<hr noshade='noshade'>";
       content += "<table><tr><td  style='white-space: nowrap'>Ship name:</td><td style='padding-left: 1em;'>${shipName}</td></tr>";
