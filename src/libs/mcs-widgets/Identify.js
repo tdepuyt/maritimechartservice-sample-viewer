@@ -320,40 +320,41 @@ define([
 
     executeAISQueryTask: function(mp) {
 
-      if (this.aisServiceUrl == null)
-        this.executeQueryTask(mp);
-      else {
-        identifyPoint = mp;
-
-        this.identifyAISParams.geometry = identifyPoint;
-        this.identifyAISParams.mapExtent = this.map.extent;
-        this.identifyAISParams.width = this.map.width;
-        this.identifyAISParams.height = this.map.height;
-
-        this.identifyAISTask.execute(this.identifyAISParams, function(response) {
-          var deferred = new Deferred();
-          deferred.resolve(response);
-        }).then(lang.hitch(this, function(response) {
-          if (response.length <= 0) {
+        if (this.aisServiceUrl == null) {
             this.executeQueryTask(mp);
-          } else {
-            _this = this;
-            var features = array.map(response, function(result) {
-              var feature = result.feature;
-              feature.attributes.layerName = result.layerName;
-              if (result.layerName === 'S57 Cells') {
-                feature.attributes.moreInfo = "";
-                var template = new InfoTemplate("Identify Results", _this.generateAISInfoContent(feature));
-                feature.setInfoTemplate(template);
-              }
-              return feature;
-            });
-            this.map.infoWindow.setFeatures(features);
+        }
+        else {
+            identifyPoint = mp;
 
-            this.showInfoWindow(identifyPoint);
-          }
-        }));
-      }
+            this.identifyAISParams.geometry = identifyPoint;
+            this.identifyAISParams.mapExtent = this.map.extent;
+            this.identifyAISParams.width = this.map.width;
+            this.identifyAISParams.height = this.map.height;
+
+            this.identifyAISTask.execute(this.identifyAISParams, function (response) {
+                var deferred = new Deferred();
+                deferred.resolve(response);
+            }).then(lang.hitch(this, function (response) {
+                if (response.length <= 0) {
+                    this.executeQueryTask(mp);
+                } else {
+                    _this = this;
+                    var features = array.map(response, function (result) {
+                        var feature = result.feature;
+                        feature.attributes.layerName = result.layerName;
+                        if (result.layerName === 'S57 Cells') {
+                            feature.attributes.moreInfo = "";
+                            var template = new InfoTemplate("Identify Results", _this.generateAISInfoContent(feature));
+                            feature.setInfoTemplate(template);
+                        }
+                        return feature;
+                    });
+                    this.map.infoWindow.setFeatures(features);
+
+                    this.showInfoWindow(identifyPoint);
+                }
+            }));
+        }
     },
 
     generateAISInfoContent: function(feature) {
