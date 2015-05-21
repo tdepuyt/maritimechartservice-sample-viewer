@@ -63,7 +63,9 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
                 // summary:
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onClose', arguments);
-                this.Identify.pauseClickListener();
+                if (this.Identify) {
+                    this.Identify.pauseClickListener();
+                }
             }
 
         });

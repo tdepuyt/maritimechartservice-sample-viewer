@@ -321,6 +321,7 @@ define([
     executeAISQueryTask: function(mp) {
 
       if (this.aisServiceUrl == null)
+        this.executeQueryTask(mp);
       else {
         identifyPoint = mp;
 
