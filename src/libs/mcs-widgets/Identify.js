@@ -158,15 +158,13 @@ define([
     },
 
     mapClickHandler: function(evt) {
-      var mp = evt.mapPoint;
-      if (this.pointGraphic) {
-        this.map.graphics.remove(this.pointGraphic);
+        if (this.pointGraphic) {
+          this.map.graphics.remove(this.pointGraphic);
+        }
+        this.pointGraphic = new Graphic(mp, this.pointSymbol);
+        this.map.graphics.add(this.pointGraphic);
+        this.executeAISQueryTask(mp);
       }
-      this.pointGraphic = new Graphic(mp, this.pointSymbol);
-
-      this.map.graphics.add(this.pointGraphic);
-      this.executeAISQueryTask(mp);
-      //this.executeQueryTask(mp);
     },
 
     pauseClickListener: function() {
