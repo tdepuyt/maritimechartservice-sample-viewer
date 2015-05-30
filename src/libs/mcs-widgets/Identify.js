@@ -158,6 +158,9 @@ define([
     },
 
     mapClickHandler: function(evt) {
+      if (this.map._params.showInfoWindowOnClick === true) {
+        var mp = evt.mapPoint;
+        this.map.infoWindow.clearFeatures();
         if (this.pointGraphic) {
           this.map.graphics.remove(this.pointGraphic);
         }

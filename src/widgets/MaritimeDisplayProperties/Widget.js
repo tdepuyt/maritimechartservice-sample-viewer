@@ -23,6 +23,17 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                         this.s57Layer = layer;
                 }
 
+                var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
+                for (j = 0; j < operLayers.length; j++) {
+                    if((this.s57Layer) && (this.s57Layer.id == operLayers[j].id)) {
+                        this.s57LayerTitle = operLayers[j].title;
+                    } else if((this.aisLayer) && (this.aisLayer.id == operLayers[j].id)) {
+                        this.aisLayerTitle = operLayers[j].title;
+                    }
+
+
+                }
+
                 if (this.s57Layer == null) {
                     this.displaySettingsNode.innerHTML = "This map has no Maritime Chart Service Layer";
 
@@ -30,7 +41,9 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                     this.displaySettings = new DisplaySettings({
                         map: this.map,
                         s57Layer: this.s57Layer,
-                        aisLayer: this.aisLayer
+                        aisLayer: this.aisLayer,
+                        s57LayerTitle: this.s57LayerTitle,
+                        aisLayerTitle: this.aisLayerTitle
                     }, this.displaySettingsNode);
                 }
 
