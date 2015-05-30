@@ -1,7 +1,7 @@
 //var testsUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
 
 define([
-  'dojo/on',
+  'dojo/on', 'dojo/topic',
   'dojo/text!./templates/DisplaySettings.html',
 
   'dojo/_base/declare',
@@ -17,7 +17,7 @@ define([
   //testsUrl + '../AISServiceLayer.js',
   //'dijit/form/Button'
 ], function(
-  on,
+  on, topic,
   template,
 
   declare, lang,
@@ -38,6 +38,8 @@ define([
     widgetsInTemplate: true,
     aisLayer: null,
     s57Layer: null,
+    s57LayerTitle: null,
+    aisLayerTitle: null,
     s57CustomLayer: null,
     aisCustomLayer: null,
     map: null,
@@ -59,10 +61,16 @@ define([
       //this.aisLayer = this.map.getLayer("Maritime Chart Service_4534");
       var imageParameters = new ImageParameters();
       imageParameters.format = "jpeg";
+
       s57CustomLayer = new S57ServiceLayer(this.s57Layer.url, {
-        "opacity": 1,
+        "opacity": this.s57Layer.opacity,
+        "visible": this.s57Layer.visible,
         "imageParameters": imageParameters,
-        "id": "Maritime Chart Service"
+        "refreshInterval": this.s57Layer.refreshInterval,
+        "maxScale": this.s57Layer.maxScale,
+        "minScale": this.s57Layer.minScale,
+        "id": this.s57LayerTitle || this.s57Layer.id,
+        "description": this.s57Layer.description
       });
 
       on(s57CustomLayer, 'parametersLoaded', lang.hitch(this, function() {
@@ -72,12 +80,18 @@ define([
       on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
         this.map.removeLayer(this.s57Layer);
       }));
+      this.map.addLayer(s57CustomLayer);
       
       if (this.aisLayer) {
         aisCustomLayer = new AISServiceLayer(this.aisLayer.url, {
-          "opacity": 1,
+          "opacity": this.aisLayer.opacity,
+          "visible": this.aisLayer.visible,
           "imageParameters": imageParameters,
-          "id": "Recorded SF Harbor AIS Service"
+          "refreshInterval": this.aisLayer.refreshInterval,
+          "maxScale": this.aisLayer.maxScale,
+          "minScale": this.aisLayer.minScale,
+          "id": this.aisLayerTitle || this.s57Layer.id,
+          "description": this.aisLayer.description
         });
 
         on.once(aisCustomLayer, 'update-end', lang.hitch(this, function() {
@@ -87,10 +101,6 @@ define([
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
         this.map.addLayer(aisCustomLayer);
       } else aisCustomLayer = null;
-      this.map.addLayer(s57CustomLayer);
-      
-      //this.map.removeLayer(this.aisLayer);
-      //this.map.removeLayer(this.s57Layer);
     },
     setupConnections: function() {
       // summary:
@@ -182,6 +192,14 @@ define([
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
+      topic.subscribe("mcs/setSafetyContour", function(){
+        _this.input_safety.value = parseInt(arguments[0][0], 10).toString();
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "SafetyContour")].value = parseInt(_this.input_safety.value, 10);
+        s57CustomLayer.refresh();
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+        });
     },
     _onApplyClick: function( /*e*/ ) {
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;

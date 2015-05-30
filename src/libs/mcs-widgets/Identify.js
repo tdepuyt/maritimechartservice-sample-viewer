@@ -7,6 +7,7 @@ define([
   'dojo/dom-construct',
   'dojo/query',
   'dojo/Deferred',
+  'dojo/topic',
   'dojo/_base/array',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
@@ -31,7 +32,7 @@ define([
 ], function(
   template,
   declare,
-  lang, on, dom, domConstruct, query, Deferred, array,
+  lang, on, dom, domConstruct, query, Deferred, topic, array,
   _WidgetBase,
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
@@ -98,8 +99,13 @@ define([
       }
 
       this.createQueryTask(this.s57ServiceUrl);
-      if(this.aisServiceUrl != null)
-       this.createAISQueryTask(this.aisServiceUrl);
+      if(this.aisServiceUrl != null){
+        this.createAISQueryTask(this.aisServiceUrl);
+        on(this.map.infoWindow.domNode, 'click', lang.hitch(this, function(e){
+          if(e.target.id === 'safetyContourLink')
+            this.setSafetyContour();
+        }));
+      }
 
       var moreInfoLink = domConstruct.create("a", {
         "class": "action",
@@ -131,6 +137,8 @@ define([
         }
 
       });
+
+      
     },
 
 
@@ -146,11 +154,6 @@ define([
     setMap: function(map) {
       if (map) {
         this.map = map;
-        this.graphicsLayer = new GraphicsLayer();
-        this.graphicsLayer.name = 'Identify Results';
-        this.map.addLayer(this.graphicsLayer);
-        this.drawToolBar = new Draw(this.map);
-        this.drawToolBar.setMarkerSymbol(this.pointSymbol);
         this.own(
           this.clickListener = on.pausable(this.map, 'click', lang.hitch(this, this.mapClickHandler))
         );
@@ -352,6 +355,7 @@ define([
             this.map.infoWindow.setFeatures(features);
 
             this.showInfoWindow(identifyPoint);
+            //query(".safetyContourLink", this.map.infoWindow.domNode).onclick(this.setSafetyContour());
           }
         }));
       }
@@ -364,7 +368,7 @@ define([
       content += "<hr noshade='noshade'>";
       content += "<table><tr><td  style='white-space: nowrap'>Ship name:</td><td style='padding-left: 1em;'>${shipName}</td></tr>";
       if (feature.attributes["draught"] != "not available") {
-        content += "<tr><td>Draught:</td><td style='padding-left: 1em;'><a id='safetyContourLink' href='#' onclick='setSafetyContour();'>${draught}</a></td></tr>";
+        content += "<tr><td>Draught:</td><td style='padding-left: 1em;'><a class='safetyContourLink' id='safetyContourLink' href='#'>${draught}</a></td></tr>";
       } else {
         content += "<tr><td>Draught:</td><td style='padding-left: 1em;'>${draught}</td></tr>";
       }
@@ -383,15 +387,10 @@ define([
       return content;
     },
 
-    //TODO: This needs testing and possible clean up. 
     setSafetyContour: function() {
-      var dynlayer2 = map1.getLayer("s57ServiceLayer");
-      var feature = map1.infoWindow.getSelectedFeature();
+      var feature = this.map.infoWindow.getSelectedFeature();
       if (feature.attributes["draught"] != "not available") {
-        var parametersArray = dynlayer2.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-        parametersArray[findParameter(dynlayer2, "SafetyContour")].value = +feature.attributes["draught"];
-        dijit.byId("input_safety").set('value', parametersArray[findParameter(dynlayer2, "SafetyContour")].value.toString());
-        dynlayer2.refresh();
+        topic.publish('mcs/setSafetyContour', [feature.attributes["draught"]]);
       }
     },
 
