@@ -305,10 +305,10 @@ define([
 
 
       var content = "<table><tr><td><b>${cellName}</b></td></tr></table>";
-      content += "<hr noshade='noshade'>";
+      content += "<p style='border: 2px inset; margin: 5px 0px ;'></p>";
       content += "<table><tr><td>Feature:</td><td style='padding-left: 1em;'>${objectType:formatFeatureName}</td></tr><tr><td>Description:</td><td style='padding-left: 1em;'>${objectTypeDescription}</td></tr><tr><td>Geometry:</td><td style='padding-left:1em;'>${geometryType}</td></tr><tr><td>Usage:</td><td style='padding-left:1em;'>${usage}</td></tr><tr><td>Compilation Scale:</td><td style='padding-left:1em;'>${compilationScale}</td></tr></table>";
       content += "<div id='moreInfoDiv' style='display: none;'>";
-      content += "<hr noshade='noshade'>";
+      content += "<p style='border: 2px inset; margin: 5px 0px ;'></p>";
       content += " <div style='height: 100px; overflow: auto;'><table>";
 
       for (var key in feature.attributes) {
@@ -365,7 +365,7 @@ define([
       var content = "<table><tr><td><b>${cellName}</b></td>";
       content += "</tr></table>";
 
-      content += "<hr noshade='noshade'>";
+      content += "<p style='border: 2px inset; margin: 5px 0px ;'></p>";
       content += "<table><tr><td  style='white-space: nowrap'>Ship name:</td><td style='padding-left: 1em;'>${shipName}</td></tr>";
       if (feature.attributes["draught"] != "not available") {
         content += "<tr><td>Draught:</td><td style='padding-left: 1em;'><a class='safetyContourLink' id='safetyContourLink' href='#'>${draught}</a></td></tr>";
@@ -374,7 +374,7 @@ define([
       }
       content += "<tr><td>COG:</td><td style='padding-left:1em;'>${cog}</td></tr><tr><td>SOG:</td><td style='padding-left:1em;'>${sog}</td></tr><tr><td>Position:</td><td style='padding-left:1em;'>${position}</td></tr></table>";
       content += "<div id='moreInfoDiv' style='display: none;'>";
-      content += "<hr noshade='noshade'>";
+      content += "<p style='border: 2px inset; margin: 5px 0px ;'></p>";
       content += " <div style='height: 100px; overflow: auto;'><table>";
 
       for (var key in feature.attributes) {
