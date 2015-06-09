@@ -30,12 +30,16 @@ The following are custom WAB widgets that use the maritime chart service library
 
 
 ## Requirements
-Requires Web AppBuilder for ArcGIS 1.1
+Requires Web AppBuilder for ArcGIS 1.1 for the Web App builder widgets. The ESRI widgets require JS API 3.9 or less. 
 
 ## Instructions
 Deploying Widgets.
 
-To use the widgets with you should copy any of the widgets to the stemapp/widget directory. This is located in %webappbuilder_install%/client directory.
+1. To use the widgets with you should copy any of the widgets to the stemapp/widget directory. This is located in %webappbuilder_install%/client directory. 
+2. The webappbuilder widgets need the corresponding classes in the libs folder to be copied as well to the stemapp/libs directory. This is located in %webappbuilder_install%/client directory. 
+3. Since the Identify widget is an off-panel web app builder widget, the config.json file at stemapp/predefined-apps/default needs to be replaced by the [src/config.json](src/config.js) file in the repository. 
+4. Since the Identify widget only supports JSAPI 3.11 and below, please replace the env.js file at %webappbuilder_install%\client\stemapp folder with the one in [src/env.js](./src/env.js)
+5. Since this uses dojo bootstrap for the Display Settings widget, please replace the init.js file at %webappbuilder_install%\client\stemapp folder with the one in [src/init.js](./src/init.js)
 
 For more resources on developing modifying widgets please visit
 [Web AppBuilder for ArcGIS Documentation](http://doc.arcgis.com/en/web-appbuilder/)
