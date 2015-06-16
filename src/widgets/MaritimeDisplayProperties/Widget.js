@@ -17,6 +17,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
 
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layer = this.map.getLayer(this.map.layerIds[j]);
+                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                     if ((layer.url.indexOf("/exts/Maritime Chart Service/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/AISServer") > 0))
                         this.aisLayer = layer;
                     else if ((layer.url.indexOf("/exts/Maritime Chart Service/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0))
@@ -30,7 +31,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                     } else if((this.aisLayer) && (this.aisLayer.id == operLayers[j].id)) {
                         this.aisLayerTitle = operLayers[j].title;
                     }
-
+                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
 
                 }
 
@@ -41,8 +42,10 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                     this.displaySettings = new DisplaySettings({
                         map: this.map,
                         s57Layer: this.s57Layer,
+                        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                         aisLayer: this.aisLayer,
                         s57LayerTitle: this.s57LayerTitle,
+                        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                         aisLayerTitle: this.aisLayerTitle
                     }, this.displaySettingsNode);
                 }

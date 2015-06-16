@@ -4,7 +4,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
         var clazz = declare([BaseWidget], {
 
             // Custom widget code goes here
-
+            /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
             baseClass: 'identify',
             aisServiceUrl: null,
             s57ServiceUrl: null,
@@ -19,6 +19,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
 
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layerUrl = this.map.getLayer(this.map.layerIds[j]).url;
+                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                     if ((layerUrl.indexOf("/exts/Maritime Chart Service/AISServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/AISServer") > 0))
                         this.aisServiceUrl = layerUrl;
                     else if ((layerUrl.indexOf("/exts/Maritime Chart Service/MapServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/MapServer") > 0))
@@ -31,6 +32,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
                     this.Identify = new Identify({
                     map: this.map,
                     nls: this.nls,
+                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                     aisServiceUrl: this.aisServiceUrl,
                     s57ServiceUrl: this.s57ServiceUrl,
                     identifySymbol: this.config.identifySymbol

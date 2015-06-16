@@ -12,6 +12,7 @@ define([
   'dijit/_WidgetsInTemplateMixin',
   'esri/layers/ImageParameters',
   './S57ServiceLayer',
+  /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
   './AISServiceLayer',
   //testsUrl + '../S57ServiceLayer.js',
   //testsUrl + '../AISServiceLayer.js',
@@ -28,6 +29,7 @@ define([
   _WidgetsInTemplateMixin,
   ImageParameters,
   S57ServiceLayer,
+  /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
   AISServiceLayer
 ) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -37,11 +39,14 @@ define([
     templateString: template,
     baseClass: 'display-settings',
     widgetsInTemplate: true,
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisLayer: null,
     s57Layer: null,
     s57LayerTitle: null,
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisLayerTitle: null,
     s57CustomLayer: null,
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisCustomLayer: null,
     map: null,
 
@@ -83,6 +88,7 @@ define([
       }));
       this.map.addLayer(s57CustomLayer);
       
+      /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
       if (this.aisLayer) {
         aisCustomLayer = new AISServiceLayer(this.aisLayer.url, {
           "opacity": this.aisLayer.opacity,
@@ -133,6 +139,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "ColorScheme")].value = parseInt(_this.colorschemeSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer) {
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
           aisCustomLayer.refresh();
@@ -142,6 +149,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "DisplayDepthUnits")].value = parseInt(_this.depthunitsSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -149,6 +157,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "TwoDepthShades")].value = parseInt(_this.depthshadesSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -156,6 +165,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "ShallowDepthPattern")].value = parseInt(_this.shallowpatternsSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -163,6 +173,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.StaticParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "PointSymbolizationType")].value = parseInt(_this.pointsymbolizationSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -170,12 +181,14 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.StaticParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "AreaSymbolizationType")].value = parseInt(_this.areasymbolizationSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(on(this.framesonSelect, 'change', function() {
         s57CustomLayer.framesOn = (_this.framesonSelect.value === '2');
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -183,6 +196,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "HonorScamin")].value = parseInt(_this.scaminSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -190,6 +204,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "DisplayNOBJNM")].value = parseInt(_this.nobjnmSelect.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
@@ -198,6 +213,7 @@ define([
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "SafetyContour")].value = parseFloat(_this.input_safety.value, 10);
         s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
         });
@@ -208,6 +224,7 @@ define([
       parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = parseFloat(this.input_safety.value, 10);
       parametersArray[this.findParameter(parametersArray, "DeepContour")].value = parseFloat(this.input_deep.value, 10);
       s57CustomLayer.refresh();
+      /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
       if (aisCustomLayer)
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
     },

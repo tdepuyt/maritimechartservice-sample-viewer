@@ -1,3 +1,4 @@
+/* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
 define([
 		'dojo/_base/declare',
 		'dojo/_base/lang',

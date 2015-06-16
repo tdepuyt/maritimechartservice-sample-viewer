@@ -61,11 +61,13 @@ define([
     showClear: false,
     //keepOneGraphic: false,
     s57ServiceUrl: null,
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisServiceUrl: null,
     pointGraphic: null,
     simpleMarkerSymbol: null,
     identifyTask: null,
     identifyParams: null,
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     identifyAISParams: null,
     identifyAISTask: null,
 
@@ -99,6 +101,7 @@ define([
       }
 
       this.createQueryTask(this.s57ServiceUrl);
+      /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
       if(this.aisServiceUrl != null){
         this.createAISQueryTask(this.aisServiceUrl);
         on(this.map.infoWindow.domNode, 'click', lang.hitch(this, function(e){
@@ -169,6 +172,7 @@ define([
         }
         this.pointGraphic = new Graphic(mp, this.pointSymbol);
         this.map.graphics.add(this.pointGraphic);
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         this.executeAISQueryTask(mp);
       }
     },
@@ -202,6 +206,7 @@ define([
       this.identifyParams.dpi = 96;
     },
 
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     createAISQueryTask: function(in_layer) {
       this.identifyAISTask = new IdentifyTask(in_layer);
       this.identifyAISParams = new IdentifyParameters();
@@ -322,6 +327,7 @@ define([
 
     },
 
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     executeAISQueryTask: function(mp) {
 
       if (this.aisServiceUrl == null)
@@ -361,6 +367,7 @@ define([
       }
     },
 
+    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     generateAISInfoContent: function(feature) {
       var content = "<table><tr><td><b>${cellName}</b></td>";
       content += "</tr></table>";
