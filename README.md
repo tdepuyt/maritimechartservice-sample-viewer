@@ -45,10 +45,14 @@ Deploying Widgets:
 
 1. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
   * Copy the contents of the `src\widgets\` folder to `%webappbuilder_install%\client\stemapp\widgets\`
-2. The Web App Builder widgets depend on the modules in the libs folder, so these must be copied as well to the stemapp/libs directory. This is located in %webappbuilder_install%/client directory. 
-3. Since the Identify widget is an off-panel web app builder widget, the config.json file at stemapp/predefined-apps/default needs to be replaced by the [src/config.json](src/config.js) file in the repository. 
-4. Since the Identify widget only supports JSAPI 3.11 and below, please replace the env.js file at %webappbuilder_install%\client\stemapp folder with the one in [src/env.js](./src/env.js)
-5. Since this uses dojo bootstrap for the Display Settings widget, please replace the init.js file at %webappbuilder_install%\client\stemapp folder with the one in [src/init.js](./src/init.js)
+2. The Web App Builder widgets depend on the modules in the libs folder.
+  * Copy the contents of `src\libs\` folder to `<webappbuilder folder>\client\stemapp\libs\`
+3. The Identify widget is an off-panel web app builder widget.
+  * Copy the file `src\config.json` to the `<webappbuilder folder>\client\stemapp\predefined-apps\default\` folder (replace the `config.json` file there).
+4. The Identify widget only supports JSAPI 3.11 and below
+  * Copy the file `src\env.js` to the `<webappbuilder folder>\client\stemapp\` folder (replace the `env.js` file there).
+5. This example uses dojo bootstrap for the Display Settings widget
+  * Copy the file `src\init.js` to the `<webappbuilder folder>\client\stemapp\` folder (replace the `init.js` file there).
 
 For more resources on developing and modifying widgets please visit
 [Web App Builder for ArcGIS (Developer Edition) documentation](https://developers.arcgis.com/web-appbuilder/)
