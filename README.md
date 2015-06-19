@@ -1,12 +1,9 @@
 # mcs-widgets
 
-JavaScript example illustrating how to use the Maritime Chart Service functionality provided by ArcGIS for Maritime: Server.
+The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
+The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate within custom web apps outside of the Web App Builder for ArcGIS framework.
 
 ![App](maritimechartservice-sample-viewer.png)
-
-ArcGIS for Maritime: Server widgets are a set of widgets and dojo classes that case be used either within Web App Builder for ArcGIS, or wihin custom web applications that don't depend on the Web App Builder. These widgets show some of the functionalities offered by the ArcGIS for Maritime: Server product.
-
-Important Note: There has been some testing with Web AppBuilder for ArcGIS 1.1 but there are still some minor issues which are being captured as part of this repository.
 
 ## Sections
 
