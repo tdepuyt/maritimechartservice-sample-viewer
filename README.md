@@ -4,7 +4,7 @@ JavaScript example illustrating how to use the Maritime Chart Service functional
 
 ![App](maritimechartservice-sample-viewer.png)
 
-ArcGIS for Maritime: Server widgets is a set of widgets and dojo classes for use within the Web AppBuilder for ArcGIS and also in web applications that are not built using the Web AppBuilder. These widgets adress specialized workflow created and managed by the Esri Server for Maritime team. These widgets are a component of the applications created by the MCS team.
+ArcGIS for Maritime: Server widgets are a set of widgets and dojo classes that case be used either within Web App Builder for ArcGIS, or wihin custom web applications that don't depend on the Web App Builder. These widgets show some of the functionalities offered by the ArcGIS for Maritime: Server product.
 
 Important Note: There has been some testing with Web AppBuilder for ArcGIS 1.1 but there are still some minor issues which are being captured as part of this repository.
 
