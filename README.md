@@ -29,7 +29,7 @@ The Widget Repository currently includes:
 
 ###Maritime Chart Service Library
 
-This is a [library](./src/libs/mcs-widgets/README.md) of custom ESRI widgets and custom layer classes that extend ESRI's JSAPI in order to consume the Maritime Chart Service in apps. 
+This is a library of custom ESRI widgets and custom layer classes that extend ESRI's JSAPI in order to consume the Maritime Chart Service in apps. 
 
 ###Web App Builder Widgets
 
