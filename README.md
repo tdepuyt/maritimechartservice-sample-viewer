@@ -34,11 +34,11 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 * Maritime Display Properties
 * Maritime Identify
-* Maritime Search
+* Maritime Search (coming soon)
 
 
 ## Requirements
-Requires Web AppBuilder for ArcGIS 1.1 for the Web App builder widgets. The ESRI widgets require JS API 3.9 or less. 
+Requires Web App Builder for ArcGIS 1.1 for the Web App builder widgets. The ESRI widgets require JS API 3.9 or less. 
 
 ## Instructions
 Deploying Widgets.
@@ -50,7 +50,7 @@ Deploying Widgets.
 5. Since this uses dojo bootstrap for the Display Settings widget, please replace the init.js file at %webappbuilder_install%\client\stemapp folder with the one in [src/init.js](./src/init.js)
 
 For more resources on developing and modifying widgets please visit
-[Web AppBuilder for ArcGIS (Developer Edition) documentation](https://developers.arcgis.com/web-appbuilder/)
+[Web App Builder for ArcGIS (Developer Edition) documentation](https://developers.arcgis.com/web-appbuilder/)
 
 ### General Help
 [New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
