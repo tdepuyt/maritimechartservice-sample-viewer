@@ -19,6 +19,12 @@ Important Note: There has been some testing with Web AppBuilder for ArcGIS 1.1 b
 * [Licensing](#licensing)
 
 ## Features
+
+These Web App Builder widgets illustrates how to build web apps consuming S-57 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
+* Allows users to change S-52 based display settings through the JavaScrip client
+* Enables users to identify on individual features and view their attribute information.
+* Provides the ability to search based on object name (OBJNAM) and S-57 dataset names. (functionality coming soon)
+
 The Widget Repository currently includes:
 
 ###Maritime Chart Service Library
