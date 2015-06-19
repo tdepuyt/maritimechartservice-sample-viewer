@@ -26,11 +26,11 @@ The Widget Repository currently includes:
 
 ###Maritime Chart Service Library
 
-This is a library of custom ESRI widgets and custom layer classes that extend ESRI's JSAPI in order to consume the Maritime Chart Service in apps. 
+This is a library of custom Esri widgets and custom layer classes that extend Esri's JSAPI in order to consume the Maritime Chart Service in apps. 
 
 ###Web App Builder Widgets
 
-The following are custom WAB widgets that use the maritime chart service library above and are to be used within the web app builder to create custom apps, templates and themes.
+The following are custom Web App Builder widgets that use the maritime chart service library above and are to be used within the Web App Builder to create custom apps, templates and themes.
 
 * Maritime Display Properties
 * Maritime Identify
