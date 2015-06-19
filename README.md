@@ -33,11 +33,11 @@ This is a [library](./src/libs/mcs-widgets/README.md) of custom ESRI widgets and
 
 ###Web App Builder Widgets
 
-The following are custom WAB widgets that use the maritime chart service library and are to be used within the web app builder to create custom apps, templates and themes.
+The following are custom WAB widgets that use the maritime chart service library above and are to be used within the web app builder to create custom apps, templates and themes.
 
-* [Maritime Display Properties](./src/widgets/MaritimeDisplayProperties/README.md)
-* [Maritime Identify](./src/widgets/MaritimeIdentify/README.md)
-* [Maritime Search](./src/widgets/MaritimeSearch/README.md)
+* Maritime Display Properties
+* Maritime Identify
+* Maritime Search
 
 
 ## Requirements
