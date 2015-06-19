@@ -44,7 +44,7 @@ Requires Web App Builder for ArcGIS 1.1 for the Web App builder widgets. The Esr
 Deploying Widgets:
 
 1. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
-⋅⋅* Copy the contents of the `src\widgets\` folder to `%webappbuilder_install%\client\stemapp\widgets\`
+  * Copy the contents of the `src\widgets\` folder to `%webappbuilder_install%\client\stemapp\widgets\`
 2. The Web App Builder widgets depend on the modules in the libs folder, so these must be copied as well to the stemapp/libs directory. This is located in %webappbuilder_install%/client directory. 
 3. Since the Identify widget is an off-panel web app builder widget, the config.json file at stemapp/predefined-apps/default needs to be replaced by the [src/config.json](src/config.js) file in the repository. 
 4. Since the Identify widget only supports JSAPI 3.11 and below, please replace the env.js file at %webappbuilder_install%\client\stemapp folder with the one in [src/env.js](./src/env.js)
