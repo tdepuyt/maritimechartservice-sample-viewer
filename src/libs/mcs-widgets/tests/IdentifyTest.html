@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>Identify Tests</title>
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
+    <style>
+        @import url('tests.css');
+        @import url('../resources/Identify.css');
+
+        /* override default styles here */
+    </style>
+</head>
+  <body>
+    <div id="map"></div>
+    <div id="widgetContainer">
+        <div id="widgetNode"></div>
+    </div>
+    <script src="//js.arcgis.com/3.11/"></script>
+    <script type="text/javascript">
+        var testsUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
+        var widgetUnderTest;
+        var map;
+
+        require([
+
+            'esri/arcgis/utils',
+          
+            testsUrl + '../Identify.js',
+            'dojo/domReady!'
+        ], function(
+
+          arcgisUtils,
+          
+          Module
+        ) {
+
+            // init map
+            var mapOptions = {
+                basemap: 'topo',
+                center: [-122.45,37.75],
+                zoom: 13,
+                sliderStyle: 'small'
+            };
+            
+            aisServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/AISServer";
+            s57ServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer";
+            identifySymbol = {
+                "color": [
+                  255,
+                  0,
+                  0,
+                  0
+                ],
+                "size": 10,
+                "angle": 0,
+                "xoffset": 0,
+                "yoffset": 0,
+                "type": "esriSMS",
+                "style": "esriSMSCircle",
+                "outline": {
+                  "color": [
+                    255,
+                    0,
+                    0
+                  ],
+                  "width": 2,
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid"
+                }
+            };
+            // this web map id is a placeholder
+            // with only the topo basemap
+            // replace it with the id of your web map
+            var webMapItemID = 'f02a83d2ebf74c71b98a2029fe40409d';
+            arcgisUtils.createMap(webMapItemID, 'map', {
+              mapOptions: mapOptions
+            }).then(function(response) {
+              map = response.map;
+               // init widget
+                widgetUnderTest = new Module({
+                       map: map,
+                       s57ServiceUrl: s57ServiceUrl,
+                       aisServiceUrl: aisServiceUrl,
+                       identifySymbol: identifySymbol
+                }, 'widgetNode');
+                widgetUnderTest.startup();
+            });
+        });
+    </script>
+</body>
+</html>

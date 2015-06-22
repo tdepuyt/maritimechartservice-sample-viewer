@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>DisplaySettings Tests</title>
+    <link rel="stylesheet" href="//js.arcgis.com/3.13/esri/css/esri.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+        @import url('tests.css');
+        @import url('../resources/DisplaySettings.css');
+
+        /* override default styles here */
+    </style>
+</head>
+  <body>
+    <div id="map"></div>
+    <div id="widgetContainer">
+        <div id="widgetNode"></div>
+    </div>
+    <script src="//js.arcgis.com/3.13/"></script>
+    <script type="text/javascript">
+        var testsUrl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
+        var widgetUnderTest;
+        var map;
+
+        require([
+          
+          'esri/arcgis/utils',
+          
+            testsUrl + '../DisplaySettings.js',
+            'dojo/domReady!'
+        ], function(
+          
+          arcgisUtils,
+          
+          Module
+        ) {
+            // init map
+            var mapOptions = {
+                basemap: 'topo',
+                center: [-122.45,37.75],
+                zoom: 13,
+                sliderStyle: 'small'
+            };
+            
+            // this web map id is a placeholder
+            // with only the topo basemap
+            // replace it with the id of your web map
+            var webMapItemID = 'f02a83d2ebf74c71b98a2029fe40409d';
+            arcgisUtils.createMap(webMapItemID, 'map', {
+              mapOptions: mapOptions
+            }).then(function(response) {
+                map = response.map;
+                s57Layer = map.getLayer('Maritime Chart Service_4144');
+                aisLayer = map.getLayer('Maritime Chart Service_4534');
+                // init widget
+                widgetUnderTest = new Module({
+                    map: map,
+                    s57Layer: s57Layer,
+                    aisLayer: aisLayer
+                }, 'widgetNode');
+                widgetUnderTest.startup();
+            });
+        });
+    </script>
+</body>
+</html>
