@@ -89,8 +89,6 @@ var ie = (function() {
       window.apiUrl + 'esri/css/esri.css',
       window.apiUrl + 'dojox/layout/resources/ResizeHandle.css',
       window.path + 'jimu.js/css/jimu.css',
-      // add a reference to the Bootstrap CSS
-      '//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
     ]);
 
     if (window.apiUrl.substr(window.apiUrl.length - 'arcgis-js-api/'.length,

@@ -79,12 +79,14 @@ define([
         "description": this.s57Layer.description
       });
 
+      s57CustomLayer.setVisibleLayers(this.s57Layer.visibleLayers);
+      
       on(s57CustomLayer, 'parametersLoaded', lang.hitch(this, function() {
         this.setupDisplaySettings();
       }));
 
       on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
-        this.map.removeLayer(this.s57Layer);
+          this.map.removeLayer(this.s57Layer);
       }));
       this.map.addLayer(s57CustomLayer);
       

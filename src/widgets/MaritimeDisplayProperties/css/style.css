@@ -1,7 +1,3 @@
-.m-c-s-display-properties h3 {
-  font-size: 1.2em;
-}
-.m-c-s-display-properties h3, p {
-  margin-top: 0;
-}
+@import url('../../../libs/mcs-widgets/resources/DisplaySettings.css');
+
 /* add additional custom styles */
