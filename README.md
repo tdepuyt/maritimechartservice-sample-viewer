@@ -1,5 +1,5 @@
 # Maritime Chart Service sample viewer
-## Web App Builder widgets
+## (Web App Builder widgets)
 
 
 The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
