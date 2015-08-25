@@ -40,20 +40,22 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 
 ## Requirements
-Requires Web App Builder for ArcGIS 1.1 for the Web App builder widgets. The Esri widgets require JS API 3.9 or less. 
+Requires Web App Builder for ArcGIS 1.1 for the Web App builder widgets. The Esri widgets require JS API 3.11 or less. 
 
 ## Instructions
 Deploying Widgets:
 
-1. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
+1. If you haven't already, download the latest version of Web AppBuilder for ArcGIS (Developer Edition) and follow the instruction at https://developers.arcgis.com/web-appbuilder/guide/getstarted.htm 
+2. Download the Maritime Chart Service widgets by clicking on Download Zip. 
+3. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
   * Copy the contents of the `src\widgets\` folder to `%webappbuilder_install%\client\stemapp\widgets\`
-2. The Web App Builder widgets depend on the modules in the libs folder.
+4. The Web App Builder widgets depend on the modules in the libs folder.
   * Copy the contents of `src\libs\` folder to `<webappbuilder folder>\client\stemapp\libs\`
-3. The Identify widget is an off-panel web app builder widget.
+5. The Identify widget is an off-panel web app builder widget.
   * Copy the file `src\config.json` to the `<webappbuilder folder>\client\stemapp\predefined-apps\default\` folder (replace the `config.json` file there).
-4. The Identify widget only supports JSAPI 3.11 and below.
+6. The Identify widget only supports JSAPI 3.11 and below.
   * Copy the file `src\env.js` to the `<webappbuilder folder>\client\stemapp\` folder (replace the `env.js` file there).
-5. This example uses dojo bootstrap for the Display Settings widget.
+7. This example uses dojo bootstrap for the Display Settings widget.
   * Copy the file `src\init.js` to the `<webappbuilder folder>\client\stemapp\` folder (replace the `init.js` file there).
 
 For more resources on developing and modifying widgets please visit
