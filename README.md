@@ -11,7 +11,7 @@ The widgets can be used directly within Web App Builder for ArcGIS. Alternativel
 
 * [Features](#features)
 * [Requirements](#requirements)
-* [Instructions](#instructions)
+* [Deployment](#Deployment)
 * [Resources](#resources)
 * [Issues](#issues)
 * [Contributing](#contributing)
@@ -44,8 +44,9 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 * Maritime Chart Service widgets require JS API 3.11 or less. 
 * ArcGIS for Maritime Server 10.3.1
 
-## Instructions
-Deploying Widgets:
+## Deployment
+
+Adding Widgets to you Web AppBuilder Environment:
 
 1. If you haven't already, download the latest version of Web AppBuilder for ArcGIS (Developer Edition) and follow the instruction at https://developers.arcgis.com/web-appbuilder/guide/getstarted.htm 
 2. Download the Maritime Chart Service widgets by clicking on Download Zip. 
@@ -60,12 +61,21 @@ Deploying Widgets:
 7. This example uses dojo bootstrap for the Display Settings widget.
   * Copy the file `src\init.js` to the `<webappbuilder folder>\client\stemapp\` folder (replace the `init.js` file there).
 
-For more resources on developing and modifying widgets please visit
-[Web App Builder for ArcGIS (Developer Edition) documentation](https://developers.arcgis.com/web-appbuilder/)
+Deploying your Web Application:
+
+These steps address a known limit with our support for JSAPI 3.11 when deploying your app on a web server.
+
+1. See Deploy app for additional information https://developers.arcgis.com/web-appbuilder/guide/xt-deploy-app.htm
+2. After you have downloaded your app you must update your env.js file with the correct JSAPI reference.
+3. Search your env.js file for 3.13 and replace it with 3.11.
+4. Save your changes.
+5. Your app is ready to be deployed on your web server.
 
 ### General Help
 [New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
 
+For more resources on developing and modifying widgets please visit
+[Web App Builder for ArcGIS (Developer Edition) documentation](https://developers.arcgis.com/web-appbuilder/)
 
 ## Resources
 
