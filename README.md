@@ -11,7 +11,7 @@ The widgets can be used directly within Web App Builder for ArcGIS. Alternativel
 
 * [Features](#features)
 * [Requirements](#requirements)
-* [Deployment](#Deployment)
+* [Deployment](#deployment)
 * [Resources](#resources)
 * [Issues](#issues)
 * [Contributing](#contributing)
