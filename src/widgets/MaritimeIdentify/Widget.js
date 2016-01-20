@@ -1,5 +1,5 @@
-define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
-    function(declare, BaseWidget, Identify) {
+define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs-widgets/Identify'],
+    function(declare, BaseWidget, DrawBox, Identify) {
         //To create a widget, you need to derive from BaseWidget.
         var clazz = declare([BaseWidget], {
 
@@ -30,15 +30,19 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
                     console.log("This map has no Maritime Chart Service Layer");
                 } else {
                     this.Identify = new Identify({
-                    map: this.map,
-                    nls: this.nls,
-                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                    aisServiceUrl: this.aisServiceUrl,
-                    s57ServiceUrl: this.s57ServiceUrl,
-                    identifySymbol: this.config.identifySymbol
-                }, this.IdentifyNode);
-            }
-        },
+                        map: this.map,
+                        nls: this.nls,
+                        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+                        aisServiceUrl: this.aisServiceUrl,
+                        s57ServiceUrl: this.s57ServiceUrl,
+                        identifySymbol: this.config.identifySymbol
+                    }, this.identifyNode);
+                    this.Identify.setDrawBox(new DrawBox({
+                        geoTypes: ['point', 'extent'],
+                        showClear: false
+                    }));
+                }
+            },
 
             startup: function() {
                 // summary:
@@ -56,18 +60,18 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Identify'],
                 // summary:
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onOpen', arguments);
-                if (this.Identify) {
-                     this.Identify.resumeClickListener();
-                }
+                /*if (this.Identify) {
+                    this.Identify.resumeClickListener();
+                }*/
             },
 
             onClose: function() {
                 // summary:
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onClose', arguments);
-                if (this.Identify) {
+                /*if (this.Identify) {
                     this.Identify.pauseClickListener();
-                }
+                }*/
             }
 
         });
