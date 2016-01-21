@@ -1,3 +1,19 @@
+///////////////////////////////////////////////////////////////////////////
+// Copyright ? 2014 Esri. All Rights Reserved.
+//
+// Licensed under the Apache License Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+///////////////////////////////////////////////////////////////////////////
+
 var dojoConfig, jimuConfig;
 
 /*global weinreUrl, loadResources, _loadPolyfills, loadingCallback, debug, allCookies, unescape */
@@ -23,7 +39,14 @@ var ie = (function() {
     var ieNotes = document.getElementById('ie-note');
     appLoading.style.display = 'none';
     ieNotes.style.display = 'block';
-    mainLoading.style.backgroundColor="#fff";
+    mainLoading.style.backgroundColor = "#fff";
+    return;
+  }
+
+  //handle edit=true parameter
+  if(!window.isXT && window.location.pathname.indexOf('/apps/webappviewer') > -1 &&
+    window.queryObject.edit === 'true' && window.queryObject.appid){
+    window.location.href = window.location.href.replace('webappviewer', 'webappbuilder');
     return;
   }
 
@@ -57,38 +80,15 @@ var ie = (function() {
       }
     };
 
-    if(allCookies.esri_auth){
-      /*jshint -W061 */
-      var userObj = eval('(' + unescape(allCookies.esri_auth)+ ')');
-      if(userObj.culture){
-        dojoConfig.locale = userObj.culture;
-      }
-    }
-
-    if(window.queryObject.mode){
-      if(allCookies.wab_locale){
-        dojoConfig.locale = allCookies.wab_locale;
-      }
-    }else{
-      if(allCookies.wab_app_locale){
-        dojoConfig.locale = allCookies.wab_app_locale;
-      }
-    }
-
-
-    if(!dojoConfig.locale){
-      dojoConfig.locale = navigator.language ? navigator.language : navigator.userLanguage;
-    }
-
-    dojoConfig.locale = dojoConfig.locale.toLowerCase();
-    window._setRTL(dojoConfig.locale);
+    setLocale();
 
     resources = resources.concat([
       window.apiUrl + 'dojo/resources/dojo.css',
       window.apiUrl + 'dijit/themes/claro/claro.css',
       window.apiUrl + 'esri/css/esri.css',
       window.apiUrl + 'dojox/layout/resources/ResizeHandle.css',
-      window.path + 'jimu.js/css/jimu.css',
+      window.path + 'jimu.js/css/jimu-theme.css',
+      window.path + 'libs/caja-html-sanitizer-minified.js'
     ]);
 
     if (window.apiUrl.substr(window.apiUrl.length - 'arcgis-js-api/'.length,
@@ -194,13 +194,47 @@ var ie = (function() {
         }
 
         _loadPolyfills("", function() {
-          window.appInfo = {appPath: window.path};
+          window.appInfo.appPath = window.path;
           require(['jimu/main', 'libs/main', 'dynamic-modules/preload'], function(jimuMain) {
-            loadingCallback('jimu', resources.length + 1, resources.length);
+            //loadingCallback('jimu', resources.length + 1, resources.length);
             jimuMain.initApp();
           });
         });
       }
     });
+  }
+
+  function setLocale(){
+    if(window.queryObject.locale){
+      dojoConfig.locale = window.queryObject.locale.toLowerCase();
+      window._setRTL(dojoConfig.locale);
+      return;
+    }
+
+    if(allCookies.esri_auth){
+      /*jshint -W061 */
+      var userObj = eval('(' + unescape(allCookies.esri_auth) + ')');
+      if(userObj.culture){
+        dojoConfig.locale = userObj.culture;
+      }
+    }
+
+    if(window.queryObject.mode){
+      if(allCookies.wab_locale){
+        dojoConfig.locale = allCookies.wab_locale;
+      }
+    }else{
+      if(allCookies.wab_app_locale){
+        dojoConfig.locale = allCookies.wab_app_locale;
+      }
+    }
+
+
+    if(!dojoConfig.locale){
+      dojoConfig.locale = navigator.language ? navigator.language : navigator.userLanguage;
+    }
+
+    dojoConfig.locale = dojoConfig.locale.toLowerCase();
+    window._setRTL(dojoConfig.locale);
   }
 })();
