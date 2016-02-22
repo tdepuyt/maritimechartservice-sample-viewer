@@ -39,6 +39,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs
                     }, this.identifyNode);
                     this.Identify.setDrawBox(new DrawBox({
                         geoTypes: ['point', 'extent'],
+                        deactivateAfterDrawing: false,
                         showClear: false
                     }));
                 }
