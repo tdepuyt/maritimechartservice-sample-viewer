@@ -158,7 +158,7 @@ define([
       if (map) {
         this.map = map;
         this.own(
-          this.clickListener = on.pausable(this.map, 'click', lang.hitch(this, this.mapClickHandler))
+          //this.clickListener = on.pausable(this.map, 'click', lang.hitch(this, this.mapClickHandler))
         );
       }
     },
@@ -198,6 +198,39 @@ define([
       this.pointSymbol = symbol;
     },
 
+    setDrawBox: function(newDrawBox) {
+      var _this = this;
+      this.drawBox = newDrawBox;
+      this.drawBox.setMap(this.map);
+      this.drawBox.geoTypes = ['POINT', 'EXTENT'];
+      this.drawBox._initTypes();
+      //this.drawBox.setPointSymbol(this.identMarkerSymbol);
+      //this.drawBox.setLineSymbol(this.identLineSymbol);
+      //this.drawBox.setPolygonSymbol(this.identFillSymbol);
+      this.own(on(this.drawBox, 'DrawEnd', function(graphic, geotype, commontype) {
+        _this._onDrawEnd(graphic, geotype, commontype);
+      }));
+      this.drawBox.placeAt(this.drawBoxNode);
+      this.drawBox.startup();
+    },
+
+    _onDrawEnd:function(graphic, geotype, commontype){
+        this.drawBox.clear();
+
+        this.map.infoWindow.clearFeatures();
+        
+        //this.graphicsLayer.clear();
+        //this.graphicsLayer.add(graphic);
+        
+        this.identifyGeom = graphic.geometry;
+        if(geotype === 'EXTENT') 
+        {
+          this.identifyGeom = graphic.geometry.getExtent();
+        }
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        this.executeAISQueryTask(this.identifyGeom);
+      },
+
     createQueryTask: function(in_layer) {
       this.identifyTask = new IdentifyTask(in_layer);
       this.identifyParams = new IdentifyParameters();
@@ -215,15 +248,14 @@ define([
       this.identifyAISParams.dpi = 96;
     },
 
-    executeQueryTask: function(mp) {
+    executeQueryTask: function(geom) {
 
-      identifyPoint = mp;
+      identifyGeom = geom;
 
-      this.identifyParams.geometry = identifyPoint;
+      this.identifyParams.geometry = identifyGeom;
       this.identifyParams.mapExtent = this.map.extent;
       this.identifyParams.width = this.map.width;
       this.identifyParams.height = this.map.height;
-
       this.identifyTask.execute(this.identifyParams, function(response) {
         var deferred = new Deferred();
         deferred.resolve(response);
@@ -302,7 +334,7 @@ define([
             return feature;
           });
         this.map.infoWindow.setFeatures(features);
-        this.showInfoWindow(identifyPoint);
+        this.showInfoWindow(identifyGeom);
       }));
     },
 
@@ -328,14 +360,13 @@ define([
     },
 
     /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-    executeAISQueryTask: function(mp) {
+    executeAISQueryTask: function(geom) {
 
       if (this.aisServiceUrl == null)
-        this.executeQueryTask(mp);
+        this.executeQueryTask(geom);
       else {
-        identifyPoint = mp;
-
-        this.identifyAISParams.geometry = identifyPoint;
+        identifyGeom = geom;
+        this.identifyAISParams.geometry = identifyGeom;
         this.identifyAISParams.mapExtent = this.map.extent;
         this.identifyAISParams.width = this.map.width;
         this.identifyAISParams.height = this.map.height;
@@ -345,7 +376,7 @@ define([
           deferred.resolve(response);
         }).then(lang.hitch(this, function(response) {
           if (response.length <= 0) {
-            this.executeQueryTask(mp);
+            this.executeQueryTask(geom);
           } else {
             _this = this;
             var features = array.map(response, function(result) {
@@ -360,7 +391,7 @@ define([
             });
             this.map.infoWindow.setFeatures(features);
 
-            this.showInfoWindow(identifyPoint);
+            this.showInfoWindow(identifyGeom);
             //query(".safetyContourLink", this.map.infoWindow.domNode).onclick(this.setSafetyContour());
           }
         }));
@@ -401,7 +432,11 @@ define([
       }
     },
 
-    showInfoWindow: function(identifyPoint) {
+    showInfoWindow: function(identifyGeom) {
+      if (identifyGeom.type != 'point')
+        identifyPoint = identifyGeom.getCenter();
+      else
+        identifyPoint = identifyGeom;
       var isInExtent = this.map.extent.contains(identifyPoint);
       if (isInExtent === true) {
         if (identifyPoint !== null) {

@@ -11,11 +11,11 @@
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
   "properties": {
-    "inPanel": false,
+    "inPanel": true,
     "hasLocale": true,
     "hasStyle": true,
     "hasConfig": true,
-    "hasUIFile": false,
+    "hasUIFile": true,
     "hasSettingPage":false,
     "hasSettingUIFile":false,
     "hasSettingLocale":false,
