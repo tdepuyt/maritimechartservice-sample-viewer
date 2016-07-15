@@ -6,9 +6,12 @@ The Maritime Chart Service widgets are widgets and dojo classes that illustrate 
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
 
 What's new with this version
+* Updated requirements section
+* Updated deployment steps
 * Identify is not a on-panel widget that contains both a single click identify and a rectangle identify option
 * Compatible with WAB 1.3 and 2.0
 * Supports JS API 3.17
+
 
 ![App](maritimechartservice-sample-viewer.png)
 
