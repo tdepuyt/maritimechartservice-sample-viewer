@@ -60,10 +60,10 @@ Adding Widgets to you Web AppBuilder Environment:
 1. If you haven't already, download the latest version of Web AppBuilder for ArcGIS (Developer Edition) and follow the instruction at https://developers.arcgis.com/web-appbuilder/guide/getstarted.htm 
 2. Download the Maritime Chart Service widgets by clicking on Download Zip. 
 3. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
-  * Copy the contents of the `src\widgets\` folder to `%webappbuilder_install%\client\stemapp\widgets\`
+  * Copy the contents of the `src\widgets\` folder to `<webappbuilder folder>\client\stemapp\widgets\`
 4. The Web App Builder widgets depend on the modules in the libs folder.
   * Copy the contents of `src\libs\` folder to `<webappbuilder folder>\client\stemapp\libs\`
-5. Add the following two lines of code in your <webappbuilder folder>\client\stemapp\init.js file in two places where dojoConfig.packages are referenced. 
+5. Add the following two lines of code in your `<webappbuilder folder>\client\stemapp\init.js` file in two places where dojoConfig.packages are defined. 
 ```
       {
           name: "bootstrap",
@@ -77,10 +77,10 @@ If you want to resize your Identify widget you will need to add a height and wid
 
  * Once you have added the Maritime Identify widget to your application and saved that application add the following two lines of code in your <webappbuilder folder>\server\apps\<app number\config.json.
 
-The following to values are a recommended starting point:
+The following two values are a recommended starting point:
 ```
        "height": 120,
-      "width": 265,
+       "width": 265,
  ```
  
  Sample modifcation:
