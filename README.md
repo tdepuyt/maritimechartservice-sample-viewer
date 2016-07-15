@@ -64,11 +64,47 @@ Adding Widgets to you Web AppBuilder Environment:
 4. The Web App Builder widgets depend on the modules in the libs folder.
   * Copy the contents of `src\libs\` folder to `<webappbuilder folder>\client\stemapp\libs\`
 5. Add the following two lines of code in your <webappbuilder folder>\client\stemapp\init.js file in two places where dojoConfig.packages are referenced. 
+```
       {
           name: "bootstrap",
           location: "//rawgit.com/xsokev/Dojo-Bootstrap/master"
       },
+```
 
+Additional Deployment steps for Identify:
+
+If you want to resize your Identify widget you will need to add a height and width value to the widget while in the WAB development environment.  
+
+ * Once you have added the Maritime Identify widget to your application and saved that application add the following two lines of code in your <webappbuilder folder>\server\apps\<app number\config.json.
+
+The following to values are a recommended starting point:
+```
+       "height": 120,
+      "width": 265,
+ ```
+ 
+ Sample modifcation:
+ ```
+ {
+        "position": {
+          "left": 55,
+          "top": 45,
+		  "height": 120,
+		  "width": 265,
+          "relativeTo": "map"
+        },
+        "placeholderIndex": 1,
+        "id": "_5",
+        "name": "MaritimeIdentify",
+        "label": "Maritime Identify",
+        "version": "0.0.1",
+        "IsController": false,
+        "uri": "widgets/MaritimeIdentify/Widget",
+        "config": "configs/MaritimeIdentify/config_Maritime Identify.json"
+      },
+```
+
+* Refresh your application to see the changes.
 
 ### General Help
 [New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
