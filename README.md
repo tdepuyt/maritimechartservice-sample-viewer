@@ -79,7 +79,7 @@ When creating a Web App, you need to chose the Web Map that will be used by the 
 * Click Add -> Add Layer from Web
 * Specify a layer containing the Maritime Chart Service
 
-For instance, if you installed and configured the Maritime Chart Service on a server using the default properties the URL for the service would look like:
+For instance, if you enabled the Maritime Chart Service on a layer called #SampleWorldCities# on a ArcGIS Server instance where the ArcGIS for Maritime: Server is installed, the URL for the layer would look like:`
 
 ```
 	https://[yourmachinename]:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
