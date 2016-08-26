@@ -71,7 +71,7 @@ Adding Widgets to you Web AppBuilder Environment:
       },
 ```
 
-Additional Deployment steps for Identify:
+## Additional Deployment steps for the Identify widget:
 
 If you want to resize your Identify widget you will need to add a height and width value to the widget while in the WAB development environment.  
 
