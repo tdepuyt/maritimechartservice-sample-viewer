@@ -71,6 +71,26 @@ Adding Widgets to you Web AppBuilder Environment:
       },
 ```
 
+## Create a Web App using the Maritime Chart Service:
+When creating a Web App, you need to chose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains the Maritime Chart Service. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
+* Log in to your ArcGIS Online account
+* Create a new Map 
+* Click Add -> Add Layer from Web
+* Specify a layer containing the Maritime Chart Service
+	for instance, if you installed and configured the Maritime Chart Service on a server using the default properties the URL for the service would look like:
+
+```
+	https://[yourmachinename]:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
+```
+If the machine is in domain, it is sometimes required to include domain name along with the machine name to get started, like 
+```
+	https://[yourmachinename].[yourdomain]::6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
+```
+* Save the Web Map
+
+The Web Map is now using the Maritime CHart Service, and can be selected when you create your App in Web AppBuilder
+
+
 ## Additional Deployment steps for the Identify widget:
 
 If you want to resize your Identify widget you will need to add a height and width value to the widget while in the WAB development environment.  
