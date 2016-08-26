@@ -78,6 +78,7 @@ When creating a Web App, you need to chose the Web Map that will be used by the 
 2. Create a new Map
 3. Click Add -> Add Layer from Web
 4. Specify a layer containing the Maritime Chart Service
+
 * For instance, if you installed and configured the Maritime Chart Service on a server using the default properties the URL for the service would look like:
 
 ```
