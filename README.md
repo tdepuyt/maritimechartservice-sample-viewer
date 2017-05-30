@@ -1,6 +1,8 @@
-# Maritime Chart Service sample viewer
+# Maritime Chart Service sample widgets
 ## (Web App Builder widgets)
 
+
+### If you are looking for ArcGIS for Maritime: Server 10.5 Widgets please email maritime@esri.com.  This page will be updated soon with 10.5 and 10.5.1 compatible widget information.
 
 The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
@@ -11,6 +13,7 @@ What's new with this version
 * Identify is not a on-panel widget that contains both a single click identify and a rectangle identify option
 * Compatible with WAB 1.3 and 2.0
 * Supports JS API 3.17
+* Compatible with ArcGIS for Maritime: Server 10.4.0 and 10.4.1
 
 
 ![App](maritimechartservice-sample-viewer.png)
