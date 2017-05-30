@@ -2,20 +2,15 @@
 ## (Web App Builder widgets)
 
 
-
-## The clone and download steps are not currently supporting 10.5.  If you require 10.5 widgets please email maritime@esri.com.
-
-
 The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
 
 What's new with this version
 * Updated requirements section
 * Updated deployment steps
-* Search widget is now functional
-* Compatible with WAB 2.3 and greater
-* Supports JS API 3.19 and greater
-* Only supports ArcGIS for Maritime: Server 10.5
+* Identify is not a on-panel widget that contains both a single click identify and a rectangle identify option
+* Compatible with WAB 1.3 and 2.0
+* Supports JS API 3.17
 
 
 ![App](maritimechartservice-sample-viewer.png)
@@ -33,9 +28,9 @@ What's new with this version
 ## Features
 
 These Web App Builder widgets illustrates how to build web apps consuming S-57 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
-* Allows users to change S-52 display properties
-* Enables users to identify on features and view their attribute information.
-* Provides the ability to search based on object name and national object name and S-57 dataset names.
+* Allows users to change S-52 based display settings through the JavaScrip client
+* Enables users to identify on individual features and view their attribute information.
+* Provides the ability to search based on object name (OBJNAM) and S-57 dataset names. (functionality coming soon)
 
 The Widget Repository currently includes:
 
@@ -49,13 +44,13 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 * Maritime Display Properties
 * Maritime Identify
-* Maritime Search
+* Maritime Search (functionality coming soon)
 
 
 ## Requirements
-* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets. 
-* Maritime Chart Service widgets require JS API 3.19 or greater. 
-* ArcGIS for Maritime: Server 10.5 - new widgets will be posted when ArcGIS for Maritime: Server 10.5.1 is released.
+* Web App Builder for ArcGIS (Developer Edition) 1.3 or greater for the Web App builder widgets. 
+* Maritime Chart Service widgets require JS API 3.12 or greater. 
+* ArcGIS for Maritime Server 10.4.0 or greater
 
 
 ## Deployment
@@ -63,13 +58,12 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 Adding Widgets to you Web AppBuilder Environment:
 
 1. If you haven't already, download the latest version of Web AppBuilder for ArcGIS (Developer Edition) and follow the instruction at https://developers.arcgis.com/web-appbuilder/guide/getstarted.htm 
-2. ~~Download the Maritime Chart Service widgets by clicking on Download Zip. maritimechartservice-sample-viewer-10.5.0.zip will be downloaded to your machine.~~  **(This step is currently not supported.  Email maritime@esri.com for the maritimechartservice-sample-viewer-10.5.0.zip file).**
-3. Unzip maritimechartservice-sample-viewer-10.5.0.zip
-4. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
-  * Copy the contents of the `<unzip folder>\src\widgets\` folder to `<webappbuilder folder>\client\stemapp\widgets\`
-5. The Web App Builder widgets depend on the modules in the libs folder.
-  * Copy the contents of `<unzip folder>\src\libs\` folder to `<webappbuilder folder>\client\stemapp\libs\`
-6. Add the following two lines of code in your `<webappbuilder folder>\client\stemapp\init.js` file in two places where dojoConfig.packages are defined. 
+2. Download the Maritime Chart Service widgets by clicking on Download Zip. 
+3. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
+  * Copy the contents of the `src\widgets\` folder to `<webappbuilder folder>\client\stemapp\widgets\`
+4. The Web App Builder widgets depend on the modules in the libs folder.
+  * Copy the contents of `src\libs\` folder to `<webappbuilder folder>\client\stemapp\libs\`
+5. Add the following two lines of code in your `<webappbuilder folder>\client\stemapp\init.js` file in two places where dojoConfig.packages are defined. 
 ```
       {
           name: "bootstrap",
@@ -78,7 +72,7 @@ Adding Widgets to you Web AppBuilder Environment:
 ```
 
 ## Create a Web App using the Maritime Chart Service:
-When creating a Web App, you need to chose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains the Maritime Chart Service layer. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
+When creating a Web App, you need to chose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains the Maritime Chart Service. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
 
 * Log in to your ArcGIS Online account
 * Create a new Map
@@ -88,11 +82,11 @@ When creating a Web App, you need to chose the Web Map that will be used by the 
 For instance, if you enabled the Maritime Chart Service on the default *SampleWorldCities* layer on a ArcGIS Server instance where the ArcGIS for Maritime: Server is installed, the URL for the layer would look like:
 
 ```
-	https://[yourmachinename]:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer
+	https://[yourmachinename]:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
 ```
-If the machine is in a domain, it is sometimes required to include domain name along with the machine name to get started, like 
+If the machine is in domain, it is sometimes required to include domain name along with the machine name to get started, like 
 ```
-	https://[yourmachinename].[yourdomain]::6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer
+	https://[yourmachinename].[yourdomain]::6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
 ```
 * Save the Web Map
 
@@ -103,7 +97,7 @@ The Web Map is now using the Maritime CHart Service, and can be selected when yo
 
 If you want to resize your Identify widget you will need to add a height and width value to the widget while in the WAB development environment.  
 
- * Once you have added the Maritime Identify widget to your application and saved that application add the following two lines of code in your <webappbuilder folder>\server\apps\<app number>\config.json.
+ * Once you have added the Maritime Identify widget to your application and saved that application add the following two lines of code in your <webappbuilder folder>\server\apps\<app number\config.json.
 
 The following two values are a recommended starting point:
 ```
@@ -148,7 +142,7 @@ For more resources on developing and modifying widgets please visit
 
 ## Issues
 
-* Find a bug or want to request a new feature?  Please let us know by submitting an issue or emailing maritime@esri.com 
+* Find a bug or want to request a new feature?  Please let us know by submitting an issue.
 
 ## Contributing
 
@@ -159,7 +153,7 @@ We allow for 120 characters per line instead of the highly restrictive 80.
 
 ## Licensing
 
-Copyright 2017 Esri
+Copyright 2015 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
