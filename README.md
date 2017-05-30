@@ -2,6 +2,10 @@
 ## (Web App Builder widgets)
 
 
+
+## The clone and download steps are not currently supporting 10.5.  If you require 10.5 widgets please email maritime@esri.com.
+
+
 The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
 
@@ -9,8 +13,8 @@ What's new with this version
 * Updated requirements section
 * Updated deployment steps
 * Search widget is now functional
-* Compatible with WAB 2.4
-* Supports JS API 3.20
+* Compatible with WAB 2.3 and greater
+* Supports JS API 3.19 and greater
 * Only supports ArcGIS for Maritime: Server 10.5
 
 
@@ -49,8 +53,8 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 
 ## Requirements
-* Web App Builder for ArcGIS (Developer Edition) 2.4 or greater for the Web App builder widgets. 
-* Maritime Chart Service widgets require JS API 3.20 or greater. 
+* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets. 
+* Maritime Chart Service widgets require JS API 3.19 or greater. 
 * ArcGIS for Maritime: Server 10.5 - new widgets will be posted when ArcGIS for Maritime: Server 10.5.1 is released.
 
 
@@ -59,7 +63,7 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 Adding Widgets to you Web AppBuilder Environment:
 
 1. If you haven't already, download the latest version of Web AppBuilder for ArcGIS (Developer Edition) and follow the instruction at https://developers.arcgis.com/web-appbuilder/guide/getstarted.htm 
-2. Download the Maritime Chart Service widgets by clicking on Download Zip. maritimechartservice-sample-viewer-10.5.0.zip will be downloaded to your machine.
+2. Download the Maritime Chart Service widgets by clicking on Download Zip. maritimechartservice-sample-viewer-10.5.0.zip will be downloaded to your machine.  ##(This step is currently not supported.  Email maritime@esri.com for the maritimechartservice-sample-viewer-10.5.0.zip file).
 3. Unzip maritimechartservice-sample-viewer-10.5.0.zip
 4. To use the widgets, copy the ones you want to use to the Web App Builder widget directory.
   * Copy the contents of the `<unzip folder>\src\widgets\` folder to `<webappbuilder folder>\client\stemapp\widgets\`
