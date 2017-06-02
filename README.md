@@ -2,7 +2,7 @@
 ## (Web App Builder widgets)
 
 
-### If you are looking for ArcGIS for Maritime: Server 10.5 Widgets please email maritime@esri.com.  This page will be updated soon with 10.5 and 10.5.1 compatible widget information.
+### If you are looking for ArcGIS for Maritime: Server 10.4 Widgets please email maritime@esri.com.
 
 The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
@@ -10,10 +10,11 @@ The widgets can be used directly within Web App Builder for ArcGIS. Alternativel
 What's new with this version
 * Updated requirements section
 * Updated deployment steps
-* Identify is not a on-panel widget that contains both a single click identify and a rectangle identify option
-* Compatible with WAB 1.3 and 2.0
-* Supports JS API 3.17
-* Compatible with ArcGIS for Maritime: Server 10.4.0 and 10.4.1
+* Search widget is now operational
+* New Maritime Display parameters
+* Compatible with WAB 2.3 or greater
+* Supports JS API 3.19 or greater
+* Compatible with ArcGIS for Maritime: Server 10.5
 
 
 ![App](maritimechartservice-sample-viewer.png)
@@ -33,7 +34,7 @@ What's new with this version
 These Web App Builder widgets illustrates how to build web apps consuming S-57 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
 * Allows users to change S-52 based display settings through the JavaScrip client
 * Enables users to identify on individual features and view their attribute information.
-* Provides the ability to search based on object name (OBJNAM) and S-57 dataset names. (functionality coming soon)
+* Provides the ability to search based on object name (OBJNAM), national object name (NOBJNM) and S-57 dataset names.
 
 The Widget Repository currently includes:
 
@@ -47,13 +48,13 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 * Maritime Display Properties
 * Maritime Identify
-* Maritime Search (functionality coming soon)
+* Maritime Search
 
 
 ## Requirements
-* Web App Builder for ArcGIS (Developer Edition) 1.3 or greater for the Web App builder widgets. 
-* Maritime Chart Service widgets require JS API 3.12 or greater. 
-* ArcGIS for Maritime Server 10.4.0 or greater
+* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets. 
+* Maritime Chart Service widgets require JS API 3.19 or greater. 
+* ArcGIS for Maritime Server 10.5.0
 
 
 ## Deployment
@@ -85,11 +86,11 @@ When creating a Web App, you need to chose the Web Map that will be used by the 
 For instance, if you enabled the Maritime Chart Service on the default *SampleWorldCities* layer on a ArcGIS Server instance where the ArcGIS for Maritime: Server is installed, the URL for the layer would look like:
 
 ```
-	https://[yourmachinename]:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
+	https://[yourmachinename]:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer
 ```
 If the machine is in domain, it is sometimes required to include domain name along with the machine name to get started, like 
 ```
-	https://[yourmachinename].[yourdomain]::6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer
+	https://[yourmachinename].[yourdomain]::6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer
 ```
 * Save the Web Map
 
