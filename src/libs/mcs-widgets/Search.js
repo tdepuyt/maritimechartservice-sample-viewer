@@ -18,6 +18,7 @@ define([
   'esri/geometry/Polyline',
   'esri/geometry/Polygon',
   'esri/graphic',
+  'esri/request',
   'bootstrap/Collapse'
 ], function(
   template,
@@ -28,7 +29,7 @@ define([
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
   FindTask, FindParameters,
-  Color, SimpleMarkerSymbol, SimpleFillSymbol, SimpleLineSymbol, Point, Polyline, Polygon, Graphic
+  Color, SimpleMarkerSymbol, SimpleFillSymbol, SimpleLineSymbol, Point, Polyline, Polygon, Graphic, esriRequest
 ) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
     // description:
@@ -60,7 +61,6 @@ define([
       }
       else
         s57ServiceUrl = "https://localhost:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer";
-//      s57ServiceUrl = "http://nsdemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/Maritime%20Chart%20Service/MapServer";
     },
     setupConnections: function() {
       // summary:
@@ -83,6 +83,20 @@ define([
     setMap: function(map) {
       if (map) {
         this.map = map;
+      }
+    },
+    injectDisplayParameters: function() {
+      for (var j = 0; j < this.map.layerIds.length; j++) {
+        var layer = this.map.getLayer(this.map.layerIds[j]);
+        if (layer.displayParameters !=null) {
+           esriRequest.setRequestPreCallback(function(ioArgs){
+            if(ioArgs.url && ioArgs.url.indexOf("/exts/MaritimeChartService/MapServer/find") > 0){
+              ioArgs.content.display_params = JSON.stringify(layer.displayParameters);
+            }
+            return ioArgs;
+          });
+          break;
+        }
       }
     },
     _onSearchClick: function(e) {
@@ -170,7 +184,7 @@ console.log(error);
     },
 
     getSearchResults_Parser: function(json_results, widgetthis) {
-      var array_usage_levels = ["Overview", "General", "Coastal", "Approach", "Harbour", "Berthing", "River", "River harbour", "River berthing", "Overlay", "Bathymetric ENC", "Unknown"];
+      var array_usage_levels = ["Overview", "General", "Coastal", "Approach", "Harbour", "Berthing", "River", "River harbour", "River berthing", "Overlay", "Bathymetric ENC", "MFF (Maritime Foundation and Facilities)", "ESB (Environment, Seabed and Beach)", "RAL (Routes Areas and Limits)", "LBO (Large Bottom Objects)", "SBO (Small Bottom Objects)", "CLB (Contour Line Bathymetry)", "IWC (Integrated Water Column)", "NMB (Network Model Bathymetry)", "Unknown"];
       var cellName, cellName_trunc, usage_str, usage_val, geometryType;
       var usageCount = [];
       var usageGroups = [];
@@ -210,16 +224,27 @@ console.log(error);
             cellName = item_details.feature.attributes.DSNM;
             cellName_trunc = cellName.substr(0, ((cellName.length) - 4));
           }
-          usage_val = cellName.substr(2, 1);
-          if (usage_val == "A") usage_val = "10";
-          if (usage_val == "B") usage_val = "11";
-          usage_str = array_usage_levels[usage_val - 1];
-          if (!usage_str) {
-            // if the usage_str is undefined set it to the Unknown category
-            usage_str = array_usage_levels[11];
+          if (cellName.indexOf("AML") ==0) {
+            usage_str = "AML 3";
           }
-          if (usage_str=="Overlay") 
-            console.log(cellName);
+          else {
+            usage_val = cellName.substr(2, 1);
+            if (usage_val == "A") usage_val = "10";
+            if (usage_val == "B") usage_val = "11";
+            if (usage_val == "M") usage_val = "12";
+            if (usage_val == "E") usage_val = "13";
+            if (usage_val == "R") usage_val = "14";
+            if (usage_val == "L") usage_val = "15";
+            if (usage_val == "S") usage_val = "16";
+            if (usage_val == "C") usage_val = "17";
+            if (usage_val == "I") usage_val = "18";
+            if (usage_val == "N") usage_val = "19";
+            usage_str = array_usage_levels[usage_val - 1];
+            if (!usage_str) {
+              // if the usage_str is undefined set it to the Unknown category
+              usage_str = array_usage_levels[19];
+            }
+          }
 
           if (previous_name != usage_str) {
             var groupIdx = -1;
@@ -249,18 +274,18 @@ console.log(error);
               usagegroup = domConstruct.create("button", {
                 'class':"btn",
                 'data-toggle':"collapse",
-                'data-target':"#container_" + usage_str.replace(" ", "_"),
+                'data-target':"#container_" + usage_str.replace(" ", "_").replace(",", "_"),
                 innerHTML: usage_str + "&nbsp;&nbsp;&nbsp;&nbsp;<span id='span_" + usage_str + "' class='badge'>0</span>",
-                id: 'usage_' + usage_str.replace(" ", "_")  
+                id: 'usage_' + usage_str.replace(" ", "_").replace(",", "_")  
               }, container); 
               divgroup = domConstruct.create("div", {
                 'class': "collapse",
-                id: 'container_' + usage_str.replace(" ", "_")
+                id: 'container_' + usage_str.replace(" ", "_").replace(",", "_")
               }, container);
             }
             else {
               counter = usageCount[groupIdx];
-              divgroup = dom.byId('container_' + usage_str.replace(" ", "_"));
+              divgroup = dom.byId('container_' + usage_str.replace(" ", "_").replace(",", "_"));
             }
           }
 

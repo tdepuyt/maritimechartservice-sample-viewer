@@ -14,14 +14,16 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('MaritimeDisplayProperties::postCreate');
-
+console.log(this.config.selectedControls);
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layer = this.map.getLayer(this.map.layerIds[j]);
                     /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                    if ((layer.url.indexOf("/exts/MaritimeChartService/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/AISServer") > 0))
+                    if ((layer.url.indexOf("/exts/MaritimeChartService/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/AISServer") > 0))
                         this.aisLayer = layer;
-                    else if ((layer.url.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0))
+                    else if ((layer.url.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/MapServer") > 0)) {
                         this.s57Layer = layer;
+                        this.s57LayerIndex = j;
+                    }
                 }
 
                 var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
@@ -41,7 +43,10 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
                 } else {
                     this.displaySettings = new DisplaySettings({
                         map: this.map,
+                        controls: this.config.selectedControls,
+                        parametersContent: this.config.mcsParametersContent,
                         s57Layer: this.s57Layer,
+                        s57LayerIndex: this.s57LayerIndex, 
                         /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                         aisLayer: this.aisLayer,
                         s57LayerTitle: this.s57LayerTitle,
