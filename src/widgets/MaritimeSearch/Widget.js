@@ -17,7 +17,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Search'],
 
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layer = this.map.getLayer(this.map.layerIds[j]);
-                    if ((layer.url.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0))
+                    if ((layer.url.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/MapServer") > 0))
                         this.s57Layer = layer;
                 }
 
@@ -48,11 +48,14 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Search'],
                     console.log('MaritimeSearch::startup');
                     if (this.maritimeSearch != null)
                         this.maritimeSearch.startup();
-                }
+                },
 
-            // onOpen: function(){
-            //   console.log('MaritimeSearch::onOpen');
-            // },
+            onOpen: function(){
+               console.log('MaritimeSearch::onOpen');
+                if (this.maritimeSearch) {
+                    this.maritimeSearch.injectDisplayParameters();
+                }
+            }
 
             // onClose: function(){
             //   console.log('MaritimeSearch::onClose');
