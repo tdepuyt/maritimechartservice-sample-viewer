@@ -27,7 +27,8 @@ define([
   'esri/geometry/Polygon',
   'esri/geometry/Polyline',
   'esri/geometry/Point',
-  'esri/domUtils'
+  'esri/domUtils',
+  'esri/request'
 
 ], function(
   template,
@@ -41,8 +42,7 @@ define([
   IdentifyParameters,
   IdentifyTask, InfoTemplate,
   Polygon, Polyline, Point,
-  domUtils
-
+  domUtils, esriRequest
 ) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
     // description:
@@ -60,6 +60,7 @@ define([
     drawToolBar: null,
     showClear: false,
     //keepOneGraphic: false,
+    s57CustomLayer: null,
     s57ServiceUrl: null,
     /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisServiceUrl: null,
@@ -109,7 +110,7 @@ define([
             this.setSafetyContour();
         }));
       }
-
+      
       var moreInfoLink = domConstruct.create("a", {
         "class": "action",
         "id": "moreInfoLink",
@@ -140,11 +141,8 @@ define([
         }
 
       });
-
       
     },
-
-
 
     setupConnections: function() {
       // summary:
@@ -164,6 +162,7 @@ define([
     },
 
     mapClickHandler: function(evt) {
+
       if (this.map._params.showInfoWindowOnClick === true) {
         var mp = evt.mapPoint;
         this.map.infoWindow.clearFeatures();
@@ -184,8 +183,7 @@ define([
     resumeClickListener: function() {
       this.clickListener.resume();
     },
-
-    destroy: function() {
+   destroy: function() {
       if (this.pointGraphic) {
         this.map.graphics.remove(this.pointGraphic);
       }
@@ -198,7 +196,23 @@ define([
       this.pointSymbol = symbol;
     },
 
+    injectDisplayParameters: function() {
+      for (var j = 0; j < this.map.layerIds.length; j++) {
+        var layer = this.map.getLayer(this.map.layerIds[j]);
+        if (layer.displayParameters !=null) {
+           esriRequest.setRequestPreCallback(function(ioArgs){
+            if(ioArgs.url && ioArgs.url.indexOf("/exts/MaritimeChartService/MapServer/identify") > 0){
+              ioArgs.content.display_params = JSON.stringify(layer.displayParameters);
+            }
+            return ioArgs;
+          });
+          break;
+        }
+      }
+    },
+
     setDrawBox: function(newDrawBox) {
+
       var _this = this;
       this.drawBox = newDrawBox;
       this.drawBox.setMap(this.map);
@@ -215,6 +229,7 @@ define([
     },
 
     _onDrawEnd:function(graphic, geotype, commontype){
+
         this.drawBox.clear();
 
         this.map.infoWindow.clearFeatures();
@@ -291,41 +306,69 @@ define([
                   feature.attributes.geometryType = "Point";
                   break;
               }
-
-              switch (feature.attributes.cellName.charAt(2)) {
-                case '1':
-                  feature.attributes.usage = "Overview";
-                  break;
-                case '2':
-                  feature.attributes.usage = "General";
-                  break;
-                case '3':
-                  feature.attributes.usage = "Coastal";
-                  break;
-                case '4':
-                  feature.attributes.usage = "Approach";
-                  break;
-                case '5':
-                  feature.attributes.usage = "Harbour";
-                  break;
-                case '6':
-                  feature.attributes.usage = "Berthing";
-                  break;
-                case '7':
-                  feature.attributes.usage = "River";
-                  break;
-                case '8':
-                  feature.attributes.usage = "River harbour";
-                  break;
-                case '9':
-                  feature.attributes.usage = "River berthing";
-                  break;
-                case 'A':
-                  feature.attributes.usage = "Overlay";
-                  break;
-                case 'B':
-                  feature.attributes.usage = "Bathymetric ENC";
-                  break;
+              if (feature.attributes.cellName.indexOf("AML") ==0) {
+                feature.attributes.usage = "AML 3.0";
+              }
+              else {
+                switch (feature.attributes.cellName.charAt(2)) {
+                 case '1':
+                    feature.attributes.usage = "Overview";
+                    break;
+                  case '2':
+                    feature.attributes.usage = "General";
+                    break;
+                  case '3':
+                    feature.attributes.usage = "Coastal";
+                    break;
+                  case '4':
+                    feature.attributes.usage = "Approach";
+                    break;
+                  case '5':
+                    feature.attributes.usage = "Harbour";
+                    break;
+                  case '6':
+                    feature.attributes.usage = "Berthing";
+                    break;
+                  case '7':
+                    feature.attributes.usage = "River";
+                    break;
+                  case '8':
+                    feature.attributes.usage = "River harbour";
+                    break;
+                  case '9':
+                    feature.attributes.usage = "River berthing";
+                    break;
+                  case 'A':
+                    feature.attributes.usage = "Overlay";
+                    break;
+                  case 'B':
+                    feature.attributes.usage = "Bathymetric ENC";
+                    break;
+                  case 'M':
+                    feature.attributes.usage = "MFF (Maritime Foundation and Facilities)";
+                    break;
+                  case 'E':
+                    feature.attributes.usage = "ESB (Environment, Seabed and Beach)";
+                    break;
+                  case 'R':
+                    feature.attributes.usage = "RAL (Routes Areas and Limits)";
+                    break;
+                  case 'L':
+                    feature.attributes.usage = "LBO (Large Bottom Objects)";
+                    break;
+                  case 'S':
+                    feature.attributes.usage = "SBO (Small Bottom Objects)";
+                    break;
+                  case 'C':
+                    feature.attributes.usage = "CLB (Contour Line Bathymetry)";
+                    break;
+                  case 'I':
+                    feature.attributes.usage = "IWC (Integrated Water Column)";
+                    break;
+                  case 'N':
+                    feature.attributes.usage = "NMB (Network Model Bathymetry)";
+                    break;
+                }
               }
 
               feature.attributes.moreInfo = "";
@@ -343,7 +386,7 @@ define([
 
     generateInfoContent: function(feature) {
 
-
+      var blacklist = ["cellName", "compilationScale", "geometryType", "objectType", "objectTypeDescription", "rcid", "moreInfo", "usage", "txtdsc_token", "layerName"];
       var content = "<table><tr><td><b>${cellName}</b></td></tr></table>";
       content += "<p style='border: 2px inset; margin: 5px 0px ;'></p>";
       content += "<table><tr><td>Feature:</td><td style='padding-left: 1em;'>${objectType:formatFeatureName}</td></tr><tr><td>Description:</td><td style='padding-left: 1em;'>${objectTypeDescription}</td></tr><tr><td>Geometry:</td><td style='padding-left:1em;'>${geometryType}</td></tr><tr><td>Usage:</td><td style='padding-left:1em;'>${usage}</td></tr><tr><td>Compilation Scale:</td><td style='padding-left:1em;'>${compilationScale}</td></tr></table>";
@@ -352,7 +395,7 @@ define([
       content += " <div style='height: 100px; overflow: auto;'><table>";
 
       for (var key in feature.attributes) {
-        if (key.length == 6) {
+        if (!(blacklist.indexOf(key) >= 0)) {
           content += "<tr><td>" + key + ":" + "</td><td style='padding-left: 1em;'>" + feature.attributes[key] + "</td></tr>";
         }
       }
