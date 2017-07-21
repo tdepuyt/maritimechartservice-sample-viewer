@@ -2,22 +2,19 @@
 ## (Web App Builder widgets)
 
 
-### If you are looking for ArcGIS for Maritime: Server 10.4 Widgets please email maritime@esri.com.
-
 The Maritime Chart Service widgets are widgets and dojo classes that illustrate how web applications can consume and interact with the Maritime Chart Service exposed by the ArcGIS for Maritime: Server product.
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
+
+To view a sample application created with these widgets please visit http://esriho.maps.arcgis.com/home/index.html and click on one of the Maritime Chart Service applications.
 
 What's new with this version
 * Updated requirements section
 * Updated deployment steps
-* Search widget is now operational
-* New Maritime Display parameters
-* Compatible with WAB 2.3 or greater
-* Supports JS API 3.19 or greater
-* Compatible with ArcGIS for Maritime: Server 10.5
+* Search widget is now operational for all supported versions
+* New Maritime Display parameters configuration setting which allows you to select which parameters to deploy.  For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm
+* Tested against WAB 2.5 and JavaScript API 3.20
+## * Compatible with ArcGIS for Maritime: Server 10.4/10.4 & 10.5/10.5.1
 
-
-![App](maritimechartservice-sample-viewer.png)
 
 ## Sections
 
@@ -31,10 +28,10 @@ What's new with this version
 
 ## Features
 
-These Web App Builder widgets illustrates how to build web apps consuming S-57 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
+These Web App Builder widgets illustrates how to build web apps consuming S-57/S-63 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
 * Allows users to change S-52 based display settings through the JavaScrip client
 * Enables users to identify on individual features and view their attribute information.
-* Provides the ability to search based on object name (OBJNAM), national object name (NOBJNM) and S-57 dataset names.
+* Provides the ability to search based on object name (OBJNAM), national object name (NOBJNM) and dataset names.
 
 The Widget Repository currently includes:
 
@@ -54,7 +51,7 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 ## Requirements
 * Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets. 
 * Maritime Chart Service widgets require JS API 3.19 or greater. 
-* ArcGIS for Maritime Server 10.5.0
+* ArcGIS for Maritime Server 10.4/10.4.1 or 10.5/10.5.1
 
 
 ## Deployment
@@ -76,7 +73,7 @@ Adding Widgets to you Web AppBuilder Environment:
 ```
 
 ## Create a Web App using the Maritime Chart Service:
-When creating a Web App, you need to chose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains the Maritime Chart Service. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
+When creating a Web App, you need to chose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains a the Maritime Chart Service layer. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
 
 * Log in to your ArcGIS Online account
 * Create a new Map
@@ -95,6 +92,19 @@ If the machine is in domain, it is sometimes required to include domain name alo
 * Save the Web Map
 
 The Web Map is now using the Maritime CHart Service, and can be selected when you create your App in Web AppBuilder
+
+## New deployment option for Maritime Display Parameters:
+
+When you add the Maritime Display Parameters widget to your application you can now query against all available parameters and select all or just the ones you want to deploy.  
+
+Please note that there are two exceptions when using these widgets against 10.4/10.4.1 and 10.5
+* 10.4/10.4.1 - Text Groups is not supported on the client side so you will need to turn this option off.
+* 10.5 - Label Contours is not supported on the client side so you will need to turn this option off.
+* 10.5.1 - All options are supported.
+
+## Search widget:
+
+The search widget is now supported on all versions with one exception.  Searching on national object name is only supported in 10.5 and 10.5.1.
 
 
 ## Additional Deployment steps for the Identify widget:
