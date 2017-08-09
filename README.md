@@ -13,7 +13,7 @@ What's new with this version
 * Search widget is now operational for all supported versions
 * New Maritime Display parameters configuration setting which allows you to select which parameters to deploy.  For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm
 * Tested against WAB 2.5 and JavaScript API 3.20
-## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4 & 10.5/10.5.1
+## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1
 
 
 ## Sections
