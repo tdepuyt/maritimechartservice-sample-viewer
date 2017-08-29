@@ -20,7 +20,7 @@ define([
   //'dijit/form/Button'
 ], function(
   on, topic, query,
-  template, 
+  template,
   declare, lang, array,
   _WidgetBase,
   _TemplatedMixin,
@@ -87,9 +87,9 @@ define([
 
       on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
           this.map.removeLayer(this.s57Layer);
-      })); 
+      }));
       this.map.addLayer(s57CustomLayer, this.s57LayerIndex);
-      
+
       /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
       if (this.aisLayer) {
         aisCustomLayer = new AISServiceLayer(this.aisLayer.url, {
@@ -125,6 +125,8 @@ define([
       if(this.controls && this.controls.length > 0) {
         var ctrlArr = this.controls.split(",");
         for (var i=0; i<ctrlArr.length; i++) {
+          if(!this[ctrlArr[i]])
+            continue;  //bypass all non-supported parameters
           this[ctrlArr[i]].style.display = "block";
           if (ctrlArr[i] !=="TextGroups") {
             for (var j=0; j<params.length; j++) {
@@ -147,7 +149,7 @@ define([
                   break;
                   case "DisplayCategory":
                   case "IntendedUsage":
-                  var filter = params[j].value; 
+                  var filter = params[j].value;
                   if (filter.substr(0,1)=="0") filter = "0"; // to handle special case for IntendedUsage
                   var selValues = filter.split(',');
                   for(var k=0; k<params[j].ExpectedInput.length; k++) {
@@ -364,7 +366,7 @@ define([
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
-      
+
       this.own(on(this.LabelContoursCtrl, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "LabelContours")].value = _this.LabelContoursCtrl.checked?2:1;
