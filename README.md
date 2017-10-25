@@ -12,7 +12,7 @@ What's new with this version
 * Updated deployment steps
 * Search widget is now operational for all supported versions
 * New Maritime Display parameters configuration setting which allows you to select which parameters to deploy.  For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm
-* Tested against WAB 2.5 and JavaScript API 3.20
+* Tested against WAB 2.5 and JavaScript API 3.20 - WAB 2.6 is not currently supported.
 ## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1
 
 
@@ -49,7 +49,7 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 
 ## Requirements
-* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets. 
+* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets.  WAB 2.6 is not currently supported.
 * Maritime Chart Service widgets require JS API 3.19 or greater. 
 * ArcGIS for Maritime Server 10.4/10.4.1 or 10.5/10.5.1
 
