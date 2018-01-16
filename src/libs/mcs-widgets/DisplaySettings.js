@@ -139,6 +139,8 @@ define([
                   case "DisplayFrames":
                   case "PointSymbolizationType":
                   case "AttDesc":
+                  case "DisplayFrameText":
+                  case "DisplayFrameTextPlacement":
                   for(var k=0; k<params[j].ExpectedInput.length; k++) {
                     if (params[j].value === params[j].ExpectedInput[k].code)
                       dynamicHtml += "<option value='" + params[j].ExpectedInput[k].code + "' selected='selected'>" + params[j].ExpectedInput[k].value + "</option>";
@@ -163,6 +165,7 @@ define([
                   }
                   this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
                   break;
+                  case "CompassRose":
                   case "DataQuality":
                   case "DisplayNOBJNM":
                   case "OptionalDeepSoundings":
@@ -246,6 +249,26 @@ define([
       this.own(on(this.AttDescCtrl, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "AttDesc")].value = parseInt(_this.AttDescCtrl.value, 10);
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer) {
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+          aisCustomLayer.refresh();
+        }
+      }));
+      this.own(on(this.DisplayFrameTextCtrl, 'change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "DisplayFrameText")].value = parseInt(_this.DisplayFrameTextCtrl.value, 10);
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer) {
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+          aisCustomLayer.refresh();
+        }
+      }));
+      this.own(on(this.DisplayFrameTextPlacementCtrl, 'change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "DisplayFrameTextPlacement")].value = parseInt(_this.DisplayFrameTextPlacementCtrl.value, 10);
         s57CustomLayer.refresh();
         /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer) {
@@ -353,6 +376,14 @@ define([
       this.own(on(this.DataQualityCtrl, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "DataQuality")].value = _this.DataQualityCtrl.checked?2:1;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
+      this.own(on(this.CompassRoseCtrl, 'change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "CompassRose")].value = _this.CompassRoseCtrl.checked?2:1;
         s57CustomLayer.refresh();
         /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
