@@ -8,12 +8,11 @@ The widgets can be used directly within Web App Builder for ArcGIS. Alternativel
 To view a sample application created with these widgets please visit http://esriho.maps.arcgis.com/home/index.html and click on one of the Maritime Chart Service applications.
 
 What's new with this version
-* Updated requirements section
-* Updated deployment steps
-* Search widget is now operational for all supported versions
-* New Maritime Display parameters configuration setting which allows you to select which parameters to deploy.  For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm
-* Tested against WAB 2.5 and JavaScript API 3.20 - WAB 2.6 is not currently supported.
-## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1
+## * Updated requirements section
+## * Display Properties now include controls for Compass Rose, Display Frame Text and Display Frame Text Placement. For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm 
+## * Data Extents within Display Properties now has a new setting to only diplay visible dataset.
+## * Tested against WAB 2.7 and JavaScript API 3.20
+## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1 & 10.6
 
 
 ## Sections
@@ -49,9 +48,9 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 
 
 ## Requirements
-* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets.  WAB 2.6 is not currently supported.
+* Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets.
 * Maritime Chart Service widgets require JS API 3.19 or greater. 
-* ArcGIS for Maritime Server 10.4/10.4.1 or 10.5/10.5.1
+* ArcGIS for Maritime Server 10.4/10.4.1, 10.5/10.5.1 and 10.6
 
 
 ## Deployment
@@ -101,10 +100,11 @@ Please note that there are two exceptions when using these widgets against 10.4/
 * 10.4/10.4.1 - Text Groups is not supported on the client side so you will need to turn this option off.
 * 10.5 - Label Contours is not supported on the client side so you will need to turn this option off.
 * 10.5.1 - All options are supported.
+## * 10.6 - All options are supported.
 
 ## Search widget:
 
-The search widget is now supported on all versions with one exception.  Searching on national object name is only supported in 10.5 and 10.5.1.
+The search widget is now supported on all versions with one exception.  Searching on national object name is only supported in versions 10.5 and greater.
 
 
 ## Additional Deployment steps for the Identify widget:
