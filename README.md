@@ -11,7 +11,7 @@ What's new with this version
 ## * Updated requirements section
 ## * Display Properties now include controls for Compass Rose, Display Frame Text and Display Frame Text Placement. For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm 
 ## * Data Extents within Display Properties now has a new setting to only diplay visible dataset.
-## * Tested against WAB 2.7 and JavaScript API 3.20
+## * Tested against WAB 2.7 and JavaScript API 3.22
 ## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1 & 10.6
 
 
