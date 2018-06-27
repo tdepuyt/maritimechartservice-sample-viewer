@@ -1,6 +1,7 @@
 <div>
 	<ul class="nav nav-tabs">
-    <li class="active"><a href="#contour-tab" role="tab" data-toggle="tab">Depth Contour (Meters)</a></li>
+	<li class="active"><a href="#contour-tab" role="tab" data-toggle="tab">Depth Contour (Meters)</a></li>
+	<li style="display:none" data-dojo-attach-point="symbol_size_tab_header"><a href="#symbol-size-tab" role="tab" data-toggle="tab">Symbol Size </a></li>
     <li><a href="#misc-tab" role="tab" data-toggle="tab">Miscellaneous </a></li>
 	</ul>
 
@@ -30,10 +31,191 @@
 		            	<button id="btn_apply" class="btn btn-primary btn-md" name="btn_apply" type="button" data-dojo-attach-event="onClick:_onApplyClick">Apply</button>
 		            </div>
 		        </div>
-		    </div>
+			</div>
+
+			<div class="tab-pane" id="symbol-size-tab">
+				<div id="SymbolSizeContainer" data-dojo-attach-point="SymbolSizeContainer" style="display:none">
+						<div id = "CommonSymbolSize" data-dojo-attach-point="CommonSymbolSize" class="custom-panel">
+							<div class = "custom-panel--body">
+								<div class="form-group">
+									<label for="input_minzoomCommonSymbolSize" class="col-sm-4 control-label">Min Zoom: </label>
+									<div class="col-sm-4">
+										<input id="input_minzoomCommonSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="0.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_minzoomCommonSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="input_maxzoomCommonSymbolSize" class="col-sm-4 control-label">Max Zoom: </label>
+									<div class="col-sm-4">
+										<input id="input_maxzoomCommonSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_maxzoomCommonSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="input_scalefactorCommonSymbolSize" class="col-sm-4 control-label">Scale Factor: </label>
+									<div class="col-sm-4">
+										<input id="input_scalefactorCommonSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_scalefactorCommonSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+									</div>
+								</div>
+							</div>
+							
+							<div class="custom-panel--footer">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<div> Use the same values for: </div>
+										<label class="checkbox-inline" for="pointCheck">
+											<input type="checkbox" id="pointCheck" data-dojo-attach-point="pointCheck" data-dojo-attach-event="onClick:_onPointCheckClick" checked="true">Point
+										</label>
+										<label class="checkbox-inline" for="lineCheck">
+											<input type="checkbox" id="lineCheck" data-dojo-attach-point="lineCheck" data-dojo-attach-event="onClick:_onLineCheckClick" checked="true">Line
+										</label>
+										<label class="checkbox-inline" for="areaCheck">
+											<input type="checkbox" id="areaCheck" data-dojo-attach-point="areaCheck" data-dojo-attach-event="onClick:_onAreaCheckClick"  checked="true">Area
+										</label>
+										<label class="checkbox-inline" for="textCheck">
+											<input type="checkbox" id="textCheck" data-dojo-attach-point="textCheck" data-dojo-attach-event="onClick:_onTextCheckClick"  checked="true">Text
+										</label>
+										<label class="checkbox-inline" for="datasetCheck">
+											<input type="checkbox" id="datasetCheck" data-dojo-attach-point="datasetCheck" data-dojo-attach-event="onClick:_onDatasetCheckClick"  checked="true">Dataset
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="PointSymbolSize" data-dojo-attach-point="PointSymbolSize" style="display:none">
+							<div class = "custom-panel">
+								<div class= "custom-panel--header"> Point Symbol Size: </div>
+								<div class= "custom-panel--body">
+									<div class="form-group custom-form-group-tight">
+										<label for="input_minzoomPointSymbolSize" class="col-sm-4 control-label">Min Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_minzoomPointSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="0.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_minzoomPointSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_maxzoomPointSymbolSize" class="col-sm-4 control-label">Max Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_maxzoomPointSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_maxzoomPointSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_scalefactorPointSymbolSize" class="col-sm-4 control-label">Scale Factor: </label>
+										<div class="col-sm-4">
+											<input id="input_scalefactorPointSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_scalefactorPointSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="LineSymbolSize" data-dojo-attach-point="LineSymbolSize" style="display:none">
+							<div class = "custom-panel">
+								<div class= "custom-panel--header"> Line Symbol Size: </div>
+								<div class= "custom-panel--body">
+									<div class="form-group custom-form-group-tight">
+										<label for="input_minzoomLineSymbolSize" class="col-sm-4 control-label">Min Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_minzoomLineSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="0.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_minzoomLineSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_maxzoomLineSymbolSize" class="col-sm-4 control-label">Max Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_maxzoomLineSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_maxzoomLineSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_scalefactorLineSymbolSize" class="col-sm-4 control-label">Scale Factor: </label>
+										<div class="col-sm-4">
+											<input id="input_scalefactorLineSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_scalefactorLineSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="AreaSymbolSize" data-dojo-attach-point="AreaSymbolSize" style="display:none">
+							<div class = "custom-panel">
+								<div class= "custom-panel--header"> Area Symbol Size: </div>
+								<div class= "custom-panel--body">
+									<div class="form-group custom-form-group-tight">
+										<label for="input_minzoomAreaSymbolSize" class="col-sm-4 control-label">Min Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_minzoomAreaSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="0.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_minzoomAreaSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_maxzoomAreaSymbolSize" class="col-sm-4 control-label">Max Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_maxzoomAreaSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_maxzoomAreaSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_scalefactorAreaSymbolSize" class="col-sm-4 control-label">Scale Factor: </label>
+										<div class="col-sm-4">
+											<input id="input_scalefactorAreaSymbolSize" data-dojo-type="dijit/form/NumberSpinner" value="1" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_scalefactorAreaSymbolSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="TextSize" data-dojo-attach-point="TextSize" style="display:none">
+							<div class = "custom-panel">
+								<div class= "custom-panel--header"> Text Size: </div>
+								<div class= "custom-panel--body">
+									<div class="form-group custom-form-group-tight">
+										<label for="input_minzoomTextSize" class="col-sm-4 control-label">Min Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_minzoomTextSize" data-dojo-type="dijit/form/NumberSpinner" value="0.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_minzoomTextSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_maxzoomTextSize" class="col-sm-4 control-label">Max Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_maxzoomTextSize" data-dojo-type="dijit/form/NumberSpinner" value="1.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_maxzoomTextSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_scalefactorTextSize" class="col-sm-4 control-label">Scale Factor: </label>
+										<div class="col-sm-4">
+											<input id="input_scalefactorTextSize" data-dojo-type="dijit/form/NumberSpinner" value="1" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_scalefactorTextSize" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="DatasetDisplayRange" data-dojo-attach-point="DatasetDisplayRange" style="display:none">
+							<div class = "custom-panel">
+								<div class= "custom-panel--header"> Dataset Display Range: </div>
+								<div class= "custom-panel--body">
+									<div class="form-group custom-form-group-tight">
+										<label for="input_minzoomDatasetDisplayRange" class="col-sm-4 control-label">Min Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_minzoomDatasetDisplayRange" data-dojo-type="dijit/form/NumberSpinner" value="0.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_minzoomDatasetDisplayRange" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+									<div class="form-group custom-form-group-tight">
+										<label for="input_maxzoomDatasetDisplayRange" class="col-sm-4 control-label">Max Zoom: </label>
+										<div class="col-sm-4">
+											<input id="input_maxzoomDatasetDisplayRange" data-dojo-type="dijit/form/NumberSpinner" value="1.2" data-dojo-props="smallDelta:0.1, constraints:{min:0}" data-dojo-attach-point="input_maxzoomDatasetDisplayRange" data-dojo-attach-event="onChange:_onSymbolSizeInputChange"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+								<div class="col-md-offset-4 col-md-10">
+									<button id="btn_apply_symbolsize" class="btn btn-primary btn-md" name="btn_apply_symbolsize" type="button" data-dojo-attach-point="SymbolSizesApplyButton" data-dojo-attach-event="onClick:_onSymboSizesApplyClick">Apply</button>
+								</div>
+						</div>
+				</div>
+			</div>
+
 		    <div class="tab-pane" id="misc-tab" data-dojo-attach-point="misc_tab">
 				<div class="form-group" id="AreaSymbolizationType" data-dojo-attach-point="AreaSymbolizationType" style="display:none">
-					<label class="col-md-5 control-label" for="AreaSymbolizationTypeCtrl">Area symbolization: </label>
+					<label class="col-md-5 control-label" for="AreaSymbolizationTypeCtrl">Text symbolization: </label>
 					<div class="col-md-7">
 						<select class="form-control" id="AreaSymbolizationTypeCtrl" data-dojo-attach-point="AreaSymbolizationTypeCtrl">
 						</select>
@@ -146,11 +328,23 @@
 						</select>
 					</div>
 				</div>
+				<div class="form-group" id="RemoveDuplicateText" data-dojo-attach-point="RemoveDuplicateText" style="display:none">
+						<label class="col-md-5 control-label" for="RemoveDuplicateTextCtrl">Remove Duplicate Text: </label>
+						<div class="col-md-7 control-switch">
+							<label>On<input id="RemoveDuplicateTextCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="RemoveDuplicateTextCtrl"/>Off</label>
+						</div>
+				</div>
 				<div class="form-group" id="ShallowDepthPattern" data-dojo-attach-point="ShallowDepthPattern" style="display:none">
 					<label class="col-md-5 control-label" for="ShallowDepthPatternCtrl">Shallow patterns: </label>
 					<div class="col-md-7 control-switch">
 						<label>On<input id="ShallowDepthPatternCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="ShallowDepthPatternCtrl"/>Off</label>
 					</div>
+				</div>
+				<div class="form-group" id="TextHalo" data-dojo-attach-point="TextHalo" style="display:none">
+						<label class="col-md-5 control-label" for="TextHaloCtrl">Text Halo: </label>
+						<div class="col-md-7 control-switch">
+							<label>On<input id="TextHaloCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="TextHaloCtrl"/>Off</label>
+						</div>
 				</div>
 				<div class="form-group" id="TwoDepthShades" data-dojo-attach-point="TwoDepthShades" style="display:none">
 					<label class="col-md-5 control-label" for="TwoDepthShadesCtrl">Two colour depth zone shades: </label>

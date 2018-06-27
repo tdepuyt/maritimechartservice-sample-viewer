@@ -10,14 +10,15 @@ define([
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
   'dijit/form/CheckBox',
+  'dijit/form/NumberSpinner',
   'esri/layers/ImageParameters',
   './S57ServiceLayer',
   /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
   './AISServiceLayer',
   //testsUrl + '../S57ServiceLayer.js',
   //testsUrl + '../AISServiceLayer.js',
-  'bootstrap/Tab'
-  //'dijit/form/Button'
+  'bootstrap/Tab',
+  'dijit/form/Button'
 ], function(
   on, topic, query,
   template,
@@ -26,6 +27,7 @@ define([
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
   Checkbox,
+  NumberSpinner,
   ImageParameters,
   S57ServiceLayer,
   /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
@@ -122,13 +124,19 @@ define([
       var dispObj = JSON.parse(this.parametersContent);
       var params = dispObj.ECDISParameters.DynamicParameters.Parameter;
       var dynamicHtml;
+
+      function isGroupParameter(checkparam) {
+        return (checkparam === 'AreaSymbolSize'  || checkparam === 'DatasetDisplayRange' || checkparam === 'LineSymbolSize'
+         || checkparam === 'PointSymbolSize' || checkparam === 'TextSize' || checkparam === 'TextGroups');
+      }
+
       if(this.controls && this.controls.length > 0) {
         var ctrlArr = this.controls.split(",");
         for (var i=0; i<ctrlArr.length; i++) {
           if(!this[ctrlArr[i]])
             continue;  //bypass all non-supported parameters
           this[ctrlArr[i]].style.display = "block";
-          if (ctrlArr[i] !=="TextGroups") {
+          if (!isGroupParameter(ctrlArr[i])) {
             for (var j=0; j<params.length; j++) {
               dynamicHtml = "";
               if (params[j].name === ctrlArr[i]) {
@@ -175,6 +183,8 @@ define([
                   case "LabelContours":
                   case "LabelSafetyContours":
                   case "TwoDepthShades":
+                  case "TextHalo":
+                  case "RemoveDuplicateText":
                   if(params[j].value == "2")
                     this[ctrlArr[i] + "Ctrl"].set("checked", true);
                   break;
@@ -184,16 +194,33 @@ define([
             }
           }
           else {
-            // text groups or Intended Usage
-            var textParams = dispObj.ECDISParameters.DynamicParameters.ParameterGroup[0].Parameter;
-            var dynamicHtml = "";
-            for(var j=0; j<textParams.length; j++) {
-              if (textParams[j].value == "2")
-                dynamicHtml += "<label><input type='checkbox' id='dbox" + textParams[j].name + "' value='" + textParams[j].name + "' checked/>" + textParams[j].Description + "</label><br/>";
-              else
-                dynamicHtml += "<label><input type='checkbox' id='dbox" + textParams[j].name + "' value='" + textParams[j].name + "'/>" + textParams[j].Description + "</label><br/>";
+            var parameterGroupsArray = dispObj.ECDISParameters.DynamicParameters.ParameterGroup;
+            var grpParameter = parameterGroupsArray[this.findParameter(parameterGroupsArray, ctrlArr[i])];
+            if(grpParameter) {
+                nestedParams = grpParameter.Parameter;
+                switch(ctrlArr[i]) {
+                  case "TextGroups":
+                    // text groups or Intended Usage
+                    var dynamicHtml = "";
+                    for(var j=0; j<nestedParams.length; j++) {
+                      if (nestedParams[j].value == "2")
+                        dynamicHtml += "<label><input type='checkbox' id='dbox" + nestedParams[j].name + "' value='" + nestedParams[j].name + "' checked/>" + nestedParams[j].Description + "</label><br/>";
+                      else
+                        dynamicHtml += "<label><input type='checkbox' id='dbox" + nestedParams[j].name + "' value='" + nestedParams[j].name + "'/>" + nestedParams[j].Description + "</label><br/>";
+                    }
+                    this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
+                    break;
+                  case "DatasetDisplayRange":
+                  case "AreaSymbolSize":
+                  case "LineSymbolSize":
+                  case "PointSymbolSize":
+                  case "TextSize":
+                    this[ctrlArr[i]].style.display = "none";
+                    this["symbol_size_tab_header"].style.display = "block";
+                    this["SymbolSizeContainer"].style.display = "block";
+                    break;
+              }
             }
-            this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
           }
         }
       }
@@ -204,7 +231,7 @@ define([
           var ctrlArr = this.controls.split(",");
           for (var i=0; i<ctrlArr.length; i++) {
             this[ctrlArr[i]].style.display = "block";
-            if (ctrlArr[i] !=="TextGroups") {
+            if (!isGroupParameter(ctrlArr[i])) {
               for (var j=0; j<params.length; j++) {
                 dynamicHtml = "";
                 if (params[j].name === ctrlArr[i]) {
@@ -356,6 +383,22 @@ define([
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
+      this.own(on(this.RemoveDuplicateTextCtrl, 'change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "RemoveDuplicateText")].value = _this.RemoveDuplicateTextCtrl.checked?2:1;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
+      this.own(on(this.TextHaloCtrl, 'change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "TextHalo")].value = _this.TextHaloCtrl.checked?2:1;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
       this.own(on(this.DisplayNOBJNMCtrl, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "DisplayNOBJNM")].value = _this.DisplayNOBJNMCtrl.checked?2:1;
@@ -481,7 +524,8 @@ define([
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
       this.own(query("input[type='checkbox']", _this.TextGroupsCtrl).on('change', function() {
-        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.ParameterGroup[0].Parameter;
+        var grpParametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.ParameterGroup;
+        var parametersArray = grpParametersArray[_this.findParameter(grpParametersArray, "TextGroups")].Parameter;
         query("input[type='checkbox']", _this.TextGroupsCtrl).forEach(function(checkbox) {
           if (checkbox.checked) {
             parametersArray[_this.findParameter(parametersArray, checkbox.value)].value = 2;
@@ -506,6 +550,86 @@ define([
       if (aisCustomLayer)
         aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
     },
+    _onPointCheckClick: function(e) {
+      e.target.checked ? this["PointSymbolSize"].setAttribute("style", "display:none") : this["PointSymbolSize"].setAttribute("style", "display:block");
+      this._onSymbolSizeInputChange();
+    },
+    _onLineCheckClick: function(e) {
+      e.target.checked ? this["LineSymbolSize"].setAttribute("style", "display:none") : this["LineSymbolSize"].setAttribute("style", "display:block")
+      this._onSymbolSizeInputChange();
+    },
+    _onAreaCheckClick: function(e) {
+      e.target.checked ?  this["AreaSymbolSize"].setAttribute("style", "display:none") : this["AreaSymbolSize"].setAttribute("style", "display:block")
+      this._onSymbolSizeInputChange();
+    },
+    _onTextCheckClick: function(e) {
+      e.target.checked ? this["TextSize"].setAttribute("style", "display:none") : this["TextSize"].setAttribute("style", "display:block")
+      this._onSymbolSizeInputChange();
+    },
+    _onDatasetCheckClick: function(e) {
+      e.target.checked ? this["DatasetDisplayRange"].setAttribute("style", "display:none") : this["DatasetDisplayRange"].setAttribute("style", "display:block")
+      this._onSymbolSizeInputChange();
+    },
+
+    _onSymbolSizeInputChange: function(e) {
+      var isValid = true;
+      ['CommonSymbolSize','PointSymbolSize', 'LineSymbolSize', 'AreaSymbolSize', 'TextSize', 'DatasetDisplayRange'].forEach(lang.hitch(this, function(symbolType) {
+        if(this[symbolType].style.display !== 'none') {
+          isValid &= this["input_minzoom"+symbolType].isValid();
+          isValid &= this["input_maxzoom"+symbolType].isValid();
+
+          if(symbolType !== 'DatasetDisplayRange') {
+            isValid &= this["input_scalefactor"+symbolType].isValid();
+          }
+        }
+      }));
+
+      if(!isValid) {
+        this["SymbolSizesApplyButton"].disabled = true;
+      }
+      else
+      {
+        this["SymbolSizesApplyButton"].disabled = false;
+      }
+    },
+
+    _onSymboSizesApplyClick: function() {
+
+      var commonMinZoom = parseFloat(this["input_minzoomCommonSymbolSize"].value, 10);
+      var commonMaxZoom = parseFloat(this["input_maxzoomCommonSymbolSize"].value, 10);
+      var commonScaleFactor = parseFloat(this["input_scalefactorCommonSymbolSize"].value, 10);
+
+      var grpParametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.ParameterGroup;
+      ['PointSymbolSize', 'LineSymbolSize', 'AreaSymbolSize', 'TextSize', 'DatasetDisplayRange'].forEach(lang.hitch(this, function(symbolType) {
+        var parametersArray = grpParametersArray[this.findParameter(grpParametersArray, symbolType)].Parameter;
+
+        var minzoom = commonMinZoom;
+        var maxzoom = commonMaxZoom;
+        var scalefactor = commonScaleFactor;
+
+        if(this[symbolType].style.display !== 'none') { // the ctrl is not hidden, override the common value
+          minzoom = parseFloat(this["input_minzoom"+symbolType].value, 10);
+          maxzoom = parseFloat(this["input_maxzoom"+symbolType].value, 10);
+
+          if(symbolType !== 'DatasetDisplayRange') {
+            scalefactor = parseFloat(this["input_scalefactor"+symbolType].value, 10);
+          }
+        }
+
+        parametersArray[this.findParameter(parametersArray, "minZoom")].value = minzoom;
+        parametersArray[this.findParameter(parametersArray, "maxZoom")].value = maxzoom;
+
+        if(symbolType!== 'DatasetDisplayRange') {
+          parametersArray[this.findParameter(parametersArray, "scaleFactor")].value = scalefactor;
+        }
+      }));
+
+      s57CustomLayer.refresh();
+      /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+      if (aisCustomLayer)
+        aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+    },
+
     findParameter: function(parametersArray, name) {
        for (i = 0; i < parametersArray.length; i++) {
         if (parametersArray[i].name == name) {

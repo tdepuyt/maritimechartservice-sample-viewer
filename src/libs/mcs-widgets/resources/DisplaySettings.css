@@ -60,3 +60,37 @@
 .switch-toggle.dijitCheckBox.dijitCheckBoxChecked:before {
   right: 26px;
 }
+
+.custom-panel{
+  background-color:#fff;
+  margin-bottom:10px;
+  border:1px solid #ddd;
+  border-radius:3px;
+}
+
+.custom-panel--body{
+  padding:5px
+}
+
+.custom-panel--header{
+  background-color:#f1f1f1;
+  padding:5px;
+  border-bottom:1px solid transparent;
+  border-top-left-radius:3px;
+  border-top-right-radius:3px;
+  font-size: 1.10em;
+}
+
+.custom-panel--footer{
+  padding:5px;
+  background-color:#f1f1f1;
+  border-top:1px solid transparent;
+  border-bottom-right-radius:3px;
+  border-bottom-left-radius:3px;
+  font-size: 0.90em;
+}
+
+.custom-form-group-tight {
+  padding: 1px;
+  margin: 1px;
+}

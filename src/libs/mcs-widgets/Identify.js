@@ -28,7 +28,9 @@ define([
   'esri/geometry/Polyline',
   'esri/geometry/Point',
   'esri/domUtils',
-  'esri/request'
+  'esri/request',
+  'jimu/PanelManager',
+  'dojo/aspect'
 
 ], function(
   template,
@@ -42,7 +44,7 @@ define([
   IdentifyParameters,
   IdentifyTask, InfoTemplate,
   Polygon, Polyline, Point,
-  domUtils, esriRequest
+  domUtils, esriRequest, PanelManager, aspect
 ) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
     // description:
@@ -218,14 +220,96 @@ define([
       this.drawBox.setMap(this.map);
       this.drawBox.geoTypes = ['POINT', 'EXTENT'];
       this.drawBox._initTypes();
-      //this.drawBox.setPointSymbol(this.identMarkerSymbol);
-      //this.drawBox.setLineSymbol(this.identLineSymbol);
-      //this.drawBox.setPolygonSymbol(this.identFillSymbol);
+
+
+      // Initialize reference to the widgetManager
+      
+      if (PanelManager.getInstance() && PanelManager.getInstance().activePanel.widgetManager) {
+        this.widgetManager = PanelManager.getInstance().activePanel.widgetManager;
+        // Interact with other widgets.
+        if(this.widgetManager) {
+          // If the widgets are not loded yet, listen to widget created event from widget manager.
+          this.own(on(this.widgetManager, 'widget-created', function(widget) {
+            if(widget.name == 'MaritimeIdentify') {
+              _this.widgetid = widget.id;
+              // If the widget is configured to open at start, make it sticky (The widget will reactivate after Select and Measurement widgets are deactivated).
+              if(widget.openAtStart) {
+                _this.makeSticky = true;
+                // Activate the identify by point by default        
+                _this.drawBox.activate('POINT');
+                // Close the panel if it was configured to open at start.
+                PanelManager.getInstance().closePanel(widget.id + '_panel');
+              }
+            }
+            else if(widget.name === 'Measurement' && widget.measurement) {
+              _this._onMeasurementToggle(_this, widget);
+            }
+            else if(widget.name === 'Select' && widget.selectDijit && widget.selectDijit.drawBox) {
+              _this._onSelectToggle(_this, widget);
+            }
+          }));
+
+          // If the widgets are already loaded (example both Identify, and Measurement/Select widgets are configured to open at startup).
+          var measurementWidget = this.widgetManager.getWidgetsByName('Measurement')[0];
+          if(measurementWidget) {
+            _this._onMeasurementToggle(_this, measurementWidget);
+          }
+          var selectWidget = this.widgetManager.getWidgetsByName('Select')[0];
+          if(selectWidget) {
+            _this._onSelectToggle(_this, selectWidget);
+          }
+        }
+      }
+
+      this.own(on(this.drawBox, 'icon-selected', function (graphic, geotype, commontype) {
+        _this.selectedTool = geotype;
+        _this.drawBox.drawToolBar._toggleTooltip(false); // hide the tool tip.
+        
+        // Activating the drawBox sets ShowInfoWindowOnClick to false.
+        // Enable to allow mashup of maritime identify tool with the default info window.
+        // _this.map.setInfoWindowOnClick(true);
+      }));
+
       this.own(on(this.drawBox, 'DrawEnd', function(graphic, geotype, commontype) {
         _this._onDrawEnd(graphic, geotype, commontype);
       }));
       this.drawBox.placeAt(this.drawBoxNode);
       this.drawBox.startup();
+    },
+
+    // Toggle MaritimeIdentify tool 'on' when the Measurement tool is toggled 'off' and vice versa
+    // Deactivate the Maritime Identify before the setTool function of measurement tool, so that the
+    // deactivate function does not interfare the mouse click handlers of the Measurement tool.
+    _onMeasurementToggle: function(_this, measurementWidget) {
+      aspect.before(measurementWidget.measurement, 'setTool', function() {
+        _this.drawBox.deactivate(); 
+      });
+      
+      aspect.after(measurementWidget.measurement, 'setTool', function() {
+        if(_this.makeSticky && !measurementWidget.measurement.activeTool && _this.selectedTool) {
+          _this.drawBox.activate(_this.selectedTool);
+        }
+      });
+    },
+
+    // Toggle MaritimeIdentify tool 'on' when the Select tool is toggled 'off' and vice versa
+    _onSelectToggle: function(_this, selectWidget) {
+        _this.own(on(selectWidget.selectDijit.drawBox, 'draw-activate', function() {
+          if(_this.makeSticky) {
+            _this.drawBox.deactivate();
+            _this.isDeactivateFromActivateCall = false;
+            //_this.map.setInfoWindowOnClick(false);
+          }
+        }));
+        _this.own(on(selectWidget.selectDijit.drawBox, 'draw-deactivate', function() {
+          if(_this.makeSticky) {
+            if(!_this.isDeactivateFromActivateCall && _this.selectedTool) {
+              // activate calls deactivate on other drawbox instances, which fires the draw-deactivate again, so do not listen to subsequent deactivate
+              _this.isDeactivateFromActivateCall = true;
+              _this.drawBox.activate(_this.selectedTool);
+            }
+          }
+        }));
     },
 
     _onDrawEnd:function(graphic, geotype, commontype){
