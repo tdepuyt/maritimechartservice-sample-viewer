@@ -1,3 +1,37 @@
 {
-	"mcsParametersUrl":"http://maritimedemo.esri.com/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer/parameters?f=json&full=true"
+	"includeParameters": {
+		"AreaSymbolizationType": true,
+		"AttDesc": true,
+		"ColorScheme": true,
+		"CompassRose": true,
+		"DataQuality": true,
+		"DeepContour": true,
+		"DisplayCategory": true,
+		"DisplayDepthUnits": true,
+		"DisplayFrames": true,
+		"DisplayFrameText": true,
+		"DisplayFrameTextPlacement": true,
+		"DisplayNOBJNM": true,
+		"HonorScamin": true,
+		"IntendedUsage": true,
+		"IsolatedDangers": true,
+		"LabelContours": true,
+		"LabelSafetyContours": true,
+		"OptionalDeepSoundings": true,
+		"PointSymbolizationType": true,
+		"RemoveDuplicateText": false,
+		"SafetyContour": true,
+		"ShallowContour": true,
+		"ShallowDepthPattern": true,
+		"TextHalo": false,
+		"TwoDepthShades": true
+    },
+	"includeParameterGroups": {
+		"AreaSymbolSize": false,
+		"DatasetDisplayRange": false,
+		"LineSymbolSize": false,
+		"PointSymbolSize": false,
+		"TextGroups": true,
+		"TextSize": false
+	}
 }

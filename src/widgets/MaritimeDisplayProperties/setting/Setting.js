@@ -16,13 +16,14 @@
 
 define([
   'dojo/_base/declare',
+  'dojo/_base/lang',
   'jimu/BaseWidgetSetting',
   'dojo/dom-construct', 
   'dojo/dom',
   'dojo/query',
   'esri/request'
 ],
-function(declare, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
+function(declare, lang, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
 
   return declare([BaseWidgetSetting], {
     baseClass: 'mcs-display-properties',
@@ -36,7 +37,7 @@ function(declare, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
           var requestHandle = esriRequest({
             "url": this.parametersUrlNode.value
           });
-          requestHandle.then(function(response,io) {
+          requestHandle.then(lang.hitch(this, function(response,io) {
             dom.byId('parametersContentNode').value = JSON.stringify(response.DisplayParameters);
             var divgroup = dom.byId('dynamicParametersDiv');
             while (divgroup.hasChildNodes()) {
@@ -48,10 +49,12 @@ function(declare, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
               parameters = response.DisplayParameters.ECDISParameters.StaticParameters.Parameter;
               for (var i = 0; i< parameters.length; i++) {
                 parameter = parameters[i];
-                content = "<label><input type='checkbox' id='" + parameter.name + "'><b> " + parameter.Description + "</b></label>";
-                rec = domConstruct.create("div", {
-                  innerHTML:  content
-                }, divgroup);
+                if(this.config.includeParameters[parameter.name]) {
+                  content = "<label><input type='checkbox' id='" + parameter.name + "'><b> " + parameter.Description + "</b></label>";
+                  rec = domConstruct.create("div", {
+                    innerHTML:  content
+                  }, divgroup);
+                }
               }
 //              console.log(response.DisplayParameters.ECDISParameters.StaticParameters);
             }
@@ -59,32 +62,42 @@ function(declare, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
               parameters = response.DisplayParameters.ECDISParameters.DynamicParameters.Parameter;
               for (var i = 0; i< parameters.length; i++) {
                 parameter = parameters[i];
-                // we need bypass the three text boxes here
-                if (parameter.name != 'DeepContour' && parameter.name != 'SafetyContour' && parameter.name != 'ShallowContour') {
-                  content = "<label><input type='checkbox' id='" + parameter.name + "'><b> " + parameter.Description + "</b></label>";
-                  rec = domConstruct.create("div", {
-                    innerHTML:  content
-                  }, divgroup);
+                if(this.config.includeParameters[parameter.name]) {
+                  // we need bypass the three text boxes here
+                  if (parameter.name != 'DeepContour' && parameter.name != 'SafetyContour' && parameter.name != 'ShallowContour') {
+                    content = "<label><input type='checkbox' id='" + parameter.name + "'><b> " + parameter.Description + "</b></label>";
+                    rec = domConstruct.create("div", {
+                      innerHTML:  content
+                    }, divgroup);
+                  }
                 }
               }
 //              console.log(response.DisplayParameters.ECDISParameters.DynamicParameters);
             }
             if (response.DisplayParameters && response.DisplayParameters.ECDISParameters && response.DisplayParameters.ECDISParameters.DynamicParameters) {
-              parameters = response.DisplayParameters.ECDISParameters.DynamicParameters.ParameterGroup[0];
-              if (parameters.name=="TextGroups")
-                content = "<label><input type='checkbox' id='" + parameters.name + "'><b> Text Groups.</b></label>";
-              else
-                content = "<label><input type='checkbox' id='" + parameters.name + "'><b> " + parameters.name + "</b></label>";
+              parameterGroups = response.DisplayParameters.ECDISParameters.DynamicParameters.ParameterGroup;
+              for (var i =0; i < parameterGroups.length; i++) {
+                paramGroup = parameterGroups[i];
+                if(this.config.includeParameterGroups[paramGroup.name]) {
 
-              rec = domConstruct.create("div", {
-                innerHTML:  content
-              }, divgroup);
-//              console.log(response.DisplayParameters.ECDISParameters.DynamicParameters);
+                  // TODO: change the description to paramGroup.Description once the descriptions are exposed for the parameter groups
+                  description = paramGroup.name;
+                  if(paramGroup.name == 'TextGroups') {
+                    description = 'Text groups: As defined by S-52.'; 
+                  }
+
+                  content = "<label><input type='checkbox' id='" + paramGroup.name + "'><b> " + description + "</b></label>";
+                  rec = domConstruct.create("div", {
+                    innerHTML:  content
+                  }, divgroup);
+               }
+    //              console.log(response.DisplayParameters.ECDISParameters.DynamicParameters);
+              }
             }
             dom.byId('actionButtonGroup').style.display = "block";
-          }, function(error, io) {
+          }), lang.hitch(this, function(error, io) {
             console.log('maritime.DisplaySettings::setting', error);
-          });
+          }));
     },
 
     setConfig: function(config){
@@ -99,8 +112,11 @@ function(declare, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
               this.parametersUrlNode.value = layer.url + "/parameters?f=json&full=true";
           }
       }
-      if (!layerFound)
-        this.parametersUrlNode.value = config.mcsParametersUrl;
+      // if (!layerFound)
+      //   this.parametersUrlNode.value = config.mcsParametersUrl;
+
+      this.includeParameters = config.includeParameters;
+      this.includeParameterGroups = config.includeParameterGroups;
     },
 
     checkAll: function(){
@@ -130,7 +146,9 @@ function(declare, BaseWidgetSetting, domConstruct, dom, query, esriRequest) {
       return {
           mcsParametersUrl: this.parametersUrlNode.value,
           selectedControls: selectedControls,
-          mcsParametersContent: this.parametersContentNode.value
+          mcsParametersContent: this.parametersContentNode.value,
+          includeParameters: this.includeParameters,
+          includeParameterGroups: this.includeParameterGroups
       };
     }
   });
