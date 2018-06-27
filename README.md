@@ -9,10 +9,10 @@ To view a sample application created with these widgets please visit http://esri
 
 What's new with this version
 ## * Updated requirements section
-## * Display Properties now include controls for Compass Rose, Display Frame Text and Display Frame Text Placement. For more information see http://server.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm 
-## * Data Extents within Display Properties now has a new setting to only diplay visible dataset.
-## * Tested against WAB 2.7 and JavaScript API 3.22
-## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1 & 10.6
+## * Identify widget can now be set to be on by default for point selection.
+## * Display Properties widget now has a config.json file which controls the parameters exposed during configuration. 
+## * Tested against WAB 2.8 and JavaScript API 3.24
+## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1 & 10.6/10.6.1
 
 
 ## Sections
@@ -50,7 +50,7 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 ## Requirements
 * Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets.
 * Maritime Chart Service widgets require JS API 3.19 or greater. 
-* ArcGIS for Maritime Server 10.4/10.4.1, 10.5/10.5.1 and 10.6
+* ArcGIS for Maritime Server 10.4/10.4.1, 10.5/10.5.1 and 10.6/10.6.1
 
 
 ## Deployment
@@ -96,11 +96,13 @@ The Web Map is now using the Maritime CHart Service, and can be selected when yo
 
 When you add the Maritime Display Parameters widget to your application you can now query against all available parameters and select all or just the ones you want to deploy.  
 
+## * The Maritime Display Parameters widget now comes with a configurable config.json file which allows you to select which controls will be exposed when the user runs query to configure the widget.  There are seven additional display parameters that are hidden by default.  You can learn more about these properties at our what's new page http://enterprise.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm
+
 Please note that there are two exceptions when using these widgets against 10.4/10.4.1 and 10.5
 * 10.4/10.4.1 - Text Groups is not supported on the client side so you will need to turn this option off.
 * 10.5 - Label Contours is not supported on the client side so you will need to turn this option off.
-* 10.5.1 - All options are supported.
-## * 10.6 - All options are supported.
+## * 10.5.1 / 10.6 / 10.6.1 - All options are supported.
+
 
 ## Search widget:
 
@@ -108,6 +110,8 @@ The search widget is now supported on all versions with one exception.  Searchin
 
 
 ## Additional Deployment steps for the Identify widget:
+
+If you enable the open this widget automatically when the app starts option, then point identify will be active and you can click on the map without opening the identify widget. 
 
 If you want to resize your Identify widget you will need to add a height and width value to the widget while in the WAB development environment.  
 
