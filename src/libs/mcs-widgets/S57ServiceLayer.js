@@ -4,12 +4,15 @@ define([
 		'dojo/Evented',
 		'dojo/io-query',
 		'esri/layers/ArcGISDynamicMapServiceLayer',
-		'esri/request'
+		'esri/request',
+		"esri/IdentityManager"
 	],
 	function(
 		declare, lang, Evented, ioQuery,
 		ArcGISDynamicMapServiceLayer,
-		esriRequest
+		esriRequest,
+		esriId
+
 	) {
 
 		return declare([Evented, ArcGISDynamicMapServiceLayer], {
@@ -50,6 +53,8 @@ define([
 							visiLayers = visiLayers + this.visibleLayers[i] + ",";
 					}
 				}
+
+				var credential = esriId.findCredential(this._url.path);
 				var params = {
 					dpi: this.dpi, //96,
 					transparent: this.imageTransparency, //true
@@ -62,7 +67,9 @@ define([
 					f: "image",
 					display_params: JSON.stringify(this.displayParameters)
 				};
-
+				if(credential && credential.token) {
+					params.token = credential.token;
+				}
 				if (typeof this.visibleLayers !== 'undefined') {
 					params.layers = "show:" + visiLayers;
 				}
