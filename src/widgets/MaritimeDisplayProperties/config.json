@@ -23,6 +23,7 @@
 		"PointSymbolizationType": true,
 		"RemoveDuplicateText": false,
 		"SafetyContour": true,
+		"SafetyDepth": true,
 		"ShallowContour": true,
 		"ShallowDepthPattern": true,
 		"TextHalo": false,

@@ -257,9 +257,10 @@ define([
         }
       }
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-      this.input_shallow.value = parametersArray[this.findParameter(parametersArray, 'ShallowContour')].value.toString();
-      this.input_safety.value = parametersArray[this.findParameter(parametersArray, 'SafetyContour')].value.toString();
-      this.input_deep.value = parametersArray[this.findParameter(parametersArray, 'DeepContour')].value.toString();
+      this.input_shallow_contour.value = parametersArray[this.findParameter(parametersArray, 'ShallowContour')].value.toString();
+      this.input_safety_contour.value = parametersArray[this.findParameter(parametersArray, 'SafetyContour')].value.toString();
+      this.input_safety_depth.value = parametersArray[this.findParameter(parametersArray, 'SafetyDepth')].value.toString();
+      this.input_deep_contour.value = parametersArray[this.findParameter(parametersArray, 'DeepContour')].value.toString();
 
       this._initEventHandlers();
     },
@@ -571,9 +572,10 @@ define([
     },
     _onApplyClick: function( /*e*/ ) {
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
-      parametersArray[this.findParameter(parametersArray, "ShallowContour")].value = parseFloat(this.input_shallow.value, 10);
-      parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = parseFloat(this.input_safety.value, 10);
-      parametersArray[this.findParameter(parametersArray, "DeepContour")].value = parseFloat(this.input_deep.value, 10);
+      parametersArray[this.findParameter(parametersArray, "ShallowContour")].value = parseFloat(this.input_shallow_contour.value, 10);
+      parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = parseFloat(this.input_safety_contour.value, 10);
+      parametersArray[this.findParameter(parametersArray, "SafetyDepth")].value = parseFloat(this.input_safety_depth.value, 10);
+      parametersArray[this.findParameter(parametersArray, "DeepContour")].value = parseFloat(this.input_deep_contour.value, 10);
       s57CustomLayer.refresh();
       /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
       if (aisCustomLayer)
