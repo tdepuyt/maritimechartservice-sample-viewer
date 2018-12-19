@@ -64,7 +64,7 @@ function(declare, lang, BaseWidgetSetting, domConstruct, dom, query, esriRequest
                 parameter = parameters[i];
                 if(this.config.includeParameters[parameter.name]) {
                   // we need bypass the three text boxes here
-                  if (parameter.name != 'DeepContour' && parameter.name != 'SafetyContour' && parameter.name != 'ShallowContour') {
+                  if (parameter.name != 'DeepContour' && parameter.name != 'SafetyContour' && parameter.name != 'SafetyDepth' && parameter.name != 'ShallowContour') {
                     content = "<label><input type='checkbox' id='" + parameter.name + "'><b> " + parameter.Description + "</b></label>";
                     rec = domConstruct.create("div", {
                       innerHTML:  content
