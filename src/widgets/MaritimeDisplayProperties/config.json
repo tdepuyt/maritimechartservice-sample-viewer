@@ -14,6 +14,7 @@
 		"DisplayFrameTextPlacement": true,
 		"DisplayNOBJNM": true,
 		"DisplayLightSectors": true,
+		"DisplaySafeSoundings": true,
 		"HonorScamin": true,
 		"IntendedUsage": true,
 		"IsolatedDangers": true,

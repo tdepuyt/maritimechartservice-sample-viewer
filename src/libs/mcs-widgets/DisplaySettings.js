@@ -187,6 +187,7 @@ define([
                   case "TextHalo":
                   case "RemoveDuplicateText":
                   case "DisplayLightSectors":
+                  case "DisplaySafeSoundings":
                   if(params[j].value == "2")
                     this[ctrlArr[i] + "Ctrl"].set("checked", true);
                   break;
@@ -390,6 +391,15 @@ define([
       this.own(on(this.DisplayLightSectorsCtrl, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "DisplayLightSectors")].value = _this.DisplayLightSectorsCtrl.checked?2:1;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
+
+      this.own(on(this.DisplaySafeSoundingsCtrl, 'change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "DisplaySafeSoundings")].value = _this.DisplaySafeSoundingsCtrl.checked?2:1;
         s57CustomLayer.refresh();
         /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
         if (aisCustomLayer)
