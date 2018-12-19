@@ -159,6 +159,7 @@ define([
                   break;
                   case "DisplayCategory":
                   case "IntendedUsage":
+                  case "DisplayAIOFeatures":
                   var filter = params[j].value;
                   if (filter.substr(0,1)=="0") filter = "0"; // to handle special case for IntendedUsage
                   var selValues = filter.split(',');
@@ -478,6 +479,23 @@ define([
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
+
+      this.own(query("input[type='checkbox']", _this.DisplayAIOFeaturesCtrl).on('change', function() {
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        var selectedFlags = "";
+         query("input[type='checkbox']", _this.DisplayAIOFeaturesCtrl).forEach(function(checkbox) {
+          if(checkbox.checked) {
+            selectedFlags = selectedFlags + checkbox.value + ",";
+          }
+        });
+        if (selectedFlags.length>1) selectedFlags = selectedFlags.substr(0, selectedFlags.length-1); // remove the last comma
+        parametersArray[_this.findParameter(parametersArray, "DisplayAIOFeatures")].value = selectedFlags;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
+
       this.own(query("input[type='checkbox']", _this.DisplayCategoryCtrl).on('change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         var selectedvalues = 0;
