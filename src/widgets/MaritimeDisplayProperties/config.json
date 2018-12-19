@@ -13,6 +13,7 @@
 		"DisplayFrameText": true,
 		"DisplayFrameTextPlacement": true,
 		"DisplayNOBJNM": true,
+		"DisplayLightSectors": true,
 		"HonorScamin": true,
 		"IntendedUsage": true,
 		"IsolatedDangers": true,
