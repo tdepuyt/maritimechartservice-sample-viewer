@@ -44,6 +44,7 @@ console.log(this.config.selectedControls);
                     this.displaySettings = new DisplaySettings({
                         map: this.map,
                         controls: this.config.selectedControls,
+                        includeParameters: this.config.includeParameters,
                         parametersContent: this.config.mcsParametersContent,
                         s57Layer: this.s57Layer,
                         s57LayerIndex: this.s57LayerIndex, 
