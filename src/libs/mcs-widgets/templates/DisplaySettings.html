@@ -20,7 +20,7 @@
 						<input type="number" class="form-control  input-md"  id="safety_contour" value="30" min="0" max="99999" step="any" data-dojo-attach-point="input_safety_contour"/>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" id = "safety_depth_block" data-dojo-attach-point="safety_depth_block">
 					<label for="safety_depth" class="col-md-4 control-label">Safety Depth: </label>
 					<div class="col-md-4">
 				    	<input type="number" class="form-control  input-sm" id="safety_depth" value="30" min="0" max="99999" step="any" data-dojo-attach-point="input_safety_depth"/>
@@ -295,6 +295,12 @@
 					<label class="col-md-5 control-label" for="DisplayLightSectorsCtrl">Display Light Sectors: </label>
 					<div class="col-md-7 control-switch">
 						<label>On<input id="DisplayLightSectorsCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="DisplayLightSectorsCtrl"/>Off</label>
+					</div>
+				</div>
+				<div class="form-group" id="DisplaySafeSoundings" data-dojo-attach-point="DisplaySafeSoundings" style="display:none">
+					<label class="col-md-5 control-label" for="DisplaySafeSoundingsCtrl">Display Safe Soundings: </label>
+					<div class="col-md-7 control-switch">
+						<label>On<input id="DisplaySafeSoundingsCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="DisplaySafeSoundingsCtrl"/>Off</label>
 					</div>
 				</div>
 				<div class="form-group" id="HonorScamin" data-dojo-attach-point="HonorScamin" style="display:none">
