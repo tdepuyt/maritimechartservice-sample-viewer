@@ -1,3 +1,8 @@
+# DO NOT download and use the latest Maritime Display Properties widget with a version of MCS prior to 10.6.1 Patch 1.  The current download only support 10.6.1 Patch 2.  An update will be posted soon to support all versions.  For more information email maritime@esri.com 
+
+
+
+
 # Maritime Chart Service sample widgets
 ## (Web App Builder widgets)
 

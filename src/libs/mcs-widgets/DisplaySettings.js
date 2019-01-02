@@ -50,6 +50,7 @@ define([
     /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisCustomLayer: null,
     map: null,
+    includeParameters: null, /* set of parameters to include form config.json . This is different from selected control from Setting.js */
 
     // Properties to be sent into constructor
 
@@ -149,31 +150,31 @@ define([
                   case "AttDesc":
                   case "DisplayFrameText":
                   case "DisplayFrameTextPlacement":
-                  for(var k=0; k<params[j].ExpectedInput.length; k++) {
-                    if (params[j].value === params[j].ExpectedInput[k].code)
-                      dynamicHtml += "<option value='" + params[j].ExpectedInput[k].code + "' selected='selected'>" + params[j].ExpectedInput[k].value + "</option>";
-                    else
-                      dynamicHtml += "<option value='" + params[j].ExpectedInput[k].code + "'>" + params[j].ExpectedInput[k].value + "</option>";
-                  }
-                  this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
-                  break;
+                      for(var k=0; k<params[j].ExpectedInput.length; k++) {
+                        if (params[j].value === params[j].ExpectedInput[k].code)
+                          dynamicHtml += "<option value='" + params[j].ExpectedInput[k].code + "' selected='selected'>" + params[j].ExpectedInput[k].value + "</option>";
+                        else
+                          dynamicHtml += "<option value='" + params[j].ExpectedInput[k].code + "'>" + params[j].ExpectedInput[k].value + "</option>";
+                      }
+                      this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
+                      break;
                   case "DisplayCategory":
                   case "IntendedUsage":
                   case "DisplayAIOFeatures":
-                  var filter = params[j].value;
-                  if (filter.substr(0,1)=="0") filter = "0"; // to handle special case for IntendedUsage
-                  var selValues = filter.split(',');
-                  for(var k=0; k<params[j].ExpectedInput.length; k++) {
-                    var curChecked = false;
-                    if (array.indexOf(selValues, params[j].ExpectedInput[k].code) >=0)
-                      curChecked = true;
-                    if (curChecked)
-                      dynamicHtml += "<label><input type='checkbox' id='dbox" + (k+1) + "' value='" + params[j].ExpectedInput[k].code + "' checked/>" + params[j].ExpectedInput[k].value + "</label><br/>";
-                    else
-                      dynamicHtml += "<label><input type='checkbox' id='dbox" + (k+1) + "' value='" + params[j].ExpectedInput[k].code + "'/>" + params[j].ExpectedInput[k].value + "</label><br/>";
-                  }
-                  this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
-                  break;
+                      var filter = params[j].value;
+                      if (filter.substr(0,1)=="0") filter = "0"; // to handle special case for IntendedUsage
+                      var selValues = filter.split(',');
+                      for(var k=0; k<params[j].ExpectedInput.length; k++) {
+                        var curChecked = false;
+                        if (array.indexOf(selValues, params[j].ExpectedInput[k].code) >=0)
+                          curChecked = true;
+                        if (curChecked)
+                          dynamicHtml += "<label><input type='checkbox' id='dbox" + (k+1) + "' value='" + params[j].ExpectedInput[k].code + "' checked/>" + params[j].ExpectedInput[k].value + "</label><br/>";
+                        else
+                          dynamicHtml += "<label><input type='checkbox' id='dbox" + (k+1) + "' value='" + params[j].ExpectedInput[k].code + "'/>" + params[j].ExpectedInput[k].value + "</label><br/>";
+                      }
+                      this[ctrlArr[i] + "Ctrl"].innerHTML = dynamicHtml;
+                      break;
                   case "CompassRose":
                   case "DataQuality":
                   case "DisplayNOBJNM":
@@ -260,7 +261,15 @@ define([
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
       this.input_shallow_contour.value = parametersArray[this.findParameter(parametersArray, 'ShallowContour')].value.toString();
       this.input_safety_contour.value = parametersArray[this.findParameter(parametersArray, 'SafetyContour')].value.toString();
-      this.input_safety_depth.value = parametersArray[this.findParameter(parametersArray, 'SafetyDepth')].value.toString();
+
+      if(this.includeParameters['SafetyDepth']) // TO make the safety depth parameter backward compatible.  @TODO: make other contour parameters controllable. 
+      {
+          this.input_safety_depth.value = parametersArray[this.findParameter(parametersArray, 'SafetyDepth')].value.toString();
+      }
+      else
+      {
+        this["safety_depth_block"].innerHTML = "";
+      }
       this.input_deep_contour.value = parametersArray[this.findParameter(parametersArray, 'DeepContour')].value.toString();
 
       this._initEventHandlers();
@@ -584,7 +593,10 @@ define([
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
       parametersArray[this.findParameter(parametersArray, "ShallowContour")].value = parseFloat(this.input_shallow_contour.value, 10);
       parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = parseFloat(this.input_safety_contour.value, 10);
-      parametersArray[this.findParameter(parametersArray, "SafetyDepth")].value = parseFloat(this.input_safety_depth.value, 10);
+      if(this.input_safety_depth && this.input_safety_depth.value) // To make SafetyDepth backward compatible. @TODO: make other contour parameters controllable.
+      {
+          parametersArray[this.findParameter(parametersArray, "SafetyDepth")].value = parseFloat(this.input_safety_depth.value, 10);
+      }
       parametersArray[this.findParameter(parametersArray, "DeepContour")].value = parseFloat(this.input_deep_contour.value, 10);
       s57CustomLayer.refresh();
       /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
