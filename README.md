@@ -33,17 +33,17 @@ What's new with this version
 ## Features
 
 These Web App Builder widgets illustrates how to build web apps consuming S-57/S-63 web services published from ArcGIS for Maritime: Server in a JavaScript web app.
-* Allows users to change S-52 based display settings through the JavaScrip client
+* Allows users to change S-52 based display settings through the JavaScript client
 * Enables users to identify on individual features and view their attribute information.
 * Provides the ability to search based on object name (OBJNAM), national object name (NOBJNM) and dataset names.
 
 The Widget Repository currently includes:
 
-###Maritime Chart Service Library
+### Maritime Chart Service Library
 
 This is a library of custom Esri widgets and custom layer classes that extend Esri's JSAPI in order to consume the Maritime Chart Service in apps. 
 
-###Web App Builder Widgets
+### Web App Builder Widgets
 
 The following are custom Web App Builder widgets that use the maritime chart service library above and are to be used within the Web App Builder to create custom apps, templates and themes.
 
@@ -77,7 +77,7 @@ Adding Widgets to you Web AppBuilder Environment:
 ```
 
 ## Create a Web App using the Maritime Chart Service:
-When creating a Web App, you need to chose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains a the Maritime Chart Service layer. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
+When creating a Web App, you need to choose the Web Map that will be used by the App. In order to use the maritime widgets, make sure that the Web Map you choose contains a Maritime Chart Service layer. This Web Map must first be created and available in your ArcGIS Online account. If you don't have a access to a Web Map that contains the Maritime Chart Service, you can create one in your ArcGIS Online account.
 
 * Log in to your ArcGIS Online account
 * Create a new Map
@@ -95,7 +95,7 @@ If the machine is in domain, it is sometimes required to include domain name alo
 ```
 * Save the Web Map
 
-The Web Map is now using the Maritime CHart Service, and can be selected when you create your App in Web AppBuilder
+The Web Map is now using the Maritime Chart Service, and can be selected when you create your App in Web AppBuilder
 
 ## New deployment option for Maritime Display Parameters:
 
@@ -152,7 +152,7 @@ The following two values are a recommended starting point:
 * Refresh your application to see the changes.
 
 ### General Help
-[New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
+[New to GitHub? Get started here.](https://help.github.com/articles/git-and-github-learning-resources/)
 
 For more resources on developing and modifying widgets please visit
 [Web App Builder for ArcGIS (Developer Edition) documentation](https://developers.arcgis.com/web-appbuilder/)
@@ -192,6 +192,3 @@ limitations under the License.
 
 A copy of the license is available in the repository's
 [license.txt](license.txt) file.
-
-[](Esri Tags: maritime maritimechartservice webappbuilder)
-[](Esri Language: Javascript)
