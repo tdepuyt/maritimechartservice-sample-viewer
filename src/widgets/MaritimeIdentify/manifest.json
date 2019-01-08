@@ -6,7 +6,7 @@
   "platform": "HTML",
   "version": "0.0.1",
   "wabVersion": "1.1",
-  "author": "TODO: your name here",
+  "author": "Esri",
   "description": "Custom Identify for ArcGIS for Maritime:Server",
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
