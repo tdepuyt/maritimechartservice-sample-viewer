@@ -593,7 +593,7 @@ define([
       var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
       parametersArray[this.findParameter(parametersArray, "ShallowContour")].value = parseFloat(this.input_shallow_contour.value, 10);
       parametersArray[this.findParameter(parametersArray, "SafetyContour")].value = parseFloat(this.input_safety_contour.value, 10);
-      if(this.includeParameters['SafetyDepth'] && this.findParameter(parametersArray, "SafetyDepth") >= 0) // To make SafetyDepth backward compatible. @TODO: make other contour parameters controllable.
+      if(this.input_safety_depth && this.input_safety_depth.value) // To make SafetyDepth backward compatible. @TODO: make other contour parameters controllable.
       {
           parametersArray[this.findParameter(parametersArray, "SafetyDepth")].value = parseFloat(this.input_safety_depth.value, 10);
       }
