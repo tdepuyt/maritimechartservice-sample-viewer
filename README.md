@@ -1,4 +1,4 @@
-# 20190226 - Updated to support releases through 10.6.1 Patch 3
+20190226 - Updated to support releases through 10.6.1 Patch 3
 
 
 
