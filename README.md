@@ -1,5 +1,4 @@
-# DO NOT download and use the latest Maritime Display Properties widget with a version of MCS prior to 10.6.1 Patch 1.  The current download only support 10.6.1 Patch 2.  An update will be posted soon to support all versions.  For more information email maritime@esri.com 
-
+# Updated to support releases through 10.6.1 Patch 3
 
 
 
@@ -14,10 +13,13 @@ To view a sample application created with these widgets please visit http://esri
 
 What's new with this version
 ## * Updated requirements section
-## * Identify widget can now be set to be on by default for point selection.
-## * Display Properties widget now has a config.json file which controls the parameters exposed during configuration. 
-## * Tested against WAB 2.8 and JavaScript API 3.24
-## * Now compatible with ArcGIS for Maritime: Server 10.4/10.4.1 & 10.5/10.5.1 & 10.6/10.6.1
+## * Added support for the following display parameters
+* Safe Depth
+* Display Light Sectors
+* Display AIO Features
+* Dsiplay Safe Soundings
+## * Updated deployment option for Maritime Display Parameters
+## * Tested against WAB 2.10 and JavaScript API 3.27
 
 
 ## Sections
@@ -101,12 +103,67 @@ The Web Map is now using the Maritime Chart Service, and can be selected when yo
 
 When you add the Maritime Display Parameters widget to your application you can now query against all available parameters and select all or just the ones you want to deploy.  
 
-## * The Maritime Display Parameters widget now comes with a configurable config.json file which allows you to select which controls will be exposed when the user runs query to configure the widget.  There are seven additional display parameters that are hidden by default.  You can learn more about these properties at our what's new page http://enterprise.arcgis.com/en/server/latest/publish-services/windows/what-s-new-for-maritime-chart-service.htm
+## * The Maritime Display Parameters widget now comes with a configurable config.json file which allows you to select which controls will be exposed when the user runs query to configure the widget.  There are serveral display parameters that are hidden by default.  All current parameters are listed below. 
+
+The config.json file can be found under your MaritimeDisplayProperties widget folder.  Starting with 10.6.1 Patch 2 SafetyDepth was added and set to False.  When set to true it will be displayed on the Depth Contours tab below safety contour.  Do not set SafetyDepth to true prior to 10.6.1 Patch 2.  Doing so will break the widget.
+
+## * DisplaySafeSoundings is dependent on SafetyDepth.  Only set DisplaySafeSounding to true if you set SafetyDepth to true.
+
+The following parameters when set to true will be exposed on a new tab named symbol size.  They are set to false by default.
+* AreaSymbolSize
+* DatasetDisplayRange
+* LineSymbolSize
+* PointSymbolSize
+* TextSize
+ 
+Current config.json for Display Parameters Widget:
+```
+{
+	"includeParameters": {
+		"AreaSymbolizationType": true,
+		"AttDesc": true,
+		"ColorScheme": true,
+		"CompassRose": true,
+		"DataQuality": true,
+		"DeepContour": true,
+		"DisplayCategory": true,
+		"DisplayAIOFeatures": true,
+		"DisplayDepthUnits": true,
+		"DisplayFrames": true,
+		"DisplayFrameText": true,
+		"DisplayFrameTextPlacement": true,
+		"DisplayNOBJNM": true,
+		"DisplayLightSectors": true,
+		"DisplaySafeSoundings": false,
+		"HonorScamin": true,
+		"IntendedUsage": true,
+		"IsolatedDangers": true,
+		"LabelContours": true,
+		"LabelSafetyContours": true,
+		"OptionalDeepSoundings": true,
+		"PointSymbolizationType": true,
+		"RemoveDuplicateText": false,
+		"SafetyContour": true,
+		"SafetyDepth": false,
+		"ShallowContour": true,
+		"ShallowDepthPattern": true,
+		"TextHalo": false,
+		"TwoDepthShades": true
+    },
+	"includeParameterGroups": {
+		"AreaSymbolSize": false,
+		"DatasetDisplayRange": false,
+		"LineSymbolSize": false,
+		"PointSymbolSize": false,
+		"TextGroups": true,
+		"TextSize": false
+	}
+}
+```
 
 Please note that there are two exceptions when using these widgets against 10.4/10.4.1 and 10.5
 * 10.4/10.4.1 - Text Groups is not supported on the client side so you will need to turn this option off.
 * 10.5 - Label Contours is not supported on the client side so you will need to turn this option off.
-## * 10.5.1 / 10.6 / 10.6.1 - All options are supported.
 
 
 ## Search widget:
