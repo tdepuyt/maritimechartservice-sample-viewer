@@ -1,4 +1,4 @@
-# Updated to support releases through 10.6.1 Patch 3
+# 20190226 - Updated to support releases through 10.6.1 Patch 3
 
 
 
@@ -12,13 +12,12 @@ The widgets can be used directly within Web App Builder for ArcGIS. Alternativel
 To view a sample application created with these widgets please visit http://esriho.maps.arcgis.com/home/index.html and click on one of the Maritime Chart Service applications.
 
 What's new with this version
-## * Updated requirements section
 ## * Added support for the following display parameters
 * Safe Depth
 * Display Light Sectors
 * Display AIO Features
 * Dsiplay Safe Soundings
-## * Updated deployment option for Maritime Display Parameters
+## * Updated deployment options for Maritime Display Parameters
 ## * Tested against WAB 2.10 and JavaScript API 3.27
 
 
@@ -99,7 +98,7 @@ If the machine is in domain, it is sometimes required to include domain name alo
 
 The Web Map is now using the Maritime Chart Service, and can be selected when you create your App in Web AppBuilder
 
-## New deployment option for Maritime Display Parameters:
+## New deployment options for Maritime Display Parameters:
 
 When you add the Maritime Display Parameters widget to your application you can now query against all available parameters and select all or just the ones you want to deploy.  
 
