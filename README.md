@@ -104,7 +104,9 @@ When you add the Maritime Display Parameters widget to your application you can 
 
 The Maritime Display Parameters widget now comes with a configurable config.json file which allows you to select which controls will be exposed when the user runs query to configure the widget.  There are serveral display parameters that are hidden by default.  All current parameters are listed below. 
 
-The config.json file can be found under your MaritimeDisplayProperties widget folder.  Starting with 10.6.1 Patch 2 SafetyDepth was added and set to False.  When set to true it will be displayed on the Depth Contours tab below safety contour.  Do not set SafetyDepth to true prior to 10.6.1 Patch 2.  Doing so will break the widget.
+The config.json file can be found under your MaritimeDisplayProperties widget folder.  Starting with 10.6.1 Patch 2 SafetyDepth was added and set to False.  When set to true it will be displayed on the Depth Contours tab below safety contour.  
+
+#### Do not set SafetyDepth to true prior to 10.6.1 Patch 2.  Doing so will break the widget.
 
 DisplaySafeSoundings is dependent on SafetyDepth.  Only set DisplaySafeSounding to true if you set SafetyDepth to true.
 
