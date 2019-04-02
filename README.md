@@ -1,4 +1,4 @@
-20190226 - Updated to support releases through 10.6.1 Patch 3
+20190401 - Updated to support releases through 10.6.1 Patch 3 and 10.7
 
 
 
@@ -56,7 +56,7 @@ The following are custom Web App Builder widgets that use the maritime chart ser
 ## Requirements
 * Web App Builder for ArcGIS (Developer Edition) 2.3 or greater for the Web App builder widgets.
 * Maritime Chart Service widgets require JS API 3.19 or greater. 
-* ArcGIS for Maritime Server 10.4/10.4.1, 10.5/10.5.1 and 10.6/10.6.1
+* ArcGIS for Maritime Server 10.4/10.4.1, 10.5/10.5.1, 10.6/10.6.1 and 10.7
 
 
 ## Deployment
