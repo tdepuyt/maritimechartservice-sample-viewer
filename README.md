@@ -166,6 +166,7 @@ Please note that there are two exceptions when using these widgets against 10.4/
 * 10.4/10.4.1 - Text Groups is not supported on the client side so you will need to turn this option off.
 * 10.5 - Label Contours is not supported on the client side so you will need to turn this option off.
 
+#### Once you enable the use of display parameters, your request URL length will typically exceed the maximum length setting on your server.  MCS supports POST but our widgets only support GET. To support the longer URL length when deploying the Display Parameters widget, will need to use a web.config.xml file and increase your URL length.  
 
 ## Search widget:
 
