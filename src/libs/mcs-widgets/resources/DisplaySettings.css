@@ -9,7 +9,7 @@
 .control-switch {
 	margin-top: 6px;
 }
-.control-switch > label {
+.control-switch > label, .sub-label {
 	font-weight: normal;
 	margin-bottom: 0;
 }
@@ -59,6 +59,10 @@
 }
 .switch-toggle.dijitCheckBox.dijitCheckBoxChecked:before {
   right: 26px;
+}
+
+.no-padding-override {
+  padding: 0px !important;
 }
 
 .custom-panel{

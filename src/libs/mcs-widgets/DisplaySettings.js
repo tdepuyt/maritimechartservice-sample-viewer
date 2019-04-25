@@ -11,6 +11,7 @@ define([
   'dijit/_WidgetsInTemplateMixin',
   'dijit/form/CheckBox',
   'dijit/form/NumberSpinner',
+  'dijit/form/DateTextBox',
   'esri/layers/ImageParameters',
   './S57ServiceLayer',
   /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
@@ -28,6 +29,7 @@ define([
   _WidgetsInTemplateMixin,
   Checkbox,
   NumberSpinner,
+  DateTextBox,
   ImageParameters,
   S57ServiceLayer,
   /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
@@ -121,6 +123,8 @@ define([
       console.log('maritime.DisplaySettings::setupConnections', arguments);
 
     },
+
+    // initialize the controls
     setupDisplaySettings: function(){
       var dispObj = JSON.parse(this.parametersContent);
       var params = dispObj.ECDISParameters.DynamicParameters.Parameter;
@@ -189,9 +193,14 @@ define([
                   case "RemoveDuplicateText":
                   case "DisplayLightSectors":
                   case "DisplaySafeSoundings":
-                  if(params[j].value == "2")
-                    this[ctrlArr[i] + "Ctrl"].set("checked", true);
-                  break;
+                  case "DateDependencySymbols":
+                    if(params[j].value == "2")
+                      this[ctrlArr[i] + "Ctrl"].set("checked", true);
+                    break;
+                  case "DateDependencyRange":
+                    this["DateDependencyRangeFromCtrl"].set("value", new Date());
+                    this["DateDependencyRangeToCtrl"].set("value", new Date());
+                    break;
                 }
                 break;
               }
@@ -456,6 +465,67 @@ define([
         if (aisCustomLayer)
           aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
       }));
+
+      this.own(on(this.DateDependencyRangeFromCtrl, 'change', function() {
+        var fromCtrl = _this.DateDependencyRangeFromCtrl;
+        var toCtrl = _this.DateDependencyRangeToCtrl;
+        toCtrl.constraints.min = fromCtrl.value;
+        if(!(fromCtrl.isValid() && toCtrl.isValid())) return;
+
+        var from = fromCtrl.value;
+        var yyyy1 = from.getFullYear().toString();
+        var mm1 = (from.getMonth() + 1).toString();
+        if(mm1.length == 1) mm1 = '0' + mm1;
+        var dd1 = from.getDate().toString();
+        if(dd1.length == 1) dd1 = '0' + dd1;
+
+        var to = toCtrl.value;
+        yyyy2 = to.getFullYear().toString();
+        mm2 = (to.getMonth() + 1).toString();
+        if(mm2.length == 1) mm2 = '0' + mm2;
+        dd2 = to.getDate().toString();
+        if(dd2.length == 1) dd2 = '0' + dd2;
+
+        var drange = yyyy1 + mm1 + dd1 + "-" + yyyy2 + mm2 + dd2;
+
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "DateDependencyRange")].value = drange;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
+
+      this.own(on(this.DateDependencyRangeToCtrl, 'change', function() {
+        var fromCtrl = _this.DateDependencyRangeFromCtrl;
+        var toCtrl = _this.DateDependencyRangeToCtrl;
+        fromCtrl.constraints.max = toCtrl.value;
+        if(!(fromCtrl.isValid() && toCtrl.isValid())) return;
+
+        var from = fromCtrl.value;
+        var yyyy1 = from.getFullYear().toString();
+        var mm1 = (from.getMonth() + 1).toString();
+        if(mm1.length == 1) mm1 = '0' + mm1;
+        var dd1 = from.getDate().toString();
+        if(dd1.length == 1) dd1 = '0' + dd1;
+
+        var to = toCtrl.value;
+        yyyy2 = to.getFullYear().toString();
+        mm2 = (to.getMonth() + 1).toString();
+        if(mm2.length == 1) mm2 = '0' + mm2;
+        dd2 = to.getDate().toString();
+        if(dd2.length == 1) dd2 = '0' + dd2;
+
+        var drange = yyyy1 + mm1 + dd1 + "-" + yyyy2 + mm2 + dd2;
+
+        var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
+        parametersArray[_this.findParameter(parametersArray, "DateDependencyRange")].value = drange;
+        s57CustomLayer.refresh();
+        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
+        if (aisCustomLayer)
+          aisCustomLayer.displayParameters = s57CustomLayer.displayParameters;
+      }));
+      
       this.own(on(this.CompassRoseCtrl, 'change', function() {
         var parametersArray = s57CustomLayer.displayParameters.ECDISParameters.DynamicParameters.Parameter;
         parametersArray[_this.findParameter(parametersArray, "CompassRose")].value = _this.CompassRoseCtrl.checked?2:1;
