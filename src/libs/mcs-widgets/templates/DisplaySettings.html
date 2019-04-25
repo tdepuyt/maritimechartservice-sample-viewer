@@ -17,7 +17,7 @@
 				<div class="form-group">
 					<label for="safety_contour" class="col-md-4 control-label">Safety Contour: </label>
 					<div class="col-md-4">
-						<input type="number" class="form-control  input-md"  id="safety_contour" value="30" min="0" max="99999" step="any" data-dojo-attach-point="input_safety_contour"/>
+						<input type="number" class="form-control  input-sm"  id="safety_contour" value="30" min="0" max="99999" step="any" data-dojo-attach-point="input_safety_contour"/>
 					</div>
 				</div>
 				<div class="form-group" id = "safety_depth_block" data-dojo-attach-point="safety_depth_block">
@@ -29,7 +29,7 @@
 				<div class="form-group">
 					<label for="deep_contour" class="col-md-4 control-label">Deep Contour: </label>
 					<div class="col-md-4">
-				    	<input type="number"  class="form-control input-md"  id="deep_contour" value="30" min="0" max="99999" step="any" data-dojo-attach-point="input_deep_contour" />
+				    	<input type="number"  class="form-control input-sm"  id="deep_contour" value="30" min="0" max="99999" step="any" data-dojo-attach-point="input_deep_contour" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -258,6 +258,29 @@
 					<label class="col-md-5 control-label" for="DataQualityCtrl">Data quality: </label>
 					<div class="col-md-7 control-switch">
 						<label>On<input id="DataQualityCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="DataQualityCtrl"/>Off</label>
+					</div>
+				</div>
+				<div class="form-group" id="DateDependencyRange" data-dojo-attach-point="DateDependencyRange" style="display:none">
+					<label class="col-md-5 control-label">Date dependency range: </label>
+					<div class="col-md-7">
+						<label for="DateDependencyRangeFromCtrl" class="sub-label">From:</label>
+						<input id="DateDependencyRangeFromCtrl" type="text"
+						required="true"
+						class="form-control no-padding-override"
+						data-dojo-type="dijit/form/DateTextBox"
+						data-dojo-attach-point="DateDependencyRangeFromCtrl" />
+						<label for="DateDependencyRangeToCtrl" class="sub-label">To:</label>
+						<input id="DateDependencyRangeToCtrl" type="text" 
+						required="true"
+						class="form-control no-padding-override"
+						data-dojo-type="dijit/form/DateTextBox"
+						data-dojo-attach-point="DateDependencyRangeToCtrl" />
+					</div>
+				</div>
+				<div class="form-group" id="DateDependencySymbols" data-dojo-attach-point="DateDependencySymbols" style="display:none">
+					<label class="col-md-5 control-label" for="DateDependencySymbolsCtrl">Date dependency symbols: </label>
+					<div class="col-md-7 control-switch">
+						<label>On<input id="DateDependencySymbolsCtrl" class="switch-toggle" data-dojo-type="dijit/form/CheckBox" data-dojo-attach-point="DateDependencySymbolsCtrl" />Off</label>
 					</div>
 				</div>
 				<div class="form-group" id="DisplayDepthUnits" data-dojo-attach-point="DisplayDepthUnits" style="display:none">
