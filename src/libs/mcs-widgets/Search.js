@@ -5,6 +5,7 @@ define([
   'dojo/_base/lang',
   'dojo/_base/array',
   'dojo/json',
+  'dojo/request/xhr',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
@@ -24,7 +25,7 @@ define([
   template,
   domConstruct, on, dom, query,
   declare,
-  lang, array, JSON,
+  lang, array, JSON, xhr,
   _WidgetBase,
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
@@ -120,19 +121,82 @@ define([
         findParams.searchFields = ["DSNM"];
       } else {
         findParams.searchFields = ["OBJNAM"];
-
       }
 
-      this.findTask.execute(findParams, lang.hitch(this, this.showFindTaskResults), lang.hitch(this, this.findErrorFindTaskResults));
+      this.findTask.execute(findParams, lang.hitch(this, this.showFindTaskResults),
+        lang.hitch(this, function(error) {
 
+          var params = {
+            searchText: findParams.searchText,
+            contains: true,
+            returnGeometry: true,
+            layers: [0],
+            searchFields: findParams.searchFields,
+            sr: this.map.spatialReference.wkid,
+            f: "json"
+          };
+
+          if (this.s57Layer && this.s57Layer.credential && this.s57Layer.credential.token)
+          {
+            params.token = this.s57Layer.credential.token;
+          }
+          
+          // if the failure is due to any invalid geometry and parse the result manually using dojo/request/xhr
+          xhr(s57ServiceUrl + "/find", {
+            query: params,
+            headers: {
+              "X-Requested-With": null
+            }
+          }).then(lang.hitch(this, function(result){
+              // replace all the inf and -inf following a digit and a comma with null so that the result string is json parsable
+              result = result.replace(/\d,inf|\d,-inf/g, function(r1) { return r1.replace(/inf|-inf/, 'null'); })
+              var jsonRes = JSON.parse(result)
+              if(jsonRes && jsonRes.results)
+              { 
+                // reorganize the result object to be in the same format returned by esri/findTask 
+                var resArr = jsonRes.results;               
+                array.forEach(resArr, function(res, i) {
+                  res.feature = {}
+                  res.feature.geometry = res.geometry
+                  var geomString = JSON.stringify(res.geometry);
+                  // if this geometry has null mark it as invalid so that the zoom to button is not displayed for it
+                  if(geomString.indexOf("null") !== -1)
+                  {
+                    res.feature.geometry.type = "invalid";
+                  }
+                  else if(res.geometryType == "esriGeometryPolygon")
+                  {
+                    res.feature.geometry.type = "polygon";
+                  }
+                  else if(res.geometryType == "esriGeometryPolyline")
+                  {
+                    res.feature.geometry.type = "polyline";
+                  }
+                  else if(res.geometryType == "esriGeometryPoint")
+                  {
+                    res.feature.geometry.type = "point";
+                  }
+                  res.feature.attributes = res.attributes
+                });
+                this.showFindTaskResults(resArr)
+              }
+              else
+              {
+                this.findErrorFindTaskResults(result);
+              }
+            }), lang.hitch(this, function(err){
+              this.findErrorFindTaskResults(err);
+            }));
+        }));
     },
+
     showFindTaskResults: function(in_results) {
       this._clearChildNodes(this.search_result_main);
       this.setSearchResults(in_results, 'default');
     },
 
     findErrorFindTaskResults: function(error) {
-console.log(error);
+      console.log(error);
     },
 
 
@@ -185,7 +249,7 @@ console.log(error);
 
     getSearchResults_Parser: function(json_results, widgetthis) {
       var array_usage_levels = ["Overview", "General", "Coastal", "Approach", "Harbour", "Berthing", "River", "River harbour", "River berthing", "Overlay", "Bathymetric ENC", "MFF (Maritime Foundation and Facilities)", "ESB (Environment, Seabed and Beach)", "RAL (Routes Areas and Limits)", "LBO (Large Bottom Objects)", "SBO (Small Bottom Objects)", "CLB (Contour Line Bathymetry)", "IWC (Integrated Water Column)", "NMB (Network Model Bathymetry)", "Unknown"];
-      var cellName, cellName_trunc, usage_str, usage_val, geometryType;
+      var cellName, cellName_trunc, usage_str, usage_val;
       var usageCount = [];
       var usageGroups = [];
       var usageIndex = 0, usageGroupIndex = 0;
@@ -196,24 +260,30 @@ console.log(error);
         var container, usagegroup, divgroup;
 
         array.forEach(json_results, function(item_details, i){
-          switch (item_details.feature.geometry.type) {
-            case "polygon":
-              geometryType = "Area";
-              var polygon = new esri.geometry.Polygon(item_details.feature.geometry);
-              centerPoint = polygon.getExtent().getCenter();
-              geometryJson = polygon.toJson();
-              break;
-            case "polyline":
-              geometryType = "Line";
-              var polyline = new esri.geometry.Polyline(item_details.feature.geometry);
-              centerPoint = polyline.getExtent().getCenter();
-              geometryJson = polyline.toJson();
-              break;
-            case "point":
-              geometryType = "Point";
-              centerPoint = new esri.geometry.Point(item_details.feature.geometry);
-              geometryJson = centerPoint.toJson();
-              break;
+
+          var geometryType = "invalid";
+
+          if(item_details.feature.geometry)
+          {
+            switch (item_details.feature.geometry.type) {
+              case "polygon":
+                geometryType = "Area";
+                var polygon = new esri.geometry.Polygon(item_details.feature.geometry);
+                centerPoint = polygon.getExtent().getCenter();
+                geometryJson = polygon.toJson();
+                break;
+              case "polyline":
+                geometryType = "Line";
+                var polyline = new esri.geometry.Polyline(item_details.feature.geometry);
+                centerPoint = polyline.getExtent().getCenter();
+                geometryJson = polyline.toJson();
+                break;
+              case "point":
+                geometryType = "Point";
+                centerPoint = new esri.geometry.Point(item_details.feature.geometry);
+                geometryJson = centerPoint.toJson();
+                break;
+            }
           }
           if (item_details.foundFieldName == 'OBJNAM') {
             searchByObjectName = true;
@@ -307,7 +377,14 @@ console.log(error);
               innerHTML:  content
             }, divgroup);
             content = "<div class='col-sm-8'>FEATURE</div>";
-            content += "<div class='col-sm-4 row-actions'><a href='#' class='btn btn-default btn-xs' data-details-button id='details_" + item_details.feature.attributes.rcid + "'><span class='glyphicon glyphicon-info-sign'><span></a><a href='#' class='btn btn-default btn-xs' data-details-zoom id='zoomto_" + item_details.feature.attributes.rcid + "'><span class='glyphicon glyphicon-map-marker'><span></a></div>"
+            content += "<div class='col-sm-4 row-actions'><a href='#' class='btn btn-default btn-xs' data-details-button id='details_" 
+              + item_details.feature.attributes.rcid + "'><span class='glyphicon glyphicon-info-sign'><span></a>";
+
+            if(geometryType !== "invalid")
+            {
+              content += "<a href='#' class='btn btn-default btn-xs' data-details-zoom id='zoomto_" + item_details.feature.attributes.rcid + "'>"
+                + "<span class='glyphicon glyphicon-map-marker'><span></a></div>"
+            }
             rec = domConstruct.create("div", {
               'class': "row attr-name",
               innerHTML:  content
@@ -372,7 +449,10 @@ console.log(error);
                 }, divgroup);
                 if(key.toUpperCase()=='DSNM') {
                   detailcontent = "<div class='col-sm-8'>" + key.toUpperCase() + "</div>";
-                  detailcontent += "<div class='col-sm-4 row-actions'><a href='#' class='btn2 btn-default btn-xs' data-details-zoom id='zoom2_" + item_details.feature.attributes.DSNM.substr(0, ((item_details.feature.attributes.DSNM.length) - 4)) + "'><span class='glyphicon glyphicon-map-marker'><span></a></div>"
+                  if(geometryType !== "invalid")
+                  {
+                    detailcontent += "<div class='col-sm-4 row-actions'><a href='#' class='btn2 btn-default btn-xs' data-details-zoom id='zoom2_" + item_details.feature.attributes.DSNM.substr(0, ((item_details.feature.attributes.DSNM.length) - 4)) + "'><span class='glyphicon glyphicon-map-marker'><span></a></div>"
+                  }  
                 }
                 else
                   detailcontent = "<div class='col-sm-12'>" + key.toUpperCase() + "</div>";
