@@ -476,19 +476,22 @@ define([
       }));
 
       this.own(on(this.DateDependencyRangeFromCtrl, 'change', function() {
-        var fromCtrl = _this.DateDependencyRangeFromCtrl;
-        var toCtrl = _this.DateDependencyRangeToCtrl;
-        toCtrl.constraints.min = fromCtrl.value;
-        if(!(fromCtrl.isValid() && toCtrl.isValid())) return;
+        // toCtrl.constraints.min = fromCtrl.value;
+        if(!(_this.DateDependencyRangeFromCtrl.isValid() && _this.DateDependencyRangeToCtrl.isValid())) return;
+        if( _this.DateDependencyRangeFromCtrl.value > _this.DateDependencyRangeToCtrl.value)
+        {
+          _this.DateDependencyRangeToCtrl.set("value",  _this.DateDependencyRangeFromCtrl.value);
+          return; //prevent sending request twice. DateDependencyRangeToCtrl will handle the event after the value change
+        }
 
-        var from = fromCtrl.value;
+        var from = _this.DateDependencyRangeFromCtrl.value;
         var yyyy1 = from.getFullYear().toString();
         var mm1 = (from.getMonth() + 1).toString();
         if(mm1.length == 1) mm1 = '0' + mm1;
         var dd1 = from.getDate().toString();
         if(dd1.length == 1) dd1 = '0' + dd1;
 
-        var to = toCtrl.value;
+        var to = _this.DateDependencyRangeToCtrl.value;
         yyyy2 = to.getFullYear().toString();
         mm2 = (to.getMonth() + 1).toString();
         if(mm2.length == 1) mm2 = '0' + mm2;
@@ -506,19 +509,22 @@ define([
       }));
 
       this.own(on(this.DateDependencyRangeToCtrl, 'change', function() {
-        var fromCtrl = _this.DateDependencyRangeFromCtrl;
-        var toCtrl = _this.DateDependencyRangeToCtrl;
-        fromCtrl.constraints.max = toCtrl.value;
-        if(!(fromCtrl.isValid() && toCtrl.isValid())) return;
+        // fromCtrl.constraints.max = toCtrl.value;
+        if(!(_this.DateDependencyRangeFromCtrl.isValid() && _this.DateDependencyRangeToCtrl.isValid())) return;
+        if( _this.DateDependencyRangeToCtrl.value < _this.DateDependencyRangeFromCtrl.value)
+        {
+          _this.DateDependencyRangeFromCtrl.set("value", _this.DateDependencyRangeToCtrl.value);
+          return; //prevent sending request twice. DateDependencyRangeFromCtrl will handle the event after the value change
+        }
 
-        var from = fromCtrl.value;
+        var from = _this.DateDependencyRangeFromCtrl.value;
         var yyyy1 = from.getFullYear().toString();
         var mm1 = (from.getMonth() + 1).toString();
         if(mm1.length == 1) mm1 = '0' + mm1;
         var dd1 = from.getDate().toString();
         if(dd1.length == 1) dd1 = '0' + dd1;
 
-        var to = toCtrl.value;
+        var to = _this.DateDependencyRangeToCtrl.value;
         yyyy2 = to.getFullYear().toString();
         mm2 = (to.getMonth() + 1).toString();
         if(mm2.length == 1) mm2 = '0' + mm2;
