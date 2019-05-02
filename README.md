@@ -1,4 +1,4 @@
-201904017 - Updated to support releases through 10.6.1 Patch 4 and 10.7
+20190502 - Updated to support releases through 10.6.1 Patch 4 and 10.7
 
 
 
@@ -16,7 +16,11 @@ What's new with this version
 * Safe Depth
 * Display Light Sectors
 * Display AIO Features
-* Dsiplay Safe Soundings
+* Display Safe Soundings
+* Date Dependency Symbol (new as of 20190502)
+* Date Dependency Range  (new as of 20190502)
+* Updated identify to automatically send display_params in the request.  This will ensure that every identify request honors any changes to the Date Dependency Range. (new as of 20190502)
+
 ## * Updated deployment options for Maritime Display Parameters
 ## * Tested against WAB 2.10 and JavaScript API 3.27
 
@@ -120,51 +124,54 @@ The following parameters when set to true will be exposed on a new tab named sym
 Current config.json for Display Parameters Widget:
 ```
 {
-	"includeParameters": {
-		"AreaSymbolizationType": true,
-		"AttDesc": true,
-		"ColorScheme": true,
-		"CompassRose": true,
-		"DataQuality": true,
-		"DeepContour": true,
-		"DisplayCategory": true,
-		"DisplayAIOFeatures": true,
-		"DisplayDepthUnits": true,
-		"DisplayFrames": true,
-		"DisplayFrameText": true,
-		"DisplayFrameTextPlacement": true,
-		"DisplayNOBJNM": true,
-		"DisplayLightSectors": true,
-		"DisplaySafeSoundings": true,
-		"HonorScamin": true,
-		"IntendedUsage": true,
-		"IsolatedDangers": true,
-		"LabelContours": true,
-		"LabelSafetyContours": true,
-		"OptionalDeepSoundings": true,
-		"PointSymbolizationType": true,
-		"RemoveDuplicateText": false,
-		"SafetyContour": true,
-		"SafetyDepth": true,
-		"ShallowContour": true,
-		"ShallowDepthPattern": true,
-		"TextHalo": false,
-		"TwoDepthShades": true
-    },
-	"includeParameterGroups": {
-		"AreaSymbolSize": false,
-		"DatasetDisplayRange": false,
-		"LineSymbolSize": false,
-		"PointSymbolSize": false,
-		"TextGroups": true,
-		"TextSize": false
-	}
+  "includeParameters": {
+    "AreaSymbolizationType": true,
+    "AttDesc": true,
+    "ColorScheme": true,
+    "CompassRose": true,
+    "DataQuality": true,
+    "DateDependencyRange": true,
+    "DateDependencySymbols": true,
+    "DeepContour": true,
+    "DisplayCategory": true,
+    "DisplayAIOFeatures": true,
+    "DisplayDepthUnits": true,
+    "DisplayFrames": true,
+    "DisplayFrameText": true,
+    "DisplayFrameTextPlacement": true,
+    "DisplayNOBJNM": true,
+    "DisplayLightSectors": true,
+    "DisplaySafeSoundings": true,
+    "HonorScamin": true,
+    "IntendedUsage": true,
+    "IsolatedDangers": true,
+    "LabelContours": true,
+    "LabelSafetyContours": true,
+    "OptionalDeepSoundings": true,
+    "PointSymbolizationType": true,
+    "RemoveDuplicateText": false,
+    "SafetyContour": true,
+    "SafetyDepth": false,
+    "ShallowContour": true,
+    "ShallowDepthPattern": true,
+    "TextHalo": false,
+    "TwoDepthShades": true
+  },
+  "includeParameterGroups": {
+    "AreaSymbolSize": false,
+    "DatasetDisplayRange": false,
+    "LineSymbolSize": false,
+    "PointSymbolSize": false,
+    "TextGroups": true,
+    "TextSize": false
+  }
 }
 ```
 
-Please note that there are two exceptions when using these widgets against 10.4/10.4.1 and 10.5
+Please note that there are some exceptions when using these widgets against 10.4/10.4.1, 10.5 and any release prior to 10.6.1 Patch 2
 * 10.4/10.4.1 - Text Groups is not supported on the client side so you will need to turn this option off.
 * 10.5 - Label Contours is not supported on the client side so you will need to turn this option off.
+* Prior to 10.6.1 Patch 2: Do not set SafetyDepth to true prior to 10.6.1 Patch 2.  Doing so will break the widget.
 
 #### Once you enable the use of display parameters, your request URL length will typically exceed the maximum length setting on your server.  MCS supports POST but our widgets only support GET. To support the longer URL length when deploying the Display Parameters widget, will need to use a web.config.xml file and increase your URL length.  
 
