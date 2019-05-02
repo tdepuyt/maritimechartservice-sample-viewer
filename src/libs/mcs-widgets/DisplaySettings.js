@@ -72,28 +72,43 @@ define([
       var imageParameters = new ImageParameters();
       imageParameters.format = "jpeg";
 
-      s57CustomLayer = new S57ServiceLayer(this.s57Layer.url, {
-        "opacity": this.s57Layer.opacity,
-        "visible": this.s57Layer.visible,
-        "imageParameters": imageParameters,
-        "refreshInterval": this.s57Layer.refreshInterval,
-        "maxScale": this.s57Layer.maxScale,
-        "minScale": this.s57Layer.minScale,
-        "id": this.s57LayerTitle || this.s57Layer.id,
-        "description": this.s57Layer.description
-      });
-//        "id": this.this.s57Layer.arcgisProps || this.s57Layer.id,
-//      s57CustomLayer.attr(arcgisProps, this.s57Layer.arcgisProps);
+      s57CustomLayer = null;
+      for (var j = 0; j < this.map.layerIds.length; j++) {
+        var layer = this.map.getLayer(this.map.layerIds[j]);
 
-      s57CustomLayer.setVisibleLayers(this.s57Layer.visibleLayers);
-      on(s57CustomLayer, 'parametersLoaded', lang.hitch(this, function() {
-        this.setupDisplaySettings();
-      }));
+        // If a user opens identify widget before the display setting widget the S57ServiceLayer needs to be 
+        // initialized by the identify widget so that the display settings will be honored by identify widget.
+        if(layer.isInstanceOf && layer.isInstanceOf(S57ServiceLayer))  // S57ServiceLayer is already initialized by identify . 
+        {
+          s57CustomLayer = layer;
+          this.setupDisplaySettings();
+          break;
+        }
+      }
 
-      on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
-          this.map.removeLayer(this.s57Layer);
-      }));
-      this.map.addLayer(s57CustomLayer, this.s57LayerIndex);
+      if(!s57CustomLayer) // if S57ServiceLayer not already initialized
+      {
+        s57CustomLayer = new S57ServiceLayer(this.s57Layer.url, {
+          "opacity": this.s57Layer.opacity,
+          "visible": this.s57Layer.visible,
+          "imageParameters": imageParameters,
+          "refreshInterval": this.s57Layer.refreshInterval,
+          "maxScale": this.s57Layer.maxScale,
+          "minScale": this.s57Layer.minScale,
+          "id": this.s57LayerTitle || this.s57Layer.id,
+          "description": this.s57Layer.description
+        });
+
+        s57CustomLayer.setVisibleLayers(this.s57Layer.visibleLayers);
+        on(s57CustomLayer, 'parametersLoaded', lang.hitch(this, function() {
+          this.setupDisplaySettings();
+        }));
+
+        on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
+            this.map.removeLayer(this.s57Layer);
+        }));
+        this.map.addLayer(s57CustomLayer, this.s57LayerIndex);
+      }
 
       /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
       if (this.aisLayer) {

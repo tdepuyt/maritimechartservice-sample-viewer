@@ -30,7 +30,9 @@ define([
   'esri/domUtils',
   'esri/request',
   'jimu/PanelManager',
-  'dojo/aspect'
+  'dojo/aspect',
+  'esri/layers/ImageParameters',
+  './S57ServiceLayer'
 
 ], function(
   template,
@@ -44,7 +46,8 @@ define([
   IdentifyParameters,
   IdentifyTask, InfoTemplate,
   Polygon, Polyline, Point,
-  domUtils, esriRequest, PanelManager, aspect
+  domUtils, esriRequest, PanelManager, aspect,
+  ImageParameters, S57ServiceLayer
 ) {
   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
     // description:
@@ -62,8 +65,9 @@ define([
     drawToolBar: null,
     showClear: false,
     //keepOneGraphic: false,
-    s57CustomLayer: null,
     s57ServiceUrl: null,
+    s57Layer: null,
+    s57LayerTitle: null,
     /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
     aisServiceUrl: null,
     pointGraphic: null,
@@ -86,6 +90,7 @@ define([
       this.setupConnections();
 
       this.inherited(arguments);
+
       if (this.identifySymbol) {
         this.pointSymbol = new SimpleMarkerSymbol(this.identifySymbol);
       } else {
@@ -199,17 +204,53 @@ define([
     },
 
     injectDisplayParameters: function() {
+
+      s57CustomLayer = null;
       for (var j = 0; j < this.map.layerIds.length; j++) {
         var layer = this.map.getLayer(this.map.layerIds[j]);
-        if (layer.displayParameters !=null) {
-           esriRequest.setRequestPreCallback(function(ioArgs){
-            if(ioArgs.url && ioArgs.url.indexOf("/exts/MaritimeChartService/MapServer/identify") > 0){
-              ioArgs.content.display_params = JSON.stringify(layer.displayParameters);
-            }
-            return ioArgs;
-          });
+        if(layer.isInstanceOf && layer.isInstanceOf(S57ServiceLayer) && layer.displayParameters)  // S57ServiceLayer is already initialized by display setting widget. 
+        {
+          s57CustomLayer = layer;
+          esriRequest.setRequestPreCallback(preCallback);
           break;
         }
+      }
+
+      // If a user opens identify widget before the display setting widget the S57ServiceLayer needs to be initialized here.
+      if(!s57CustomLayer) 
+      {
+        var imageParameters = new ImageParameters();
+        imageParameters.format = "jpeg";
+
+        s57CustomLayer = new S57ServiceLayer(this.s57Layer.url, {
+          "opacity": this.s57Layer.opacity,
+          "visible": this.s57Layer.visible,
+          "imageParameters": imageParameters,
+          "refreshInterval": this.s57Layer.refreshInterval,
+          "maxScale": this.s57Layer.maxScale,
+          "minScale": this.s57Layer.minScale,
+          "id": this.s57LayerTitle || this.s57Layer.id,
+          "description": this.s57Layer.description
+        });
+
+        s57CustomLayer.setVisibleLayers(this.s57Layer.visibleLayers);
+
+        on(s57CustomLayer, 'parametersLoaded', function() {
+          esriRequest.setRequestPreCallback(preCallback);
+        });
+
+        on.once(s57CustomLayer, 'update-end', lang.hitch(this, function() {
+            this.map.removeLayer(this.s57Layer);
+        }));
+
+        this.map.addLayer(s57CustomLayer, this.s57LayerIndex);
+      }
+
+      function preCallback(ioArgs){
+        if(ioArgs.url && ioArgs.url.indexOf("/exts/MaritimeChartService/MapServer/identify") > 0){
+          ioArgs.content.display_params = JSON.stringify(s57CustomLayer.displayParameters);
+        }
+        return ioArgs;
       }
     },
 
@@ -230,6 +271,7 @@ define([
         if(this.widgetManager) {
           // If the widgets are not loded yet, listen to widget created event from widget manager.
           this.own(on(this.widgetManager, 'widget-created', function(widget) {
+            if (typeof(widget) === "undefined") return;
             if(widget.name == 'MaritimeIdentify') {
               _this.widgetid = widget.id;
               // If the widget is configured to open at start, make it sticky (The widget will reactivate after Select and Measurement widgets are deactivated).

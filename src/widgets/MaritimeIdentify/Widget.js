@@ -28,8 +28,17 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs
                     else if ((layerUrl.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/MapServer") > 0)) {
                         this.s57Layer = layer;
                         this.s57ServiceUrl = layerUrl;
+                        this.s57LayerIndex = j;
                     }
-// console.log("s57ServiceUrl is " + this.s57ServiceUrl);       
+                    // console.log("s57ServiceUrl is " + this.s57ServiceUrl);       
+                }
+
+                var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
+                for (j = 0; j < operLayers.length; j++) {
+                    if((this.s57Layer) && (this.s57Layer.id == operLayers[j].id)) {
+                        this.s57LayerTitle = operLayers[j].title;
+                        break;
+                    } 
                 }
 
                 if (this.s57ServiceUrl == null) {
@@ -41,7 +50,10 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs
                        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
                         aisServiceUrl: this.aisServiceUrl,
                         s57ServiceUrl: this.s57ServiceUrl,
-                        identifySymbol: this.config.identifySymbol
+                        s57Layer: this.s57Layer,
+                        s57LayerIndex: this.s57LayerIndex,
+                        identifySymbol: this.config.identifySymbol,
+                        s57LayerTitle: this.s57LayerTitle,
                     }, this.identifyNode);
                     this.Identify.setDrawBox(new DrawBox({
                         geoTypes: ['point', 'extent'],
