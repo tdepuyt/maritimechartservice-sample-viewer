@@ -421,17 +421,21 @@ define([
                 feature.attributes.cellName = feature.attributes.cellName.replace(".000", "");
               }
 
-              switch (feature.geometry.type) {
-                case "polygon":
-                  feature.attributes.geometryType = "Area";
-                  break;
-                case "polyline":
-                  feature.attributes.geometryType = "Line";
-                  break;
-                case "point":
-                  feature.attributes.geometryType = "Point";
-                  break;
+              var geoString = JSON.stringify(feature.geometry);
+              if (geoString.indexOf("null") == -1){
+                switch (feature.geometry.type) {
+                  case "polygon":
+                    feature.attributes.geometryType = "Area";
+                    break;
+                  case "polyline":
+                    feature.attributes.geometryType = "Line";
+                    break;
+                  case "point":
+                    feature.attributes.geometryType = "Point";
+                    break;
+                }
               }
+
               if (feature.attributes.cellName.indexOf("AML") ==0) {
                 feature.attributes.usage = "AML 3.0";
               }
