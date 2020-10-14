@@ -521,7 +521,7 @@ define([
                   'class': "row attr-value",
                   innerHTML:  detailcontent
                 }, detailcontainer);
-                if(key.toUpperCase()=='RCID') {
+                if(itemSelected.feature.geometry && key.toUpperCase()=='RCID') {
                   detailcontent = "<div class='col-sm-8'>" + key.toUpperCase() + "</div>";
                   detailcontent += "<div class='col-sm-4 row-actions'><a href='#' class='btn btn-default btn-xs' data-details-zoom id='zoom2_" + itemSelected.feature.attributes.rcid + "'><span class='glyphicon glyphicon-map-marker'><span></a></div>"
                 }
