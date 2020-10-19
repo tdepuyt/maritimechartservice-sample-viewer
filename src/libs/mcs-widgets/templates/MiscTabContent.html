@@ -1,0 +1,203 @@
+<div>
+    <div class="form-group" data-dojo-attach-point="AreaSymbolizationType"
+        style="display:none">
+        <label class="col-md-5 control-label" for="AreaSymbolizationTypeCtrl">Area symbolization: </label>
+        <div class="col-md-7">
+            <select class="form-control" 
+                data-dojo-attach-point="AreaSymbolizationTypeCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="AttDesc" style="display:none">
+        <label class="col-md-5 control-label" for="AttDescCtrl">Attribute Description: </label>
+        <div class="col-md-7">
+            <select class="form-control" data-dojo-attach-point="AttDescCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="ColorScheme" style="display:none">
+        <label class="col-md-5 control-label" for="ColorSchemeCtrl">Colour scheme: </label>
+        <div class="col-md-7">
+            <select class="form-control" data-dojo-attach-point="ColorSchemeCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="CompassRose" style="display:none">
+        <label class="col-md-5 control-label" for="CompassRoseCtrl">Compass rose: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="CompassRoseCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayFrames" style="display:none">
+        <label class="col-md-5 control-label" for="DisplayFramesCtrl">Data extents: </label>
+        <div class="col-md-7">
+            <select class="form-control" data-dojo-attach-point="DisplayFramesCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DataQuality" style="display:none">
+        <label class="col-md-5 control-label" for="DataQualityCtrl">Data quality: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="DataQualityCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DateDependencyRange" style="display:none">
+        <label class="col-md-5 control-label">Date dependency range: </label>
+        <div class="col-md-7">
+            <label for="DateDependencyRangeFromCtrl" class="sub-label">From:</label>
+            <input type="text" required="true" class="form-control no-padding-override"
+                data-dojo-type="dijit/form/DateTextBox" data-dojo-attach-point="DateDependencyRangeFromCtrl" />
+            <label for="DateDependencyRangeToCtrl" class="sub-label">To:</label>
+            <input type="text" required="true" class="form-control no-padding-override"
+                data-dojo-type="dijit/form/DateTextBox" data-dojo-attach-point="DateDependencyRangeToCtrl" />
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DateDependencySymbols"
+        style="display:none">
+        <label class="col-md-5 control-label" for="DateDependencySymbolsCtrl">Date dependency symbols: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="DateDependencySymbolsCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayDepthUnits" style="display:none">
+        <label class="col-md-5 control-label" for="DisplayDepthUnitsCtrl">Depth units: </label>
+        <div class="col-md-7">
+            <select class="form-control" data-dojo-attach-point="DisplayDepthUnitsCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayAIOFeatures" style="display:none">
+        <label class="col-md-5 control-label" for="DisplayAIOFeaturesCtrl">AIO Features: </label>
+        <div class="col-md-7" data-dojo-attach-point="DisplayAIOFeaturesCtrl">
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayCategory" style="display:none">
+        <label class="col-md-5 control-label" for="DisplayCategoryCtrl">Display categories: </label>
+        <div class="col-md-7" data-dojo-attach-point="DisplayCategoryCtrl">
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayFrameText" style="display:none">
+        <label class="col-md-5 control-label" for="DisplayFrameTextCtrl">Display frame text: </label>
+        <div class="col-md-7">
+            <select class="form-control" data-dojo-attach-point="DisplayFrameTextCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayFrameTextPlacement"
+        style="display:none">
+        <label class="col-md-5 control-label" for="DisplayFrameTextPlacementCtrl">Display frame text placement: </label>
+        <div class="col-md-7">
+            <select class="form-control" 
+                data-dojo-attach-point="DisplayFrameTextPlacementCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayLightSectors" style="display:none">
+        <label class="col-md-5 control-label" for="DisplayLightSectorsCtrl">Display Light Sectors: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="DisplayLightSectorsCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplaySafeSoundings"
+        style="display:none">
+        <label class="col-md-5 control-label" for="DisplaySafeSoundingsCtrl">Display Safe Soundings: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="DisplaySafeSoundingsCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="HonorScamin" style="display:none">
+        <label class="col-md-5 control-label" for="HonorScaminCtrl">Honor SCAMIN: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="HonorScaminCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="IntendedUsage" style="display:none">
+        <label class="col-md-5 control-label" for="IntendedUsageCtrl">Intended Usage: </label>
+        <div class="col-md-7" data-dojo-attach-point="IntendedUsageCtrl">
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="IsolatedDangers" style="display:none">
+        <label class="col-md-5 control-label" for="IsolatedDangersCtrl">Isolated dangers in shallow water: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="IsolatedDangersCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="LabelContours" style="display:none">
+        <label class="col-md-5 control-label" for="LabelContoursCtrl">Label contours: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="LabelContoursCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="LabelSafetyContours" style="display:none">
+        <label class="col-md-5 control-label" for="LabelSafetyContoursCtrl">Label safety contours: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="LabelSafetyContoursCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="DisplayNOBJNM" style="display:none">
+        <label class="col-md-5 control-label" for="nobjnm">National names when available: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="DisplayNOBJNMCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="OptionalDeepSoundings"
+        style="display:none">
+        <label class="col-md-5 control-label" for="OptionalDeepSoundingsCtrl">Optional deep soundings: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="OptionalDeepSoundingsCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="PointSymbolizationType"
+        style="display:none">
+        <label class="col-md-5 control-label" for="PointSymbolizationTypeCtrl">Point symbolization: </label>
+        <div class="col-md-7">
+            <select class="form-control" 
+                data-dojo-attach-point="PointSymbolizationTypeCtrl">
+            </select>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="RemoveDuplicateText" style="display:none">
+        <label class="col-md-5 control-label" for="RemoveDuplicateTextCtrl">Remove Duplicate Text: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="RemoveDuplicateTextCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="ShallowDepthPattern" style="display:none">
+        <label class="col-md-5 control-label" for="ShallowDepthPatternCtrl">Shallow patterns: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="ShallowDepthPatternCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="TextHalo" style="display:none">
+        <label class="col-md-5 control-label" for="TextHaloCtrl">Text Halo: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="TextHaloCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="TwoDepthShades" style="display:none">
+        <label class="col-md-5 control-label" for="TwoDepthShadesCtrl">Two colour depth zone shades: </label>
+        <div class="col-md-7 control-switch">
+            <label>On<input class="switch-toggle" data-dojo-type="dijit/form/CheckBox"
+                    data-dojo-attach-point="TwoDepthShadesCtrl" />Off</label>
+        </div>
+    </div>
+    <div class="form-group" data-dojo-attach-point="TextGroups" style="display:none">
+        <label class="col-md-5 control-label" for="TextGroupsCtrl">Text groups: </label>
+        <div class="col-md-7" data-dojo-attach-point="TextGroupsCtrl">
+        </div>
+    </div>
+</div>

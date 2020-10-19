@@ -6,6 +6,7 @@ define([
   'dojo/_base/array',
   'dojo/json',
   'dojo/request/xhr',
+  "dojo/dom-construct",
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
@@ -25,7 +26,7 @@ define([
   template,
   domConstruct, on, dom, query,
   declare,
-  lang, array, JSON, xhr,
+  lang, array, JSON, xhr, domConstruct,
   _WidgetBase,
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
@@ -40,9 +41,9 @@ define([
     baseClass: 'mcs-search',
     widgetsInTemplate: true,
     map: null,
-    s57ServiceUrl: null,
     symbol: null,
     searchType: null,
+    selectedLayerIdsAndIndexes: {},
 
     // Properties to be sent into constructor
 
@@ -57,12 +58,26 @@ define([
       if (this.map) {
         this.setMap(this.map);
       }
-      if (this.s57Layer) {
-        s57ServiceUrl = this.s57Layer.url;
+
+      for(var i = 0; i < this.s57Layers.length; i++) {
+        this.setupMCSLayerCheckbox(this.s57Layers[i], true);
       }
-      else
-        s57ServiceUrl = "https://localhost:6443/arcgis/rest/services/SampleWorldCities/MapServer/exts/MaritimeChartService/MapServer";
     },
+
+    setupMCSLayerCheckbox: function(layer, flagChecked) {
+
+      var checkboxDiv = domConstruct.create("div", {}, this.MCSLayersSearchDiv);
+      domConstruct.create("input", {
+        type: "checkbox",
+        id: "checkbox_" + layer.id + "_Search",
+        value: this._getLayerTitle(layer),
+        checked: flagChecked
+      }, checkboxDiv);
+      domConstruct.create("b", {
+        innerHTML: this._getLayerTitle(layer)
+      }, checkboxDiv);
+    },
+
     setupConnections: function() {
       // summary:
       //    wire events, and such
@@ -81,38 +96,95 @@ define([
         }
       })));
     },
+
     setMap: function(map) {
       if (map) {
         this.map = map;
       }
     },
-    injectDisplayParameters: function() {
-      for (var j = 0; j < this.map.layerIds.length; j++) {
-        var layer = this.map.getLayer(this.map.layerIds[j]);
-        if (layer.displayParameters !=null) {
-           esriRequest.setRequestPreCallback(function(ioArgs){
-            if(ioArgs.url && ioArgs.url.indexOf("/exts/MaritimeChartService/MapServer/find") > 0){
-              ioArgs.content.display_params = JSON.stringify(layer.displayParameters);
-            }
-            return ioArgs;
-          });
-          break;
+
+    _getLayerTitle: function(layer) {
+
+      var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
+      var title = null;
+      for (var j = 0; j < operLayers.length; j++) {
+        if ((layer) && !(layer.displayParameters) && (layer == operLayers[j])) {
+          title = operLayers[j].title;
         }
       }
+      if (title) {
+        return title;
+      }
+
+      if(layer.title) {
+        return layer.title;
+      }
+
+      if(lang.getObject("_wabProperties.originalLayerName", false, layer)) {
+        return layer.name || layer.id;
+      }
+
+      title = layer.label || layer.name || "";
+      if (layer.url) {
+        var serviceName;
+        var index = layer.url.indexOf("/FeatureServer");
+        if (index === -1) {
+          index = layer.url.indexOf("/MapServer");
+        }
+        if (index === -1) {
+          index = layer.url.indexOf("/service");
+        }
+        if(index > -1) {
+          serviceName = layer.url.substring(0, index);
+          serviceName = serviceName.substring(serviceName.lastIndexOf("/") + 1, serviceName.length);
+          if (title) {
+            title = serviceName + " - " + title;
+          } else {
+            title = serviceName;
+          }
+        }
+
+      }
+      return title || layer.id;
     },
+
+    _onSearchRefreshClick: function() {
+      this._clearChildNodes(this.MCSLayersSearchDiv);
+      this._clearChildNodes(this.search_result_main);
+      this.s57Layers = [];
+      for (var j = 0; j < this.map.layerIds.length; j++) {
+        var layer = this.map.getLayer(this.map.layerIds[j]);
+        var indexMCSStr1 = layer.url.toLowerCase().indexOf("/exts/MaritimeChartService/MapServer".toLowerCase()); 
+        var indexMCSStr2 = layer.url.toLowerCase().indexOf("/exts/Maritime Chart Server/MapServer".toLowerCase());
+        var indexMCSStr3 = layer.url.toLowerCase().indexOf("/exts/Maritime%20Chart%20Service/MapServer".toLowerCase());
+        // in the MCS URL, "exts" and "mapserver" could be lower case or upper case
+        if ((indexMCSStr1 > 0 && layer.url.substring(indexMCSStr1+6, indexMCSStr1+26)=="MaritimeChartService")
+          || (indexMCSStr2 > 0 && layer.url.substring(indexMCSStr2+6, indexMCSStr2+27)=="Maritime Chart Server")
+          || (indexMCSStr3 > 0 && layer.url.substring(indexMCSStr3+6, indexMCSStr3+32)=="Maritime%20Chart%20Service")) {
+            this.s57Layers.push(layer);
+          }
+      }
+      for(var i = 0; i < this.s57Layers.length; i++) {
+        this.setupMCSLayerCheckbox(this.s57Layers[i], true);
+      }
+
+      // clear the graphics (the highlighted selections)
+      this.map.graphics.clear();
+    },
+
     _onSearchClick: function(e) {
 
       e.preventDefault();
-
-      //Create Find Task using the URL of the map service to search
-      this.findTask = new FindTask(s57ServiceUrl);
-
+      this._clearChildNodes(this.search_result_main);
+      dom.byId("container_search_results").style = "display:visible";
+      dom.byId("container_result_details").style = "display:none";
+      this.selectedLayerIdsAndIndexes = {};
+      
       //Create the find parameters
-      findParams = new FindParameters();
+      var findParams = new FindParameters();
       findParams.returnGeometry = true;
       findParams.layerIds = [0];
       findParams.outSpatialReference = this.map.spatialReference;
-
       //Set the search text to the value in the box
       findParams.searchText = dom.byId("input_search").value;
       esri.config.defaults.io.timeout = 300000; // 5 minutes?
@@ -123,92 +195,94 @@ define([
         findParams.searchFields = ["OBJNAM"];
       }
 
-      this.findTask.execute(findParams, lang.hitch(this, this.showFindTaskResults),
-        lang.hitch(this, function(error) {
+      var selectedCheckboxes = query("input[type=checkbox]:checked", this.MCSLayersSearchDiv);
+      var index = 0;
+      selectedCheckboxes.forEach(lang.hitch(this, function (MCSLayerCheckbox) {
+        // get layerId from the checkbox's id
+        var layerId = MCSLayerCheckbox.id.slice(9, -7);
+        var s57ServiceUrl = this.map.getLayer(layerId).url;
+        this.selectedLayerIdsAndIndexes[layerId] = index;
+        index += 1;
 
-          var params = {
-            searchText: findParams.searchText,
-            contains: true,
-            returnGeometry: true,
-            layers: [0],
-            searchFields: findParams.searchFields,
-            sr: this.map.spatialReference.wkid,
-            f: "json"
-          };
-
-          if (this.s57Layer && this.s57Layer.credential && this.s57Layer.credential.token)
-          {
-            params.token = this.s57Layer.credential.token;
-          }
-          
-          // if the failure is due to any invalid geometry and parse the result manually using dojo/request/xhr
-          xhr(s57ServiceUrl + "/find", {
-            query: params,
-            headers: {
-              "X-Requested-With": null
-            }
-          }).then(lang.hitch(this, function(result){
-              // replace all the inf and -inf following a digit and a comma with null so that the result string is json parsable
-              result = result.replace(/\d,inf|\d,-inf/g, function(r1) { return r1.replace(/inf|-inf/, 'null'); })
-              var jsonRes = JSON.parse(result)
-              if(jsonRes && jsonRes.results)
-              { 
-                // reorganize the result object to be in the same format returned by esri/findTask 
-                var resArr = jsonRes.results;               
-                array.forEach(resArr, function(res, i) {
-                  res.feature = {}
-                  res.feature.geometry = res.geometry
-                  var geomString = JSON.stringify(res.geometry);
-                  // if this geometry has null mark it as invalid so that the zoom to button is not displayed for it
-                  if(geomString.indexOf("null") !== -1)
-                  {
-                    res.feature.geometry.type = "invalid";
-                  }
-                  else if(res.geometryType == "esriGeometryPolygon")
-                  {
-                    res.feature.geometry.type = "polygon";
-                  }
-                  else if(res.geometryType == "esriGeometryPolyline")
-                  {
-                    res.feature.geometry.type = "polyline";
-                  }
-                  else if(res.geometryType == "esriGeometryPoint")
-                  {
-                    res.feature.geometry.type = "point";
-                  }
-                  res.feature.attributes = res.attributes
-                });
-                this.showFindTaskResults(resArr)
-              }
-              else
-              {
-                this.findErrorFindTaskResults(result);
-              }
-            }), lang.hitch(this, function(err){
-              this.findErrorFindTaskResults(err);
-            }));
-        }));
+        //Create Find Task using the URL of the map service to search
+        this.findTask = new FindTask(s57ServiceUrl);
+        this.findTask.execute(findParams, lang.hitch(this, function (layerName, layerId, in_results) {
+          this.setSearchResults(in_results, layerName, layerId, 'default');
+        }, MCSLayerCheckbox.value, layerId),
+          lang.hitch(this, function (layerName, layerId, s57ServiceUrl, error) {
+            this.findTaskError(layerName, layerId, s57ServiceUrl);
+          }, MCSLayerCheckbox.value, layerId, s57ServiceUrl));
+      }));
     },
 
-    showFindTaskResults: function(in_results) {
-      this._clearChildNodes(this.search_result_main);
-      this.setSearchResults(in_results, 'default');
+    findTaskError: function(layerName, layerId, s57ServiceUrl){
+        var params = {
+          searchText: findParams.searchText,
+          contains: true,
+          returnGeometry: true,
+          layers: [0],
+          searchFields: findParams.searchFields,
+          sr: this.map.spatialReference.wkid,
+          f: "json"
+        };
+
+        var s57Layer = this.map.getLayer(layerId);
+        if (s57Layer && s57Layer.credential && s57Layer.credential.token) {
+          params.token = s57Layer.credential.token;
+        }
+
+        // if the failure is due to any invalid geometry and parse the result manually using dojo/request/xhr
+        xhr(s57ServiceUrl + "/find", {
+          query: params,
+          headers: {
+            "X-Requested-With": null
+          }
+        }).then(lang.hitch(this, function (result) {
+          // replace all the inf and -inf following a digit and a comma with null so that the result string is json parsable
+          result = result.replace(/\d,inf|\d,-inf/g, function (r1) { return r1.replace(/inf|-inf/, 'null'); })
+          var jsonRes = JSON.parse(result)
+          if (jsonRes && jsonRes.results) {
+            // reorganize the result object to be in the same format returned by esri/findTask 
+            var resArr = jsonRes.results;
+            array.forEach(resArr, function (res, i) {
+              res.feature = {}
+              res.feature.geometry = res.geometry
+              var geomString = JSON.stringify(res.geometry);
+              // if this geometry has null mark it as invalid so that the zoom to button is not displayed for it
+              if (geomString.indexOf("null") !== -1) {
+                res.feature.geometry.type = "invalid";
+              }
+              else if (res.geometryType == "esriGeometryPolygon") {
+                res.feature.geometry.type = "polygon";
+              }
+              else if (res.geometryType == "esriGeometryPolyline") {
+                res.feature.geometry.type = "polyline";
+              }
+              else if (res.geometryType == "esriGeometryPoint") {
+                res.feature.geometry.type = "point";
+              }
+              res.feature.attributes = res.attributes
+            });
+            this.setSearchResults(resArr, layerName, layerId, 'default');
+          }
+          else {
+            this.findErrorFindTaskResults(result);
+          }
+        }), lang.hitch(this, function (err) {
+          this.findErrorFindTaskResults(err);
+        }));
     },
 
     findErrorFindTaskResults: function(error) {
       console.log(error);
     },
 
-
-    setSearchResults: function(in_results, type) {
-      dom.byId("container_search_results").style = "display:visible";
-      dom.byId("container_result_details").style = "display:none";
+    setSearchResults: function(in_results, layerName, layerId, type) {
       if (type == "cell") {
-        this.getCellSearchResults_Parser(in_results);
+        this.getCellSearchResults_Parser(in_results, layerName, layerId);
       } else {
-        this.getSearchResults_Parser(in_results, this);
+        this.getSearchResults_Parser(in_results, layerName, layerId, this);
       }
-
     },
 
     _zoomToSelectedFeature: function (itemSelected) {
@@ -247,7 +321,7 @@ define([
       return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     },
 
-    getSearchResults_Parser: function(json_results, widgetthis) {
+    getSearchResults_Parser: function(json_results, layerName, layerId, widgetthis) {
       var array_usage_levels = ["Overview", "General", "Coastal", "Approach", "Harbour", "Berthing", "River", "River harbour", "River berthing", "Overlay", "Bathymetric ENC", "MFF (Maritime Foundation and Facilities)", "ESB (Environment, Seabed and Beach)", "RAL (Routes Areas and Limits)", "LBO (Large Bottom Objects)", "SBO (Small Bottom Objects)", "CLB (Contour Line Bathymetry)", "IWC (Integrated Water Column)", "NMB (Network Model Bathymetry)", "Unknown"];
       var cellName, cellName_trunc, usage_str, usage_val;
       var usageCount = [];
@@ -257,6 +331,13 @@ define([
       var searchByObjectName = false;
 
       if (json_results.length > 0) {
+        var layerResultDiv = domConstruct.create("div", {
+          "id": "div_" + layerId
+        }, widgetthis.search_result_main);
+        layerResultDiv.style.order = this.selectedLayerIdsAndIndexes[layerId]; 
+        domConstruct.create("p", {
+          "innerHTML": layerName
+        }, layerResultDiv);
         var container, usagegroup, divgroup;
 
         array.forEach(json_results, function(item_details, i){
@@ -339,23 +420,23 @@ define([
               usageGroups[usageGroupIndex++] = usage_str;
               counter = 0;
               container = domConstruct.create("div", {
-              }, widgetthis.search_result_main); 
+              }, layerResultDiv); 
 
               usagegroup = domConstruct.create("button", {
                 'class':"btn",
                 'data-toggle':"collapse",
-                'data-target':"#container_" + usage_str.replace(" ", "_").replace(",", "_"),
-                innerHTML: usage_str + "&nbsp;&nbsp;&nbsp;&nbsp;<span id='span_" + usage_str + "' class='badge'>0</span>",
+                'data-target':"#container_" + layerId + usage_str.replace(" ", "_").replace(",", "_"),
+                innerHTML: usage_str + "&nbsp;&nbsp;&nbsp;&nbsp;<span id='span_" + layerId + usage_str + "' class='badge'>0</span>",
                 id: 'usage_' + usage_str.replace(" ", "_").replace(",", "_")  
               }, container); 
               divgroup = domConstruct.create("div", {
                 'class': "collapse",
-                id: 'container_' + usage_str.replace(" ", "_").replace(",", "_")
+                id: 'container_'+ layerId + usage_str.replace(" ", "_").replace(",", "_")
               }, container);
             }
             else {
               counter = usageCount[groupIdx];
-              divgroup = dom.byId('container_' + usage_str.replace(" ", "_").replace(",", "_"));
+              divgroup = dom.byId('container_' + layerId + usage_str.replace(" ", "_").replace(",", "_"));
             }
           }
 
@@ -493,7 +574,7 @@ define([
 
         // change the badge to the numbers of records within each group
         for(var i=0; i<usageGroups.length; i++)
-          dom.byId('span_'+usageGroups[i]).innerHTML = usageCount[i];
+          dom.byId('span_'+ layerId +usageGroups[i]).innerHTML = usageCount[i];
         console.log(usageCount);
         console.log(usageGroups);
         if (searchByObjectName) {

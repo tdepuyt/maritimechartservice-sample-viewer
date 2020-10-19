@@ -1,7 +1,10 @@
+
+@import url('../../../libs/mcs-widgets/resources/Identify.css');
+
+/* add additional custom styles */
 .maritime-identify h3 {
   font-size: 1.2em;
 }
 .maritime-identify h3, p {
   margin-top: 0;
 }
-/* add additional custom styles */

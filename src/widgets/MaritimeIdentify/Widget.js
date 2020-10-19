@@ -4,9 +4,7 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs
         var clazz = declare([BaseWidget], {
 
             // Custom widget code goes here
-            /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
             baseClass: 'identify',
-            aisServiceUrl: null,
             s57ServiceUrl: null,
             // this property is set by the framework when widget is loaded.
             // name: 'Identify',
@@ -17,43 +15,27 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs
                 this.inherited(arguments);
                 console.log('Identify::postCreate');
 
+                // check if there is MCS layer on the map
+                var flagHasMCSLayer = false;
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layer = this.map.getLayer(this.map.layerIds[j]);
-                    var layerUrl = layer.url;
-                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                    if ((layerUrl.indexOf("/exts/MaritimeChartService/AISServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/AISServer") > 0)) {
-                        this.s57Layer = layer;
-                        this.aisServiceUrl = layerUrl;
-                    }
-                    else if ((layerUrl.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layerUrl.indexOf("/exts/Maritime Chart Server/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/MapServer") > 0)) {
-                        this.s57Layer = layer;
-                        this.s57ServiceUrl = layerUrl;
-                        this.s57LayerIndex = j;
-                    }
-                    // console.log("s57ServiceUrl is " + this.s57ServiceUrl);       
-                }
-
-                var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
-                for (j = 0; j < operLayers.length; j++) {
-                    if((this.s57Layer) && (this.s57Layer.id == operLayers[j].id)) {
-                        this.s57LayerTitle = operLayers[j].title;
+                    var indexMCSStr1 = layer.url.toLowerCase().indexOf("/exts/MaritimeChartService/MapServer".toLowerCase()); 
+                    var indexMCSStr2 = layer.url.toLowerCase().indexOf("/exts/Maritime Chart Server/MapServer".toLowerCase());
+                    var indexMCSStr3 = layer.url.toLowerCase().indexOf("/exts/Maritime%20Chart%20Service/MapServer".toLowerCase());
+                    // in the MCS URL, "exts" and "mapserver" could be lower case or upper case
+                    if ((indexMCSStr1 > 0 && layer.url.substring(indexMCSStr1+6, indexMCSStr1+26)=="MaritimeChartService")
+                      || (indexMCSStr2 > 0 && layer.url.substring(indexMCSStr2+6, indexMCSStr2+27)=="Maritime Chart Server")
+                      || (indexMCSStr3 > 0 && layer.url.substring(indexMCSStr3+6, indexMCSStr3+32)=="Maritime%20Chart%20Service")) {
+                        flagHasMCSLayer = true;
                         break;
-                    } 
+                    }
                 }
 
-                if (this.s57ServiceUrl == null) {
+                if (!flagHasMCSLayer) {
                     console.log("This map has no Maritime Chart Service Layer");
                 } else {
                     this.Identify = new Identify({
-                        map: this.map,
-                        nls: this.nls,
-                       /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                        aisServiceUrl: this.aisServiceUrl,
-                        s57ServiceUrl: this.s57ServiceUrl,
-                        s57Layer: this.s57Layer,
-                        s57LayerIndex: this.s57LayerIndex,
-                        identifySymbol: this.config.identifySymbol,
-                        s57LayerTitle: this.s57LayerTitle,
+                        map: this.map
                     }, this.identifyNode);
                     this.Identify.setDrawBox(new DrawBox({
                         geoTypes: ['point', 'extent'],
@@ -79,18 +61,12 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'jimu/dijit/DrawBox', 'libs/mcs
                 // summary:
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onOpen', arguments);
-                if (this.Identify) {
-                    this.Identify.injectDisplayParameters();
-                }
             },
 
             onClose: function() {
                 // summary:
                 //      Overrides method of same name in jimu._BaseWidget.
                 console.log('Identify::onClose', arguments);
-                /*if (this.Identify) {
-                    this.Identify.pauseClickListener();
-                }*/
             }
 
         });

@@ -14,48 +14,45 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/DisplaySettin
             postCreate: function() {
                 this.inherited(arguments);
                 console.log('MaritimeDisplayProperties::postCreate');
-console.log(this.config.selectedControls);
-                for (var j = 0; j < this.map.layerIds.length; j++) {
-                    var layer = this.map.getLayer(this.map.layerIds[j]);
-                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                    if ((layer.url.indexOf("/exts/MaritimeChartService/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/AISServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/AISServer") > 0))
-                        this.aisLayer = layer;
-                    else if ((layer.url.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/MapServer") > 0)) {
-                        this.s57Layer = layer;
-                        this.s57LayerIndex = j;
+            
+                var flagHasS57Layer = false;
+                var MCSLayersConfig = {};
+                var flagFirstS57Layer = true;
+                for (var i = 0; i < this.map.layerIds.length; i++) {
+                    var layer = this.map.getLayer(this.map.layerIds[i]);
+                    var indexMCSStr1 = layer.url.toLowerCase().indexOf("/exts/MaritimeChartService/MapServer".toLowerCase()); 
+                    var indexMCSStr2 = layer.url.toLowerCase().indexOf("/exts/Maritime Chart Server/MapServer".toLowerCase());
+                    var indexMCSStr3 = layer.url.toLowerCase().indexOf("/exts/Maritime%20Chart%20Service/MapServer".toLowerCase());
+                    // in the MCS URL, "exts" and "mapserver" could be lower case or upper case
+                    if ((indexMCSStr1 > 0 && layer.url.substring(indexMCSStr1+6, indexMCSStr1+26)=="MaritimeChartService")
+                      || (indexMCSStr2 > 0 && layer.url.substring(indexMCSStr2+6, indexMCSStr2+27)=="Maritime Chart Server")
+                      || (indexMCSStr3 > 0 && layer.url.substring(indexMCSStr3+6, indexMCSStr3+32)=="Maritime%20Chart%20Service")) {
+                        flagHasS57Layer = true;
+                        // Only pass the information of the MCS layers showed in the setting page to DisplaySettings.js
+                        if(layer.id in this.config.mcsLayers) {
+                            console.log(layer.id + ": " + this.config.mcsLayers[layer.id].selectedControls)
+                            MCSLayersConfig[layer.id] = {
+                                id: layer.id,
+                                controls: this.config.mcsLayers[layer.id].selectedControls,
+                                parametersContent: this.config.mcsLayers[layer.id].mcsParametersContent,
+                                s57Layer: layer,
+                                s57LayerIndex: i,
+                                selected: flagFirstS57Layer
+                            };
+                        }
                     }
                 }
-
-                var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
-                for (j = 0; j < operLayers.length; j++) {
-                    if((this.s57Layer) && (this.s57Layer.id == operLayers[j].id)) {
-                        this.s57LayerTitle = operLayers[j].title;
-                    } else if((this.aisLayer) && (this.aisLayer.id == operLayers[j].id)) {
-                        this.aisLayerTitle = operLayers[j].title;
-                    }
-                    /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-
-                }
-
-                if (this.s57Layer == null) {
+                
+                if (!flagHasS57Layer) {
                     this.displaySettingsNode.innerHTML = "This map has no Maritime Chart Service Layer";
-
                 } else {
                     this.displaySettings = new DisplaySettings({
                         map: this.map,
-                        controls: this.config.selectedControls,
                         includeParameters: this.config.includeParameters,
-                        parametersContent: this.config.mcsParametersContent,
-                        s57Layer: this.s57Layer,
-                        s57LayerIndex: this.s57LayerIndex, 
-                        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                        aisLayer: this.aisLayer,
-                        s57LayerTitle: this.s57LayerTitle,
-                        /* This AIS Service code is for Esri demo purposes only and does not impact your deployment of this widget. This widget does not depend on an AIS Service being available. */
-                        aisLayerTitle: this.aisLayerTitle
+                        includeParameterGroups: this.config.includeParameterGroups,
+                        MCSLayersConfig: MCSLayersConfig
                     }, this.displaySettingsNode);
                 }
-
             },
 
             startup: function() {
@@ -66,41 +63,6 @@ console.log(this.config.selectedControls);
                if (this.displaySettings != null)
                 this.displaySettings.startup();
             }
-
-            // onOpen: function(){
-            //   console.log('MCSDisplayProperties::onOpen');
-            // },
-
-            // onClose: function(){
-            //   console.log('MCSDisplayProperties::onClose');
-            // },
-
-            // onMinimize: function(){
-            //   console.log('MCSDisplayProperties::onMinimize');
-            // },
-
-            // onMaximize: function(){
-            //   console.log('MCSDisplayProperties::onMaximize');
-            // },
-
-            // onSignIn: function(credential){
-            //   console.log('MCSDisplayProperties::onSignIn', credential);
-            // },
-
-            // onSignOut: function(){
-            //   console.log('MCSDisplayProperties::onSignOut');
-            // }
-
-            // onPositionChange: function(){
-            //   console.log('MCSDisplayProperties::onPositionChange');
-            // },
-
-            // resize: function(){
-            //   console.log('MCSDisplayProperties::resize');
-            // }
-
-            //methods to communication between widgets:
-
         });
 
     });

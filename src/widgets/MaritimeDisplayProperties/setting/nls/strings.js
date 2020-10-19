@@ -1,5 +1,5 @@
 define({
 	root: ({
-		mcsParametersUrl: "MCS Service Parameters Url:"
+		mcsLayers: "MCS Layers:"
   })
 });

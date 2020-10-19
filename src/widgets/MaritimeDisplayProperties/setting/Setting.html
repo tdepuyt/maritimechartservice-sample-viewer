@@ -1,9 +1,14 @@
 <div>
-	<label>${nls.mcsParametersUrl}</label><input data-dojo-attach-point="parametersUrlNode"><button type="button" data-dojo-attach-event="onclick:getParameters">Query</button>
+	<div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 10px;" data-dojo-attach-point="MCSLayersDiv">
+		<label style="font-weight:bold;color:#596679;font-size:14px">${nls.mcsLayers}</label>
+		<div data-dojo-attach-point="MCSLayersSelectDiv">
+	</div>
 	<div id="dynamicParametersDiv" data-dojo-attach-point="dynamicParametersNode">
 	</div>
 	<input id="parametersContentNode" data-dojo-attach-point="parametersContentNode" style="display:none">
-	<div  id="actionButtonGroup" style="display:none">
-		<button type="button" data-dojo-attach-event="onclick:checkAll">Select All</button><button type="button" data-dojo-attach-event="onclick:unCheckAll">Unselect All</button>
+	<div  id="actionButtonGroup" style="display:block">
+		<span title="Select All" class="jimu-btn" data-dojo-attach-event="onclick:checkAll">Select All</span>
+		<span title="Unselect All" class="jimu-btn" data-dojo-attach-event="onclick:unCheckAll">Unselect All</span>
+
 	</div>
 </div>
