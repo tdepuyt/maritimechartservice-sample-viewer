@@ -1,5 +1,5 @@
 define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Search'],
-    function(declare, BaseWidget, MaritimeSearch) {
+    function (declare, BaseWidget, MaritimeSearch) {
         //To create a widget, you need to derive from BaseWidget.
         return declare([BaseWidget], {
 
@@ -11,82 +11,43 @@ define(['dojo/_base/declare', 'jimu/BaseWidget', 'libs/mcs-widgets/Search'],
             // add additional properties here
 
             //methods to communication with app container:
-            postCreate: function() {
+            postCreate: function () {
                 this.inherited(arguments);
                 console.log('MaritimeSearch::postCreate');
 
+                this.s57Layers = [];
                 for (var j = 0; j < this.map.layerIds.length; j++) {
                     var layer = this.map.getLayer(this.map.layerIds[j]);
-                    if ((layer.url.indexOf("/exts/MaritimeChartService/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime Chart Server/MapServer") > 0) || (layer.url.indexOf("/exts/Maritime%20Chart%20Service/MapServer") > 0))
-                        this.s57Layer = layer;
+                    var indexMCSStr1 = layer.url.toLowerCase().indexOf("/exts/MaritimeChartService/MapServer".toLowerCase()); 
+                    var indexMCSStr2 = layer.url.toLowerCase().indexOf("/exts/Maritime Chart Server/MapServer".toLowerCase());
+                    var indexMCSStr3 = layer.url.toLowerCase().indexOf("/exts/Maritime%20Chart%20Service/MapServer".toLowerCase());
+                    // in the MCS URL, "exts" and "mapserver" could be lower case or upper case
+                    if ((indexMCSStr1 > 0 && layer.url.substring(indexMCSStr1+6, indexMCSStr1+26)=="MaritimeChartService")
+                      || (indexMCSStr2 > 0 && layer.url.substring(indexMCSStr2+6, indexMCSStr2+27)=="Maritime Chart Server")
+                      || (indexMCSStr3 > 0 && layer.url.substring(indexMCSStr3+6, indexMCSStr3+32)=="Maritime%20Chart%20Service")) {
+                        this.s57Layers.push(layer);
+                      }
                 }
 
-                var operLayers = this.map.webMapResponse.itemInfo.itemData.operationalLayers;
-                for (j = 0; j < operLayers.length; j++) {
-                    if ((this.s57Layer) && (this.s57Layer.id == operLayers[j].id)) {
-                        this.s57LayerTitle = operLayers[j].title;
-                    } 
-
-                }
-
-                if (this.s57Layer == null) {
+                if (this.s57Layers.length == 0) {
                     this.maritimeSearchNode.innerHTML = "This map has no S-57 Maritime Chart Service Layer";
 
                 } else {
                     this.maritimeSearch = new MaritimeSearch({
                         map: this.map,
-                        s57Layer: this.s57Layer,
+                        s57Layers: this.s57Layers
                     }, this.maritimeSearchNode);
                 }
-
             },
 
-            startup: function() {
+            startup: function () {
 
-                    this.inherited(arguments);
+                this.inherited(arguments);
 
-                    console.log('MaritimeSearch::startup');
-                    if (this.maritimeSearch != null)
-                        this.maritimeSearch.startup();
-                },
-
-            onOpen: function(){
-               console.log('MaritimeSearch::onOpen');
-                if (this.maritimeSearch) {
-                    this.maritimeSearch.injectDisplayParameters();
-                }
+                console.log('MaritimeSearch::startup');
+                if (this.maritimeSearch != null)
+                    this.maritimeSearch.startup();
             }
-
-            // onClose: function(){
-            //   console.log('MaritimeSearch::onClose');
-            // },
-
-            // onMinimize: function(){
-            //   console.log('MaritimeSearch::onMinimize');
-            // },
-
-            // onMaximize: function(){
-            //   console.log('MaritimeSearch::onMaximize');
-            // },
-
-            // onSignIn: function(credential){
-            //   console.log('MaritimeSearch::onSignIn', credential);
-            // },
-
-            // onSignOut: function(){
-            //   console.log('MaritimeSearch::onSignOut');
-            // }
-
-            // onPositionChange: function(){
-            //   console.log('MaritimeSearch::onPositionChange');
-            // },
-
-            // resize: function(){
-            //   console.log('MaritimeSearch::resize');
-            // }
-
-            //methods to communication between widgets:
-
         });
 
     });

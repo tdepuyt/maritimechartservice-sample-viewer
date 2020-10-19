@@ -1,42 +1,50 @@
 <div>
-    <form class="form-horizontal"  style="margin-top:15px;" data-dojo-attach-event="submit:_onSearchClick">
+  <form class="form-horizontal" data-dojo-attach-event="submit:_onSearchClick">
+    <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+      <label>MCS Layers:</label>
+      <div id="MCSLayersSearchDiv" data-dojo-attach-point="MCSLayersSearchDiv">
+      </div>
+      <button id="btn_refresh_Search" class="btn btn-primary btn-md" type="button" data-dojo-attach-event="onClick:_onSearchRefreshClick">Refresh</button>
+    </div>
 
+    <div class="input-group col-md-12">
+      <input type="Search" placeholder="Search..." class="form-control" id="input_search" />
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </div>
+    </div>
+    <div class="input-group col-md-12" style="margin-top:5px;">
+      <select class="form-control" id="search_type" data-dojo-attach-point="searchtypeSelect">
+        <option value="default" selected="selected">Object/National Object name search</option>
+        <option value="cell">Dataset name search</option>
+        <!--                            <option value="national">National object name search</option> //-->
+      </select>
 
-            <div class="input-group col-md-12">
-               <input type="Search" placeholder="Search..." class="form-control" id="input_search" />
-               <div class="input-group-btn">
-                   <button class="btn btn-default" type="submit"  >
-                      <span class="glyphicon glyphicon-search"></span>
-                   </button>
-               </div>
-            </div>
-           <div class="input-group col-md-12" style="margin-top:5px;">
-                         <select class="form-control" id="search_type" data-dojo-attach-point="searchtypeSelect">
-                           <option value="default" selected="selected">Object/National Object name search</option>
-                            <option value="cell">Dataset name search</option>
-<!--                            <option value="national">National object name search</option> //-->
-                        </select>
-            
-            </div>
-    </form>
-    <div id="container_search_default">
-      <p id="container_search_default_text">Use the above search box to search for features based on their Object Name (OBJNAM) or National Object Name (NOBJNM) attribute. </p>
     </div>
-    <div class="panel-group" id="my-accordion">
-    </div>
-    <!-- Container: Search Results - START -->
-    <div id="container_search_results" class="width_99 display_none clear_both" style="display:visible">
-      <h3 class="default_title clear_both margin_top_20 margin_bottom_0 padding_bottom_5">Results/<a id="clear_results" href='#'>Clear Results</a></h3>
-        <!-- Clear -->
-        <div class="clear"></div>
-        
-        <div class="width_99 search-result" id="search_result_main" data-dojo-attach-point="search_result_main"></div>
-    </div>
-    <div id="container_result_details" class="width_99 display_none clear_both" style="display:none">
-      <h3 class="default_title clear_both margin_top_20 margin_bottom_0 padding_bottom_5"><a href='#'>Back to Search Results</a></h3>
-      <h4 class="clear_both margin_top_20 margin_bottom_0 padding_bottom_5">Details</h4>
-        <div class="clear"></div>
-        
-        <div class="width_99 detail-result" id="result_detail_main" data-dojo-attach-point="result_detail_main"></div>
-    </div>
+  </form>
+  <div id="container_search_default">
+    <p id="container_search_default_text">Use the above search box to search for features based on their Object Name
+      (OBJNAM) or National Object Name (NOBJNM) attribute. </p>
+  </div>
+  <div class="panel-group" id="my-accordion">
+  </div>
+  <!-- Container: Search Results - START -->
+  <div id="container_search_results" class="width_99 display_none clear_both" style="display:visible">
+    <h3 class="default_title clear_both margin_top_20 margin_bottom_0 padding_bottom_5">Results/<a id="clear_results"
+        href='#'>Clear Results</a></h3>
+    <!-- Clear -->
+    <div class="clear"></div>
+
+    <div class="width_99 search-result" id="search_result_main" style = "display: flex; flex-direction: column"  data-dojo-attach-point="search_result_main"></div>
+  </div>
+  <div id="container_result_details" class="width_99 display_none clear_both" style="display:none">
+    <h3 class="default_title clear_both margin_top_20 margin_bottom_0 padding_bottom_5"><a href='#'>Back to Search
+        Results</a></h3>
+    <h4 class="clear_both margin_top_20 margin_bottom_0 padding_bottom_5">Details</h4>
+    <div class="clear"></div>
+
+    <div class="width_99 detail-result" id="result_detail_main" data-dojo-attach-point="result_detail_main"></div>
+  </div>
 </div>
