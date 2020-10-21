@@ -9,22 +9,23 @@ The Maritime Chart Service widgets are widgets and dojo classes that illustrate 
 
 The widgets can be used directly within Web App Builder for ArcGIS. Alternatively, the source code for these widgets is available here for reuse/modification and to integrate it within custom web apps outside of the Web App Builder for ArcGIS framework.
 
-To view a sample application created with these widgets please visit http://esriho.maps.arcgis.com/home/index.html and click on one of the Maritime Chart Service applications.
+To view a sample application created with these sample widgets please visit http://esriho.maps.arcgis.com/home/index.html and click on one of the Maritime Chart Service applications.
 
-Note: Only MCS mapserver services are supported with these widgets.
+Note: Only MCS mapserver services are supported with these sample widgets.
 
 
 ## * What's new with this version
 * Added multiple MCS service support to Display Properties, Identify, and Search widgets.
-* Updated Display Properties configuration steps to support multiple MCS services.
+* various bug fixes for S-63 datasets
 
 With added support for multiple MCS services you can now author a map with one or more MCS services and use all three sample widgets with each service.  Even if you use the Add Data widget to add another MCS service to your map, you can refresh your MCS sample widgets to recognize and work with any newly added MCS service.
 
 ## * Added new Multiple MCS Services support section under deployment
 ## * Tested against WAB 2.17 and JavaScript API 3.29
 
-Items included with previous release (20190502)
-## * Added support for the following display parameters
+### Items included with previous release (20190502)
+
+Added support for the following display parameters
 * Safe Depth
 * Display Light Sectors
 * Display AIO Features
@@ -117,11 +118,11 @@ If the machine is in domain, it is sometimes required to include domain name alo
 The Web Map is now using the Maritime Chart Service, and can be selected when you create your App in Web AppBuilder
 
 ## Multiple MCS Services support
-Multiple MCS services support allows you to deploy the sample widgets with a map that contains one or more MCS services.  If you deploy with more than one MCS service, you must set the Display Properties for each service by selecting the service in the drop-down menu and choosing the display parameters you want to expose.  Then you repeat the process for the other MCS services before click done.  There are not additional deployment steps for Identify and Search.
+Multiple MCS services support allows you to deploy the sample widgets with a map that contains one or more MCS services.  If you deploy with more than one MCS service, you must set the Display Properties for each service by selecting the service in the drop-down menu and choosing the display parameters you want to expose.  Then you repeat the process for the other MCS services before clicking done.  There are no additional deployment steps for Identify and Search.
 
 If a user adds another MCS service using the Add Data button after the application has been deployed, all the available display properties for that service will be exposed to the user.  Users must click the refresh button on each MCS sample widget for the newly added service to be available.
 
-Both the Identify and Search widget allow you to select which services you want to use as part of the request.  You can either use Identify and Search on one or all of the available services at once.   The Display Properties widget must be used on one service at a time.  The display options for each service will be retained during your session.
+Both the Identify and Search widgets allow you to select which services you want to use as part of the request.  You can either use Identify and Search on one or all of the available services at once.   The Display Properties widget must be used on one service at a time.  The display options for each service will be retained during your session.
 
 NOTE: There is a known limitation that when you use the add data button to add an MCS Service, you will not be able to remove it.  However, you can uncheck that service from your widgets to keep it from being interacted with.
 
