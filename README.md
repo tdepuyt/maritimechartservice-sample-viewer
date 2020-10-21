@@ -21,7 +21,7 @@ Note: Only MCS mapserver services are supported with these sample widgets.
 With added support for multiple MCS services you can now author a map with one or more MCS services and use all three sample widgets with each service.  Even if you use the Add Data widget to add another MCS service to your map, you can refresh your MCS sample widgets to recognize and work with any newly added MCS service.
 
 ## * Added new Multiple MCS Services support section under deployment
-## * Tested against WAB 2.17 and JavaScript API 3.29
+## * Tested against WAB 2.17
 
 ### Items included with previous release (20190502)
 
